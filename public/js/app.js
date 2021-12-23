@@ -5411,8 +5411,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       currentStep: 1,
       totalSteps: 3,
-      csvFilename: '',
-      csvFilePath: ''
+      csvFile: '',
+      csvFilename: ''
     };
   },
   computed: {
@@ -5440,9 +5440,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.currentStep--;
     },
-    storeFileNameAndContinue: function storeFileNameAndContinue(filename, path) {
+    storeFileAndGoToMappingsPage: function storeFileAndGoToMappingsPage(file, filename) {
+      this.csvFile = file;
       this.csvFilename = filename;
-      this.csvFilePath = path;
       this.goToNextStep();
     }
   }
@@ -5491,7 +5491,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "MapFieldsPage"
+  name: "MapFieldsPage",
+  props: ['csvFile', 'csvFilename'],
+  data: function data() {
+    return {};
+  },
+  methods: {
+    scanCSVFile: function scanCSVFile() {
+      var formData = new FormData();
+      formData.append('csv_file', this.csvFile);
+      axios.post('/contacts/upload/csv', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {// Set csv file fields
+        // Set contacts columns fields
+      })["catch"](function (error) {});
+    }
+  },
+  mounted: function mounted() {
+    console.log('mapping fields page');
+    console.log(this.csvFile);
+    console.log(this.csvFilename);
+  }
 });
 
 /***/ }),
@@ -5517,37 +5539,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UploadCSVPage",
-  data: function data() {
-    return {
-      isLoading: false
-    };
-  },
   methods: {
     uploadFile: function uploadFile(e) {
-      var _this = this;
-
-      this.isLoading = true;
       var files = e.target.files || e.dataTransfer.files;
       var csvFile = files[0];
       var csvFileName = files[0].name;
-      console.log('File');
-      console.log(csvFile);
-      console.log('File Name');
-      console.log(csvFileName);
-      var formData = new FormData();
-      formData.append('csv_file', csvFile);
-      axios.post('/contacts/upload/csv', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (response) {
-        _this.isLoading = false;
-
-        _this.$emit('uploaded', [response.filename, response.path]);
-      })["catch"](function (error) {});
+      this.$emit('uploaded', csvFile, csvFileName);
     }
   }
 });
@@ -28286,7 +28285,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _MapFieldsPage_vue_vue_type_template_id_956f443c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true& */ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true&");
+/* harmony import */ var _MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MapFieldsPage.vue?vue&type=template&id=956f443c& */ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&");
 /* harmony import */ var _MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MapFieldsPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -28298,11 +28297,11 @@ __webpack_require__.r(__webpack_exports__);
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _MapFieldsPage_vue_vue_type_template_id_956f443c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _MapFieldsPage_vue_vue_type_template_id_956f443c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  "956f443c",
+  null,
   null
   
 )
@@ -28550,19 +28549,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true&":
-/*!*******************************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true& ***!
-  \*******************************************************************************************************/
+/***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c& ***!
+  \*******************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapFieldsPage.vue?vue&type=template&id=956f443c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&");
 
 
 /***/ }),
@@ -28783,10 +28782,23 @@ var render = function () {
       ),
       _vm._v(" "),
       _vm.currentStep === 1
-        ? [_c("upload-csv-page", { on: { uploaded: function ($event) {} } })]
+        ? [
+            _c("upload-csv-page", {
+              on: { uploaded: _vm.storeFileAndGoToMappingsPage },
+            }),
+          ]
         : _vm._e(),
       _vm._v(" "),
-      _vm.currentStep === 2 ? [_c("map-fields-page")] : _vm._e(),
+      _vm.currentStep === 2
+        ? [
+            _c("map-fields-page", {
+              attrs: {
+                "csv-file": _vm.csvFile,
+                "csv-filename": _vm.csvFilename,
+              },
+            }),
+          ]
+        : _vm._e(),
       _vm._v(" "),
       _vm.currentStep === 3 ? [_c("confirm-mappings-page")] : _vm._e(),
       _vm._v(" "),
@@ -28862,10 +28874,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true&":
-/*!**********************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&scoped=true& ***!
-  \**********************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -28922,21 +28934,6 @@ var render = function () {
         on: { change: _vm.uploadFile },
       }),
     ]),
-    _vm._v(" "),
-    _c(
-      "span",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.isLoading,
-            expression: "isLoading",
-          },
-        ],
-      },
-      [_vm._v("Loading...")]
-    ),
   ])
 }
 var staticRenderFns = []
