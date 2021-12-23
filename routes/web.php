@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CsvUploadsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +18,5 @@ Route::get('/', function () {
     return view('imports.contacts');
 });
 
-Route::post('/contacts/upload/csv', 'CsvUploadsController@store');
+
+Route::post('/contacts/upload/csv', [CsvUploadsController::class, 'store']);

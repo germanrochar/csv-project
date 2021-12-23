@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace App\Models;
 
@@ -20,5 +20,5 @@ class Contact extends Model
 {
     use HasFactory;
 
-    
+
 }
