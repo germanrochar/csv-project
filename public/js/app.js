@@ -5410,7 +5410,9 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       currentStep: 1,
-      totalSteps: 3
+      totalSteps: 3,
+      csvFilename: '',
+      csvFilePath: ''
     };
   },
   computed: {
@@ -5437,6 +5439,11 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.currentStep--;
+    },
+    storeFileNameAndContinue: function storeFileNameAndContinue(filename, path) {
+      this.csvFilename = filename;
+      this.csvFilePath = path;
+      this.goToNextStep();
     }
   }
 });
@@ -5538,6 +5545,8 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         _this.isLoading = false;
+
+        _this.$emit('uploaded', [response.filename, response.path]);
       })["catch"](function (error) {});
     }
   }
@@ -28773,7 +28782,9 @@ var render = function () {
         1
       ),
       _vm._v(" "),
-      _vm.currentStep === 1 ? [_c("upload-csv-page")] : _vm._e(),
+      _vm.currentStep === 1
+        ? [_c("upload-csv-page", { on: { uploaded: function ($event) {} } })]
+        : _vm._e(),
       _vm._v(" "),
       _vm.currentStep === 2 ? [_c("map-fields-page")] : _vm._e(),
       _vm._v(" "),

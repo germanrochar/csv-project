@@ -5,7 +5,7 @@
         </div>
 
         <template v-if="currentStep === 1">
-            <upload-csv-page></upload-csv-page>
+            <upload-csv-page @uploaded=""></upload-csv-page>
         </template>
 
         <template v-if="currentStep === 2">
@@ -32,7 +32,9 @@ export default {
     data() {
         return {
             currentStep: 1,
-            totalSteps: 3
+            totalSteps: 3,
+            csvFilename: '',
+            csvFilePath: ''
         }
     },
 
@@ -62,6 +64,13 @@ export default {
             }
 
             this.currentStep--
+        },
+
+        storeFileNameAndContinue(filename, path) {
+            this.csvFilename = filename
+            this.csvFilePath = path
+
+            this.goToNextStep()
         }
     }
 }

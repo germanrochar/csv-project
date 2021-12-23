@@ -43,6 +43,7 @@ export default {
                 }
             ).then(response => {
                 this.isLoading = false
+                this.$emit('uploaded', [response.filename, response.path])
             }).catch(error => {
 
             })
