@@ -37,9 +37,7 @@ export default {
     },
 
     mounted() {
-        console.log('mapping fields page');
-        console.log(this.csvFile);
-        console.log(this.csvFilename);
+        this.scanCSVFile()
     }
 }
 </script>

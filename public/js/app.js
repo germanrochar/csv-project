@@ -5510,9 +5510,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    console.log('mapping fields page');
-    console.log(this.csvFile);
-    console.log(this.csvFilename);
+    this.scanCSVFile();
   }
 });
 
