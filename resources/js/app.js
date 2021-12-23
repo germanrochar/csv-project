@@ -24,7 +24,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 // Pages
 Vue.component('import-contacts-page', require('./pages/ImportContactsPage.vue').default);
-Vue.component('import-steps-page', require('./pages/ImportSetpsPage.vue').default);
+Vue.component('import-steps-page', require('./pages/ImportStepsPage').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -4,14 +4,16 @@
             <steps-navigator :total-steps="totalSteps" :current-step="currentStep"></steps-navigator>
         </div>
 
-<!--        Add footer here-->
+        <div>
+
+        </div>
     </div>
 </template>
 
 <script>
 import StepsNavigator from "../components/imports/StepsNavigator";
 export default {
-    name: "ImportStepsPage.vue",
+    name: "ImportStepsPage",
     components: { StepsNavigator },
 
     data() {
