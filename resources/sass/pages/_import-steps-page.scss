@@ -1,0 +1,15 @@
+.import-steps-page {
+    &__header {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    &__footer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        padding: 2rem;
+    }
+}

@@ -11286,25 +11286,20 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-.navbar {
-  background-color: #2b6bcc;
-  color: white;
-}
-
 .u-margin-bottom-small {
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
 }
 
 .u-margin-right-small {
-  margin-right: 2rem;
+  margin-right: 0.5rem;
 }
 
 .u-margin-top-small {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
 }
 
 .u-margin-top-medium {
-  margin-top: 4rem;
+  margin-top: 2rem;
 }
 
 .u-margin-left-auto {
@@ -11312,7 +11307,7 @@ textarea.form-control-lg {
 }
 
 .u-margin-left-small {
-  margin-left: 2rem;
+  margin-left: 0.5rem;
 }
 
 .heading-secondary {
@@ -11324,6 +11319,11 @@ textarea.form-control-lg {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.navbar {
+  background-color: #2b6bcc;
+  color: white;
 }
 
 .steps-navigator {
@@ -11350,4 +11350,17 @@ textarea.form-control-lg {
 }
 .steps-navigator__arrow {
   margin-right: 0.5rem;
+}
+
+.import-steps-page__header {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+.import-steps-page__footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 2rem;
 }

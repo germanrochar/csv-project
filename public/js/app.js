@@ -5385,6 +5385,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsPage",
@@ -5396,6 +5397,32 @@ __webpack_require__.r(__webpack_exports__);
       currentStep: 1,
       totalSteps: 3
     };
+  },
+  computed: {
+    isLastStep: function isLastStep() {
+      return this.currentStep === this.totalSteps;
+    },
+    isFirstStep: function isFirstStep() {
+      return this.currentStep === 1;
+    }
+  },
+  methods: {
+    goToNextStep: function goToNextStep() {
+      if (this.isLastStep) {
+        alert('Something went wrong. Please contact tech support.');
+        return;
+      }
+
+      this.currentStep++;
+    },
+    goLastStep: function goLastStep() {
+      if (this.isFirstStep) {
+        alert('Going back to import contacts page...');
+        return;
+      }
+
+      this.currentStep--;
+    }
   }
 });
 
@@ -28390,10 +28417,10 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "import-steps-page" }, [
     _c(
       "div",
-      { staticClass: "d-flex justify-content-center p-4" },
+      { staticClass: "import-steps-page__header" },
       [
         _c("steps-navigator", {
           attrs: {
@@ -28405,7 +28432,35 @@ var render = function () {
       1
     ),
     _vm._v(" "),
-    _c("div"),
+    _c("div", { staticClass: "import-steps-page__footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-light u-margin-right-small",
+          on: {
+            click: function ($event) {
+              return _vm.goLastStep()
+            },
+          },
+        },
+        [_vm._v("Go Back")]
+      ),
+      _vm._v(" "),
+      !_vm.isLastStep
+        ? _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: {
+                click: function ($event) {
+                  return _vm.goToNextStep()
+                },
+              },
+            },
+            [_vm._v("Continue")]
+          )
+        : _vm._e(),
+    ]),
   ])
 }
 var staticRenderFns = []

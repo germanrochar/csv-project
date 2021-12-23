@@ -7,13 +7,16 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-// Layout
-@import 'layout/navbar';
-
 // Base Styles
 @import 'base/utilities';
 @import 'base/typography';
 @import 'base/base';
 
+// Layout
+@import 'layout/navbar';
+
 // Components
 @import 'components/imports/steps-navigator';
+
+// Pages
+@import 'pages/import-steps-page';

@@ -1,11 +1,12 @@
 <template>
-    <div>
-        <div class="d-flex justify-content-center p-4">
+    <div class="import-steps-page">
+        <div class="import-steps-page__header">
             <steps-navigator :total-steps="totalSteps" :current-step="currentStep"></steps-navigator>
         </div>
 
-        <div>
-
+        <div class="import-steps-page__footer">
+            <button class="btn btn-light u-margin-right-small" @click="goLastStep()">Go Back</button>
+            <button class="btn btn-primary" v-if="!isLastStep" @click="goToNextStep()">Continue</button>
         </div>
     </div>
 </template>
@@ -20,6 +21,35 @@ export default {
         return {
             currentStep: 1,
             totalSteps: 3
+        }
+    },
+
+    computed: {
+        isLastStep() {
+            return this.currentStep === this.totalSteps
+        },
+        isFirstStep() {
+            return this.currentStep === 1
+        }
+    },
+
+    methods: {
+        goToNextStep() {
+            if (this.isLastStep) {
+                alert('Something went wrong. Please contact tech support.')
+                return
+            }
+
+            this.currentStep++
+        },
+
+        goLastStep() {
+            if (this.isFirstStep) {
+                alert('Going back to import contacts page...')
+                return
+            }
+
+            this.currentStep--
         }
     }
 }
