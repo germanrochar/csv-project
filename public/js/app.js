@@ -5444,6 +5444,11 @@ __webpack_require__.r(__webpack_exports__);
       this.csvFile = file;
       this.csvFilename = filename;
       this.goToNextStep();
+    },
+    removeFileAndGoToUploadPage: function removeFileAndGoToUploadPage() {
+      this.csvFile = '';
+      this.csvFilename = '';
+      this.goToPreviousStep();
     }
   }
 });
@@ -5529,12 +5534,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MapFieldsPage",
   props: ['csvFile', 'csvFilename'],
   data: function data() {
     return {
-      scanErrors: []
+      scanErrors: [],
+      csvFields: [],
+      contactsFields: []
     };
   },
   computed: {
@@ -5553,9 +5573,9 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        console.log('response');
-        console.log(response); // Set csv file fields
-        // Set contacts columns fields
+        console.log(response.data);
+        _this.csvFields = response.data.csvFields;
+        _this.contactsFields = response.data.contactsFields;
       })["catch"](function (error) {
         _this.scanErrors = error.response.data.errors['csv_file']; // TODO: Assert this param exists.
       });
@@ -28849,7 +28869,7 @@ var render = function () {
                 "csv-file": _vm.csvFile,
                 "csv-filename": _vm.csvFilename,
               },
-              on: { canceled: _vm.goToPreviousStep },
+              on: { canceled: _vm.removeFileAndGoToUploadPage },
             }),
           ]
         : _vm._e(),
@@ -29028,9 +29048,25 @@ var render = function () {
     _vm._v(" "),
     _vm.scanErrorsAreEmpty
       ? _c("div", [
-          _c("p", [_vm._v("Map your fields to Contacts' fields")]),
+          _c("p", { staticClass: "fw-bold" }, [
+            _vm._v(" Map your fields to Contacts' fields"),
+          ]),
           _vm._v(" "),
-          _c("table"),
+          _c("table", { staticClass: "table table-bordered" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.csvFields, function (csvField) {
+                return _c("tr", [
+                  _c("td", [_vm._v(_vm._s(csvField))]),
+                  _vm._v(" "),
+                  _c("td"),
+                ])
+              }),
+              0
+            ),
+          ]),
         ])
       : _vm._e(),
   ])
@@ -29044,6 +29080,18 @@ var staticRenderFns = [
       _c("h3", [_vm._v("Map Fields")]),
       _vm._v(" "),
       _c("p", [_vm._v("Map fields in your csv file to contacts table fields")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("CSV File Field")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Contacts Field")]),
+      ]),
     ])
   },
 ]

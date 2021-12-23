@@ -9,7 +9,7 @@
         </template>
 
         <template v-if="currentStep === 2">
-            <map-fields-page @canceled="goToPreviousStep" :csv-file="csvFile" :csv-filename="csvFilename"></map-fields-page>
+            <map-fields-page @canceled="removeFileAndGoToUploadPage" :csv-file="csvFile" :csv-filename="csvFilename"></map-fields-page>
         </template>
 
         <template v-if="currentStep === 3">
@@ -71,6 +71,13 @@ export default {
             this.csvFilename = filename
 
             this.goToNextStep()
+        },
+
+        removeFileAndGoToUploadPage() {
+            this.csvFile = ''
+            this.csvFilename = ''
+
+            this.goToPreviousStep()
         }
     }
 }

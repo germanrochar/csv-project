@@ -15,13 +15,13 @@ class ContactsCsvScannerController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(ScanCsvRequest $request)
+    public function index(ScanCsvRequest $request): JsonResponse
     {
-        $headingRows = (new HeadingRowImport())->toArray($request->input('csv_file'))[0];
+        $headingRows = (new HeadingRowImport())->toArray($request->file('csv_file'))[0][0]; // TODO: improve this
 
         return new JsonResponse([
-            'csv_fields' => $headingRows,
-            'contacts_fields' => [
+            'csvFields' => $headingRows,
+            'contactsFields' => [
                 'team_id',
                 'name',
                 'phone',

@@ -35,9 +35,22 @@
 
         <!--   Mappings table     -->
         <div v-if="scanErrorsAreEmpty">
-            <p>Map your fields to Contacts' fields</p>
-            <table>
-
+            <p class="fw-bold"> Map your fields to Contacts' fields</p>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">CSV File Field</th>
+                        <th scope="col">Contacts Field</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="csvField in csvFields">
+                        <td>{{ csvField }}</td>
+                        <td>
+                            <!--   insert multiselect      -->
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -50,7 +63,9 @@ export default {
 
     data() {
         return {
-            scanErrors: []
+            scanErrors: [],
+            csvFields: [],
+            contactsFields: []
         }
     },
 
@@ -64,6 +79,7 @@ export default {
         scanCSVFile() {
             let formData = new FormData()
             formData.append('csv_file', this.csvFile)
+
             axios.post(
                 '/scan/csv',
                 formData,
@@ -73,10 +89,9 @@ export default {
                     },
                 }
             ).then(response => {
-                console.log('response');
-                console.log(response);
-                // Set csv file fields
-                // Set contacts columns fields
+                console.log(response.data);
+                this.csvFields = response.data.csvFields
+                this.contactsFields = response.data.contactsFields
             }).catch(error => {
                 this.scanErrors = error.response.data.errors['csv_file'] // TODO: Assert this param exists.
             })
