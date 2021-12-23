@@ -4,6 +4,18 @@
             <steps-navigator :total-steps="totalSteps" :current-step="currentStep"></steps-navigator>
         </div>
 
+        <template v-if="currentStep === 1">
+            <upload-csv-page></upload-csv-page>
+        </template>
+
+        <template v-if="currentStep === 2">
+            <map-fields-page></map-fields-page>
+        </template>
+
+        <template v-if="currentStep === 3">
+            <confirm-mappings-page></confirm-mappings-page>
+        </template>
+
         <div class="import-steps-page__footer">
             <button class="btn btn-light u-margin-right-small" @click="goToPreviousStep()">Go Back</button>
             <button class="btn btn-primary" v-if="!isLastStep" @click="goToNextStep()">Continue</button>

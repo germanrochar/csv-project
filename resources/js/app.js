@@ -25,6 +25,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 // Pages
 Vue.component('import-contacts-page', require('./pages/ImportContactsPage.vue').default);
 Vue.component('import-steps-page', require('./pages/ImportStepsPage').default);
+Vue.component('upload-csv-page', require('./pages/imports/steps/UploadCSVPage').default);
+Vue.component('map-fields-page', require('./pages/imports/steps/MapFieldsPage').default);
+Vue.component('confirm-mappings-page', require('./pages/imports/steps/ConfirmMappingsPage').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
