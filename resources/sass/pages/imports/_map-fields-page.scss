@@ -1,0 +1,21 @@
+.map-fields-page {
+
+    &__feedback {
+
+    }
+
+    &__filename-box {
+        background-color: #fff;
+        padding: 1rem;
+        display: inline-flex;
+        flex-direction: column;
+
+        &--danger {
+            border: 1px solid #dc3545;
+        }
+
+        &--success {
+            border: 1px solid #28a745;
+        }
+    }
+}

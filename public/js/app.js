@@ -5490,23 +5490,78 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MapFieldsPage",
   props: ['csvFile', 'csvFilename'],
   data: function data() {
-    return {};
+    return {
+      scanErrors: []
+    };
+  },
+  computed: {
+    scanErrorsAreEmpty: function scanErrorsAreEmpty() {
+      return this.scanErrors.length === 0;
+    }
   },
   methods: {
     scanCSVFile: function scanCSVFile() {
+      var _this = this;
+
       var formData = new FormData();
       formData.append('csv_file', this.csvFile);
-      axios.post('/contacts/upload/csv', formData, {
+      axios.post('/scan/csv', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then(function (response) {// Set csv file fields
+      }).then(function (response) {
+        console.log('response');
+        console.log(response); // Set csv file fields
         // Set contacts columns fields
-      })["catch"](function (error) {});
+      })["catch"](function (error) {
+        _this.scanErrors = error.response.data.errors['csv_file']; // TODO: Assert this param exists.
+      });
+    },
+    cancelMapping: function cancelMapping() {
+      this.$emit('canceled');
     }
   },
   mounted: function mounted() {
@@ -28794,6 +28849,7 @@ var render = function () {
                 "csv-file": _vm.csvFile,
                 "csv-filename": _vm.csvFilename,
               },
+              on: { canceled: _vm.goToPreviousStep },
             }),
           ]
         : _vm._e(),
@@ -28888,14 +28944,107 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container " }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "map-fields-page__feedback" }, [
+      !_vm.scanErrorsAreEmpty
+        ? _c(
+            "div",
+            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+            [
+              _c("span", { staticClass: "sr-only" }, [
+                _vm._v("The following errors were found in your csv file:"),
+              ]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                _vm._l(_vm.scanErrors, function (scanError) {
+                  return _c("li", [_vm._v(_vm._s(scanError))])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "map-fields-page__filename-box map-fields-page__filename-box--danger",
+                },
+                [
+                  _c("span", [
+                    _c("span", { staticClass: "fw-bold" }, [
+                      _vm._v("File name"),
+                    ]),
+                    _vm._v(
+                      ": " + _vm._s(_vm.csvFilename) + "\n                "
+                    ),
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "#" },
+                      on: {
+                        click: function ($event) {
+                          return _vm.cancelMapping()
+                        },
+                      },
+                    },
+                    [_vm._v("Upload a different file")]
+                  ),
+                ]
+              ),
+            ]
+          )
+        : _c(
+            "div",
+            { staticClass: "alert alert-success", attrs: { role: "alert" } },
+            [
+              _c("p", { staticClass: "fw-bold" }, [
+                _vm._v("Found 1000 contacts in:"),
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass:
+                    "map-fields-page__filename-box map-fields-page__filename-box--success",
+                },
+                [
+                  _c("span", [
+                    _c("span", { staticClass: "fw-bold" }, [
+                      _vm._v("File name"),
+                    ]),
+                    _vm._v(
+                      ": " + _vm._s(_vm.csvFilename) + "\n                "
+                    ),
+                  ]),
+                ]
+              ),
+            ]
+          ),
+    ]),
+    _vm._v(" "),
+    _vm.scanErrorsAreEmpty
+      ? _c("div", [
+          _c("p", [_vm._v("Map your fields to Contacts' fields")]),
+          _vm._v(" "),
+          _c("table"),
+        ])
+      : _vm._e(),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [_c("span", [_vm._v("Map Columns")])])
+    return _c("div", [
+      _c("h3", [_vm._v("Map Fields")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Map fields in your csv file to contacts table fields")]),
+    ])
   },
 ]
 render._withStripped = true

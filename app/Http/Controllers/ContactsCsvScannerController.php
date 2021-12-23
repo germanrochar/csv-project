@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ScanCsvRequest;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,9 +15,9 @@ class ContactsCsvScannerController extends Controller
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index(ScanCsvRequest $request)
     {
-        $headingRows = (new HeadingRowImport())->toArray(request()->file('csv_file'))[0];
+        $headingRows = (new HeadingRowImport())->toArray($request->input('csv_file'))[0];
 
         return new JsonResponse([
             'csv_fields' => $headingRows,
