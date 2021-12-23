@@ -5506,8 +5506,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "UploadCSVPage"
+  name: "UploadCSVPage",
+  data: function data() {
+    return {
+      isLoading: false
+    };
+  },
+  methods: {
+    uploadFile: function uploadFile(e) {
+      var _this = this;
+
+      this.isLoading = true;
+      var files = e.target.files || e.dataTransfer.files;
+      var csvFile = files[0];
+      var csvFileName = files[0].name;
+      console.log('File');
+      console.log(csvFile);
+      console.log('File Name');
+      console.log(csvFileName);
+      var formData = new FormData();
+      formData.append('csv_file', csvFile);
+      axios.post('/contacts/upload/csv', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (response) {
+        _this.isLoading = false;
+      })["catch"](function (error) {});
+    }
+  }
 });
 
 /***/ }),
@@ -28283,7 +28316,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _UploadCSVPage_vue_vue_type_template_id_43a1421c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true& */ "./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true&");
+/* harmony import */ var _UploadCSVPage_vue_vue_type_template_id_43a1421c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UploadCSVPage.vue?vue&type=template&id=43a1421c& */ "./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&");
 /* harmony import */ var _UploadCSVPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UploadCSVPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -28295,11 +28328,11 @@ __webpack_require__.r(__webpack_exports__);
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _UploadCSVPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _UploadCSVPage_vue_vue_type_template_id_43a1421c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _UploadCSVPage_vue_vue_type_template_id_43a1421c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _UploadCSVPage_vue_vue_type_template_id_43a1421c___WEBPACK_IMPORTED_MODULE_0__.render,
+  _UploadCSVPage_vue_vue_type_template_id_43a1421c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  "43a1421c",
+  null,
   null
   
 )
@@ -28525,19 +28558,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true&":
-/*!*******************************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true& ***!
-  \*******************************************************************************************************/
+/***/ "./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c& ***!
+  \*******************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UploadCSVPage_vue_vue_type_template_id_43a1421c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UploadCSVPage_vue_vue_type_template_id_43a1421c_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UploadCSVPage_vue_vue_type_template_id_43a1421c___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UploadCSVPage_vue_vue_type_template_id_43a1421c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UploadCSVPage_vue_vue_type_template_id_43a1421c_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UploadCSVPage_vue_vue_type_template_id_43a1421c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UploadCSVPage.vue?vue&type=template&id=43a1421c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&");
 
 
 /***/ }),
@@ -28850,10 +28883,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true&":
-/*!**********************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&scoped=true& ***!
-  \**********************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/UploadCSVPage.vue?vue&type=template&id=43a1421c& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -28866,16 +28899,36 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "center-content text-center" }, [
+    _c("h3", [_vm._v("Upload CSV File")]),
+    _vm._v(" "),
+    _c("p", [_vm._v("Import your contacts from a csv file")]),
+    _vm._v(" "),
+    _c("div", { staticClass: "mb-3" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "file", accept: ".csv" },
+        on: { change: _vm.uploadFile },
+      }),
+    ]),
+    _vm._v(" "),
+    _c(
+      "span",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.isLoading,
+            expression: "isLoading",
+          },
+        ],
+      },
+      [_vm._v("Loading...")]
+    ),
+  ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("span", [_vm._v("Upload CSV File")])])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

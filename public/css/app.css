@@ -11360,6 +11360,9 @@ textarea.form-control-lg {
 }
 .import-steps-page__footer {
   width: 100%;
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
   display: flex;
   justify-content: flex-end;
   padding: 2rem;
