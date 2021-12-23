@@ -5,7 +5,7 @@
         </div>
 
         <div class="import-steps-page__footer">
-            <button class="btn btn-light u-margin-right-small" @click="goLastStep()">Go Back</button>
+            <button class="btn btn-light u-margin-right-small" @click="goToPreviousStep()">Go Back</button>
             <button class="btn btn-primary" v-if="!isLastStep" @click="goToNextStep()">Continue</button>
         </div>
     </div>
@@ -43,9 +43,9 @@ export default {
             this.currentStep++
         },
 
-        goLastStep() {
+        goToPreviousStep() {
             if (this.isFirstStep) {
-                alert('Going back to import contacts page...')
+                this.$emit('canceled')
                 return
             }
 

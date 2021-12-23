@@ -12,7 +12,7 @@
         </template>
 
         <template v-if="showImportSteps">
-            <import-steps-page></import-steps-page>
+            <import-steps-page @canceled="hideImportSteps"></import-steps-page>
         </template>
     </div>
 
@@ -30,6 +30,9 @@ export default {
     methods: {
         goToImportSteps() {
             this.showImportSteps = true;
+        },
+        hideImportSteps() {
+            this.showImportSteps = false;
         }
     }
 }

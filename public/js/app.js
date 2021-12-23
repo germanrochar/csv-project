@@ -5355,6 +5355,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     goToImportSteps: function goToImportSteps() {
       this.showImportSteps = true;
+    },
+    hideImportSteps: function hideImportSteps() {
+      this.showImportSteps = false;
     }
   }
 });
@@ -5415,9 +5418,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.currentStep++;
     },
-    goLastStep: function goLastStep() {
+    goToPreviousStep: function goToPreviousStep() {
       if (this.isFirstStep) {
-        alert('Going back to import contacts page...');
+        this.$emit('canceled');
         return;
       }
 
@@ -28389,7 +28392,9 @@ var render = function () {
           ]
         : _vm._e(),
       _vm._v(" "),
-      _vm.showImportSteps ? [_c("import-steps-page")] : _vm._e(),
+      _vm.showImportSteps
+        ? [_c("import-steps-page", { on: { canceled: _vm.hideImportSteps } })]
+        : _vm._e(),
     ],
     2
   )
@@ -28439,7 +28444,7 @@ var render = function () {
           staticClass: "btn btn-light u-margin-right-small",
           on: {
             click: function ($event) {
-              return _vm.goLastStep()
+              return _vm.goToPreviousStep()
             },
           },
         },
