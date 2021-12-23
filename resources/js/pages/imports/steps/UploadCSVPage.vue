@@ -21,7 +21,7 @@ export default {
 
     methods: {
         uploadFile(e) {
-            this.isLoading = true;
+            this.isLoading = true
             let files = e.target.files || e.dataTransfer.files
             let csvFile = files[0]
             let csvFileName = files[0].name
@@ -42,7 +42,7 @@ export default {
                     },
                 }
             ).then(response => {
-                this.isLoading = false;
+                this.isLoading = false
             }).catch(error => {
 
             })
