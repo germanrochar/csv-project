@@ -15,6 +15,14 @@
 </head>
 <body>
 <div id="app">
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <span class="heading-secondary">Import Contacts</span>
+            </div>
+        </div>
+    </nav>
+
     @yield('content')
 </div>
 
