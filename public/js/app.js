@@ -5284,9 +5284,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsNavigator",
-  props: ['totalSteps', 'currentStep']
+  props: ['totalSteps', 'currentStep'],
+  data: function data() {
+    return {};
+  },
+  methods: {
+    getBubbleClasses: function getBubbleClasses(step) {
+      var classes = ['steps-navigator__bubble'];
+
+      if (step === this.currentStep) {
+        classes.push('steps-navigator__bubble--active');
+      } else {
+        classes.push('steps-navigator__bubble--inactive');
+      }
+
+      return classes;
+    }
+  }
 });
 
 /***/ }),
@@ -28251,7 +28274,36 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("\n    testing....\n")])
+  return _c(
+    "div",
+    { staticClass: "steps-navigator" },
+    [
+      _vm._l(_vm.totalSteps, function (step) {
+        return [
+          _c("div", { class: _vm.getBubbleClasses(step) }, [
+            _c("span", [_vm._v(_vm._s(step))]),
+          ]),
+          _vm._v(" "),
+          _c(
+            "span",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: step !== _vm.totalSteps,
+                  expression: "step !== totalSteps",
+                },
+              ],
+              staticClass: "steps-navigator__arrow",
+            },
+            [_vm._v("→")]
+          ),
+        ]
+      }),
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -28339,7 +28391,7 @@ var render = function () {
   return _c("div", [
     _c(
       "div",
-      { staticClass: "d-flex justify-content-center" },
+      { staticClass: "d-flex justify-content-center p-4" },
       [
         _c("import-steps-navigator", {
           attrs: {

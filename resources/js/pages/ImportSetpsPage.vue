@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center p-4">
             <import-steps-navigator :total-steps="totalSteps" :current-step="currentStep"></import-steps-navigator>
         </div>
 

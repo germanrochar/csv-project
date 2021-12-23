@@ -11325,3 +11325,29 @@ textarea.form-control-lg {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.steps-navigator {
+  display: flex;
+  align-items: center;
+}
+.steps-navigator__bubble {
+  height: 50px;
+  width: 50px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+.steps-navigator__bubble--active {
+  background-color: #ca3434;
+}
+.steps-navigator__bubble--inactive {
+  background-color: #ecaaaa;
+}
+.steps-navigator__bubble:not(:last-child) {
+  margin-right: 0.5rem;
+}
+.steps-navigator__arrow {
+  margin-right: 0.5rem;
+}

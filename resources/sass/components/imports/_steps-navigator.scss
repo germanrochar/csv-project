@@ -1,0 +1,30 @@
+.steps-navigator {
+    display: flex;
+    align-items: center;
+
+    &__bubble {
+        height: 50px;
+        width: 50px;
+        border-radius: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+
+        &--active {
+            background-color: #ca3434;
+        }
+
+        &--inactive {
+            background-color: #ecaaaa;
+        }
+
+        &:not(:last-child) {
+            margin-right: 0.5rem;
+        }
+    }
+
+    &__arrow {
+        margin-right: 0.5rem;
+    }
+}
