@@ -11287,7 +11287,7 @@ textarea.form-control-lg {
   }
 }
 .navbar {
-  background-color: black;
+  background-color: #2b6bcc;
   color: white;
 }
 
@@ -11317,4 +11317,11 @@ textarea.form-control-lg {
 
 .heading-secondary {
   font-size: 2rem;
+}
+
+.center-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

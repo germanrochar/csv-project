@@ -2,6 +2,6 @@
 
 @section ('content')
 
-    <p>Contacts page</p>
+    <import-contacts-page></import-contacts-page>
 
 @endsection
