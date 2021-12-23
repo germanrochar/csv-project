@@ -1,5 +1,5 @@
 <template>
-    <div class="container ">
+    <div class="container map-fields-page">
         <div>
             <h3>Map Fields</h3>
             <p>Map fields in your csv file to contacts table fields</p>
@@ -19,7 +19,7 @@
                     <span>
                         <span class="fw-bold">File name</span>: {{ csvFilename}}
                     </span>
-                    <a href="#" @click="cancelMapping()">Upload a different file</a>
+                    <a href="#" @click="cancelMapping">Upload a different file</a>
                 </div>
             </div>
 
@@ -44,14 +44,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(csvField) in csvFields">
+                    <tr v-for="(csvField, index) in csvFields">
                         <td>{{ csvField }}</td>
                         <td>
-                            <multiselect v-model="values[csvField]" :options="contactsFields" placeholder="Select field"></multiselect>
+                            <multiselect v-model="mappedValues[index]" :options="contactsFields" placeholder="Select field"></multiselect>
                         </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="map-fields-page__footer">
+            <button class="btn btn-light u-margin-right-small" @click="cancelMapping">Cancel</button>
+            <button class="btn btn-primary" @click="goToMappingsPreviewPage">Continue</button>
         </div>
     </div>
 </template>
@@ -68,7 +73,7 @@ export default {
             scanErrors: [],
             csvFields: [],
             contactsFields: [],
-            values: []
+            mappedValues: []
         }
     },
 
@@ -92,9 +97,12 @@ export default {
                     },
                 }
             ).then(response => {
-                console.log(response.data);
                 this.csvFields = response.data.csvFields
                 this.contactsFields = response.data.contactsFields
+
+                // Create an empty array with same length than csvFields
+                this.mappedValues = this.csvFields.map(field => '')
+                console.log('hey');
             }).catch(error => {
                 this.scanErrors = error.response.data.errors['csv_file'] // TODO: Assert this param exists.
             })
@@ -102,6 +110,10 @@ export default {
 
         cancelMapping() {
             this.$emit('canceled')
+        },
+
+        goToMappingsPreviewPage() {
+            this.$emit('completed', this.csvFields, this.mappedValues)
         }
     },
 

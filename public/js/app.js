@@ -5407,7 +5407,9 @@ __webpack_require__.r(__webpack_exports__);
       currentStep: 1,
       totalSteps: 3,
       csvFile: '',
-      csvFilename: ''
+      csvFilename: '',
+      mappedKeys: [],
+      mappedValues: []
     };
   },
   computed: {
@@ -5435,40 +5437,22 @@ __webpack_require__.r(__webpack_exports__);
 
       this.currentStep--;
     },
-    storeFileAndGoToMappingsPage: function storeFileAndGoToMappingsPage(file, filename) {
+    storeFileAndContinue: function storeFileAndContinue(file, filename) {
       this.csvFile = file;
       this.csvFilename = filename;
       this.goToNextStep();
     },
-    removeFileAndGoToUploadPage: function removeFileAndGoToUploadPage() {
+    removeFileAndGoBack: function removeFileAndGoBack() {
       this.csvFile = '';
       this.csvFilename = '';
       this.goToPreviousStep();
+    },
+    storeMappingsAndContinue: function storeMappingsAndContinue(mappedKeys, mappedValues) {
+      this.mappedKeys = mappedKeys;
+      this.mappedValues = mappedValues;
+      this.goToNextStep();
     }
   }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=script&lang=js&":
-/*!***********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=script&lang=js& ***!
-  \***********************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-//
-//
-//
-//
-//
-//
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "ConfirmMappingsPage"
 });
 
 /***/ }),
@@ -5561,7 +5545,7 @@ __webpack_require__.r(__webpack_exports__);
       scanErrors: [],
       csvFields: [],
       contactsFields: [],
-      values: []
+      mappedValues: []
     };
   },
   computed: {
@@ -5580,19 +5564,63 @@ __webpack_require__.r(__webpack_exports__);
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        console.log(response.data);
         _this.csvFields = response.data.csvFields;
-        _this.contactsFields = response.data.contactsFields;
+        _this.contactsFields = response.data.contactsFields; // Create an empty array with same length than csvFields
+
+        _this.mappedValues = _this.csvFields.map(function (field) {
+          return '';
+        });
+        console.log('hey');
       })["catch"](function (error) {
         _this.scanErrors = error.response.data.errors['csv_file']; // TODO: Assert this param exists.
       });
     },
     cancelMapping: function cancelMapping() {
       this.$emit('canceled');
+    },
+    goToMappingsPreviewPage: function goToMappingsPreviewPage() {
+      this.$emit('completed', this.csvFields, this.mappedValues);
     }
   },
   mounted: function mounted() {
     this.scanCSVFile();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "MappingsPreviewPage",
+  props: ['mappedKeys', 'mappedValues'],
+  data: function data() {
+    return {};
+  },
+  mounted: function mounted() {
+    console.log('component mounted');
+    console.log(this.mappedKeys);
+    console.log(this.mappedValues);
   }
 });
 
@@ -5697,7 +5725,7 @@ Vue.component('import-contacts-page', (__webpack_require__(/*! ./pages/ImportCon
 Vue.component('import-steps-page', (__webpack_require__(/*! ./pages/ImportStepsPage */ "./resources/js/pages/ImportStepsPage.vue")["default"]));
 Vue.component('upload-csv-page', (__webpack_require__(/*! ./pages/imports/steps/UploadCSVPage */ "./resources/js/pages/imports/steps/UploadCSVPage.vue")["default"]));
 Vue.component('map-fields-page', (__webpack_require__(/*! ./pages/imports/steps/MapFieldsPage */ "./resources/js/pages/imports/steps/MapFieldsPage.vue")["default"]));
-Vue.component('confirm-mappings-page', (__webpack_require__(/*! ./pages/imports/steps/ConfirmMappingsPage */ "./resources/js/pages/imports/steps/ConfirmMappingsPage.vue")["default"]));
+Vue.component('mappings-preview-page', (__webpack_require__(/*! ./pages/imports/steps/MappingsPreviewPage */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue")["default"]));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -28757,45 +28785,6 @@ component.options.__file = "resources/js/pages/ImportStepsPage.vue"
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/ConfirmMappingsPage.vue":
-/*!******************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/ConfirmMappingsPage.vue ***!
-  \******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _ConfirmMappingsPage_vue_vue_type_template_id_03a7ba72_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true& */ "./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true&");
-/* harmony import */ var _ConfirmMappingsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ConfirmMappingsPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=script&lang=js&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _ConfirmMappingsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _ConfirmMappingsPage_vue_vue_type_template_id_03a7ba72_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _ConfirmMappingsPage_vue_vue_type_template_id_03a7ba72_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  "03a7ba72",
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/pages/imports/steps/ConfirmMappingsPage.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
-
-/***/ }),
-
 /***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue":
 /*!************************************************************!*\
   !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue ***!
@@ -28833,6 +28822,45 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 /* hot reload */
 if (false) { var api; }
 component.options.__file = "resources/js/pages/imports/steps/MapFieldsPage.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue":
+/*!******************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&");
+/* harmony import */ var _MappingsPreviewPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MappingsPreviewPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MappingsPreviewPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "ac760260",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/imports/steps/MappingsPreviewPage.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -28940,22 +28968,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfirmMappingsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ConfirmMappingsPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfirmMappingsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
 /***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************!*\
   !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js& ***!
@@ -28969,6 +28981,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapFieldsPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingsPreviewPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -29069,23 +29097,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true&":
-/*!*************************************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true& ***!
-  \*************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfirmMappingsPage_vue_vue_type_template_id_03a7ba72_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfirmMappingsPage_vue_vue_type_template_id_03a7ba72_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_ConfirmMappingsPage_vue_vue_type_template_id_03a7ba72_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true&");
-
-
-/***/ }),
-
 /***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&":
 /*!*******************************************************************************************!*\
   !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c& ***!
@@ -29099,6 +29110,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapFieldsPage.vue?vue&type=template&id=956f443c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&");
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&");
 
 
 /***/ }),
@@ -29323,7 +29351,7 @@ var render = function () {
             _c("upload-csv-page", {
               on: {
                 canceled: _vm.goToPreviousStep,
-                uploaded: _vm.storeFileAndGoToMappingsPage,
+                uploaded: _vm.storeFileAndContinue,
               },
             }),
           ]
@@ -29336,49 +29364,29 @@ var render = function () {
                 "csv-file": _vm.csvFile,
                 "csv-filename": _vm.csvFilename,
               },
-              on: { canceled: _vm.removeFileAndGoToUploadPage },
+              on: {
+                canceled: _vm.removeFileAndGoBack,
+                completed: _vm.storeMappingsAndContinue,
+              },
             }),
           ]
         : _vm._e(),
       _vm._v(" "),
-      _vm.currentStep === 3 ? [_c("confirm-mappings-page")] : _vm._e(),
+      _vm.currentStep === 3
+        ? [
+            _c("mappings-preview-page", {
+              attrs: {
+                mappedKeys: _vm.mappedKeys,
+                mappedValues: _vm.mappedValues,
+              },
+            }),
+          ]
+        : _vm._e(),
     ],
     2
   )
 }
 var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true&":
-/*!****************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/ConfirmMappingsPage.vue?vue&type=template&id=03a7ba72&scoped=true& ***!
-  \****************************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function () {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("span", [_vm._v("Confirm Mappings")])])
-  },
-]
 render._withStripped = true
 
 
@@ -29401,7 +29409,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container " }, [
+  return _c("div", { staticClass: "container map-fields-page" }, [
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "map-fields-page__feedback" }, [
@@ -29440,14 +29448,7 @@ var render = function () {
                   _vm._v(" "),
                   _c(
                     "a",
-                    {
-                      attrs: { href: "#" },
-                      on: {
-                        click: function ($event) {
-                          return _vm.cancelMapping()
-                        },
-                      },
-                    },
+                    { attrs: { href: "#" }, on: { click: _vm.cancelMapping } },
                     [_vm._v("Upload a different file")]
                   ),
                 ]
@@ -29494,7 +29495,7 @@ var render = function () {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.csvFields, function (csvField) {
+              _vm._l(_vm.csvFields, function (csvField, index) {
                 return _c("tr", [
                   _c("td", [_vm._v(_vm._s(csvField))]),
                   _vm._v(" "),
@@ -29507,11 +29508,11 @@ var render = function () {
                           placeholder: "Select field",
                         },
                         model: {
-                          value: _vm.values[csvField],
+                          value: _vm.mappedValues[index],
                           callback: function ($$v) {
-                            _vm.$set(_vm.values, csvField, $$v)
+                            _vm.$set(_vm.mappedValues, index, $$v)
                           },
-                          expression: "values[csvField]",
+                          expression: "mappedValues[index]",
                         },
                       }),
                     ],
@@ -29525,16 +29526,21 @@ var render = function () {
         ])
       : _vm._e(),
     _vm._v(" "),
-    _c("div", { staticClass: "import-steps-page__footer" }, [
-      _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
-        _vm._v("Cancel"),
-      ]),
+    _c("div", { staticClass: "map-fields-page__footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-light u-margin-right-small",
+          on: { click: _vm.cancelMapping },
+        },
+        [_vm._v("Cancel")]
+      ),
       _vm._v(" "),
       _c(
         "button",
         {
           staticClass: "btn btn-primary",
-          attrs: { disabled: !_vm.csvIsUploaded },
+          on: { click: _vm.goToMappingsPreviewPage },
         },
         [_vm._v("Continue")]
       ),
@@ -29561,6 +29567,48 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("CSV File Field")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Contacts Field")]),
+      ]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&":
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("span", [_vm._v("Confirm Mappings")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "map-fields-page__footer" }, [
+        _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
+          _vm._v("Cancel"),
+        ]),
+        _vm._v(" "),
+        _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Continue")]),
       ]),
     ])
   },

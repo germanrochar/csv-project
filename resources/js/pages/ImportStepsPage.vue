@@ -5,15 +5,15 @@
         </div>
 
         <template v-if="currentStep === 1">
-            <upload-csv-page @canceled="goToPreviousStep" @uploaded="storeFileAndGoToMappingsPage"></upload-csv-page>
+            <upload-csv-page @canceled="goToPreviousStep" @uploaded="storeFileAndContinue"></upload-csv-page>
         </template>
 
         <template v-if="currentStep === 2">
-            <map-fields-page @canceled="removeFileAndGoToUploadPage" :csv-file="csvFile" :csv-filename="csvFilename"></map-fields-page>
+            <map-fields-page @canceled="removeFileAndGoBack" @completed="storeMappingsAndContinue"  :csv-file="csvFile" :csv-filename="csvFilename"></map-fields-page>
         </template>
 
         <template v-if="currentStep === 3">
-            <confirm-mappings-page></confirm-mappings-page>
+            <mappings-preview-page :mappedKeys="mappedKeys" :mappedValues="mappedValues"></mappings-preview-page>
         </template>
     </div>
 </template>
@@ -29,7 +29,9 @@ export default {
             currentStep: 1,
             totalSteps: 3,
             csvFile: '',
-            csvFilename: ''
+            csvFilename: '',
+            mappedKeys: [],
+            mappedValues: []
         }
     },
 
@@ -61,18 +63,25 @@ export default {
             this.currentStep--
         },
 
-        storeFileAndGoToMappingsPage(file, filename) {
+        storeFileAndContinue(file, filename) {
             this.csvFile = file
             this.csvFilename = filename
 
             this.goToNextStep()
         },
 
-        removeFileAndGoToUploadPage() {
+        removeFileAndGoBack() {
             this.csvFile = ''
             this.csvFilename = ''
 
             this.goToPreviousStep()
+        },
+
+        storeMappingsAndContinue(mappedKeys, mappedValues) {
+            this.mappedKeys = mappedKeys
+            this.mappedValues = mappedValues
+
+            this.goToNextStep()
         }
     }
 }

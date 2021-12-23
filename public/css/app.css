@@ -11369,6 +11369,9 @@ textarea.form-control-lg {
   padding: 2rem;
 }
 
+.map-fields-page {
+  padding: 2rem;
+}
 .map-fields-page__filename-box {
   background-color: #fff;
   padding: 1rem;
@@ -11385,5 +11388,4 @@ textarea.form-control-lg {
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: 2rem;
 }
