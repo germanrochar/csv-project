@@ -44,10 +44,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="csvField in csvFields">
+                    <tr v-for="(csvField) in csvFields">
                         <td>{{ csvField }}</td>
                         <td>
-                            <!--   insert multiselect      -->
+                            <multiselect v-model="values[csvField]" :options="contactsFields" placeholder="Select field"></multiselect>
                         </td>
                     </tr>
                 </tbody>
@@ -57,15 +57,18 @@
 </template>
 
 <script>
+import Multiselect from 'vue-multiselect'
 export default {
     name: "MapFieldsPage",
     props: ['csvFile', 'csvFilename'],
+    components: { Multiselect },
 
     data() {
         return {
             scanErrors: [],
             csvFields: [],
-            contactsFields: []
+            contactsFields: [],
+            values: []
         }
     },
 
@@ -107,3 +110,5 @@ export default {
     }
 }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
