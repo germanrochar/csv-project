@@ -5,7 +5,7 @@
         </div>
 
         <template v-if="currentStep === 1">
-            <upload-csv-page @uploaded="storeFileAndGoToMappingsPage"></upload-csv-page>
+            <upload-csv-page @canceled="goToPreviousStep" @uploaded="storeFileAndGoToMappingsPage"></upload-csv-page>
         </template>
 
         <template v-if="currentStep === 2">
@@ -15,11 +15,6 @@
         <template v-if="currentStep === 3">
             <confirm-mappings-page></confirm-mappings-page>
         </template>
-
-        <div class="import-steps-page__footer">
-            <button class="btn btn-light u-margin-right-small" @click="goToPreviousStep()">Go Back</button>
-            <button class="btn btn-primary" v-if="!isLastStep" @click="goToNextStep()">Continue</button>
-        </div>
     </div>
 </template>
 

@@ -5396,11 +5396,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsPage",
@@ -5549,6 +5544,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MapFieldsPage",
@@ -5619,14 +5619,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UploadCSVPage",
+  data: function data() {
+    return {
+      csvFile: '',
+      csvFilename: ''
+    };
+  },
+  computed: {
+    csvIsUploaded: function csvIsUploaded() {
+      return this.csvFile.length > 0 && this.csvFilename.length > 0;
+    }
+  },
   methods: {
     uploadFile: function uploadFile(e) {
       var files = e.target.files || e.dataTransfer.files;
-      var csvFile = files[0];
-      var csvFileName = files[0].name;
-      this.$emit('uploaded', csvFile, csvFileName);
+      this.csvFile = files[0];
+      this.csvFilename = files[0].name;
+      this.emitUploadedEvent();
+    },
+    goToMapFieldsPage: function goToMapFieldsPage() {
+      if (this.csvFile.length <= 0 || this.csvFilename <= 0) {
+        alert('Something went wrong. Please contact tech support.');
+        return;
+      }
+
+      this.emitUploadedEvent();
+    },
+    cancelImport: function cancelImport() {
+      this.$emit('canceled');
+    },
+    emitUploadedEvent: function emitUploadedEvent() {
+      this.$emit('uploaded', this.csvFile, this.csvFilename);
     }
   }
 });
@@ -29288,7 +29321,10 @@ var render = function () {
       _vm.currentStep === 1
         ? [
             _c("upload-csv-page", {
-              on: { uploaded: _vm.storeFileAndGoToMappingsPage },
+              on: {
+                canceled: _vm.goToPreviousStep,
+                uploaded: _vm.storeFileAndGoToMappingsPage,
+              },
             }),
           ]
         : _vm._e(),
@@ -29306,36 +29342,6 @@ var render = function () {
         : _vm._e(),
       _vm._v(" "),
       _vm.currentStep === 3 ? [_c("confirm-mappings-page")] : _vm._e(),
-      _vm._v(" "),
-      _c("div", { staticClass: "import-steps-page__footer" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-light u-margin-right-small",
-            on: {
-              click: function ($event) {
-                return _vm.goToPreviousStep()
-              },
-            },
-          },
-          [_vm._v("Go Back")]
-        ),
-        _vm._v(" "),
-        !_vm.isLastStep
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-primary",
-                on: {
-                  click: function ($event) {
-                    return _vm.goToNextStep()
-                  },
-                },
-              },
-              [_vm._v("Continue")]
-            )
-          : _vm._e(),
-      ]),
     ],
     2
   )
@@ -29518,6 +29524,21 @@ var render = function () {
           ]),
         ])
       : _vm._e(),
+    _vm._v(" "),
+    _c("div", { staticClass: "import-steps-page__footer" }, [
+      _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
+        _vm._v("Cancel"),
+      ]),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { disabled: !_vm.csvIsUploaded },
+        },
+        [_vm._v("Continue")]
+      ),
+    ]),
   ])
 }
 var staticRenderFns = [
@@ -29566,17 +29587,48 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "center-content text-center" }, [
-    _c("h3", [_vm._v("Upload CSV File")]),
+  return _c("div", { staticClass: "upload-csv-page" }, [
+    _c("div", { staticClass: "center-content text-center" }, [
+      _c("h3", [_vm._v("Upload CSV File")]),
+      _vm._v(" "),
+      _c("p", [_vm._v("Import your contacts from a csv file")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "mb-3" }, [
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { type: "file", accept: ".csv" },
+          on: { change: _vm.uploadFile },
+        }),
+      ]),
+    ]),
     _vm._v(" "),
-    _c("p", [_vm._v("Import your contacts from a csv file")]),
-    _vm._v(" "),
-    _c("div", { staticClass: "mb-3" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "file", accept: ".csv" },
-        on: { change: _vm.uploadFile },
-      }),
+    _c("div", { staticClass: "upload-csv-page__footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-light u-margin-right-small",
+          on: {
+            click: function ($event) {
+              return _vm.cancelImport()
+            },
+          },
+        },
+        [_vm._v("Cancel")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary",
+          attrs: { disabled: !_vm.csvIsUploaded },
+          on: {
+            click: function ($event) {
+              return _vm.goToMapFieldsPage()
+            },
+          },
+        },
+        [_vm._v("Continue")]
+      ),
     ]),
   ])
 }

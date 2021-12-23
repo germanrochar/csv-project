@@ -11358,7 +11358,8 @@ textarea.form-control-lg {
   justify-content: center;
   padding: 2rem;
 }
-.import-steps-page__footer {
+
+.upload-csv-page__footer {
   width: 100%;
   position: absolute;
   bottom: 2rem;
@@ -11379,4 +11380,10 @@ textarea.form-control-lg {
 }
 .map-fields-page__filename-box--success {
   border: 1px solid #28a745;
+}
+.map-fields-page__footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 2rem;
 }
