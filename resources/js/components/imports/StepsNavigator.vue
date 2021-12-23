@@ -13,7 +13,7 @@
 
 <script>
 export default {
-    name: "ImportStepsNavigator",
+    name: "StepsNavigator",
     props: ['totalSteps', 'currentStep'],
 
     data() {

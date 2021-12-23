@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex justify-content-center p-4">
-            <import-steps-navigator :total-steps="totalSteps" :current-step="currentStep"></import-steps-navigator>
+            <steps-navigator :total-steps="totalSteps" :current-step="currentStep"></steps-navigator>
         </div>
 
 <!--        Add footer here-->
@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import ImportStepsNavigator from "../components/ImportStepsNavigator";
+import StepsNavigator from "../components/imports/StepsNavigator";
 export default {
     name: "ImportStepsPage.vue",
-    components: { ImportStepsNavigator },
+    components: { StepsNavigator },
 
     data() {
         return {
