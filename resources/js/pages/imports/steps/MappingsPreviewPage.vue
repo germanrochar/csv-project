@@ -18,7 +18,7 @@
             </table>
 
             <div class="mappings-preview-page__footer">
-                <button class="btn btn-light u-margin-right-small">Cancel</button>
+                <button class="btn btn-light u-margin-right-small" @click="goToPreviousPage">Go Back</button>
                 <button class="btn btn-primary">Finish</button>
             </div>
         </div>
@@ -35,10 +35,12 @@ export default {
         }
     },
 
-    mounted() {
-        console.log('component mounted')
-        console.log(this.mappings);
-    }
+    methods: {
+        goToPreviousPage() {
+            this.$emit('go-back')
+        }
+    },
+
 }
 </script>
 

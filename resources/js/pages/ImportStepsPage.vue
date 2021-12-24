@@ -9,11 +9,18 @@
         </template>
 
         <template v-if="currentStep === 2">
-            <map-fields-page @canceled="removeFileAndGoBack" @completed="storeMappingsAndContinue"  :csv-file="csvFile" :csv-filename="csvFilename"></map-fields-page>
+            <map-fields-page
+                @canceled="removeDataAndGoBack"
+                @completed="storeMappingsAndContinue"
+                :csv-file="csvFile"
+                :csv-filename="csvFilename"
+                :mappings="mappings"
+            >
+            </map-fields-page>
         </template>
 
         <template v-if="currentStep === 3">
-            <mappings-preview-page :mappings="mappings"></mappings-preview-page>
+            <mappings-preview-page @go-back='goToPreviousStep' :mappings="mappings"></mappings-preview-page>
         </template>
     </div>
 </template>
@@ -69,9 +76,10 @@ export default {
             this.goToNextStep()
         },
 
-        removeFileAndGoBack() {
+        removeDataAndGoBack() {
             this.csvFile = ''
             this.csvFilename = ''
+            this.mappings = ''
 
             this.goToPreviousStep()
         },

@@ -68,7 +68,7 @@
 import Multiselect from 'vue-multiselect'
 export default {
     name: "MapFieldsPage",
-    props: ['csvFile', 'csvFilename'],
+    props: ['csvFile', 'csvFilename', 'mappings'],
     components: { Multiselect },
 
     data() {
@@ -103,9 +103,12 @@ export default {
                 this.csvFields = response.data.csvFields
                 this.contactsFields = response.data.contactsFields
 
-                // Create an empty array with same length than csvFields
-                this.mappedValues = this.csvFields.map(field => '')
-                console.log('hey');
+                if (Object.keys(this.mappings).length > 0) {
+                    this.mappedValues = Object.values(this.mappings)
+                } else {
+                    // Create an empty array with same length than csvFields
+                    this.mappedValues = this.csvFields.map(field => '')
+                }
             }).catch(error => {
                 this.scanErrors = error.response.data.errors['csv_file'] // TODO: Assert this param exists.
             })

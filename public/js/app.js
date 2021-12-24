@@ -5396,6 +5396,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsPage",
@@ -5441,9 +5448,10 @@ __webpack_require__.r(__webpack_exports__);
       this.csvFilename = filename;
       this.goToNextStep();
     },
-    removeFileAndGoBack: function removeFileAndGoBack() {
+    removeDataAndGoBack: function removeDataAndGoBack() {
       this.csvFile = '';
       this.csvFilename = '';
+      this.mappings = '';
       this.goToPreviousStep();
     },
     storeMappingsAndContinue: function storeMappingsAndContinue(mappings) {
@@ -5537,7 +5545,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MapFieldsPage",
-  props: ['csvFile', 'csvFilename'],
+  props: ['csvFile', 'csvFilename', 'mappings'],
   components: {
     Multiselect: (vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default())
   },
@@ -5566,12 +5574,16 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         _this.csvFields = response.data.csvFields;
-        _this.contactsFields = response.data.contactsFields; // Create an empty array with same length than csvFields
+        _this.contactsFields = response.data.contactsFields;
 
-        _this.mappedValues = _this.csvFields.map(function (field) {
-          return '';
-        });
-        console.log('hey');
+        if (Object.keys(_this.mappings).length > 0) {
+          _this.mappedValues = Object.values(_this.mappings);
+        } else {
+          // Create an empty array with same length than csvFields
+          _this.mappedValues = _this.csvFields.map(function (field) {
+            return '';
+          });
+        }
       })["catch"](function (error) {
         _this.scanErrors = error.response.data.errors['csv_file']; // TODO: Assert this param exists.
       });
@@ -5640,9 +5652,10 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {};
   },
-  mounted: function mounted() {
-    console.log('component mounted');
-    console.log(this.mappings);
+  methods: {
+    goToPreviousPage: function goToPreviousPage() {
+      this.$emit('go-back');
+    }
   }
 });
 
@@ -29385,9 +29398,10 @@ var render = function () {
               attrs: {
                 "csv-file": _vm.csvFile,
                 "csv-filename": _vm.csvFilename,
+                mappings: _vm.mappings,
               },
               on: {
-                canceled: _vm.removeFileAndGoBack,
+                canceled: _vm.removeDataAndGoBack,
                 completed: _vm.storeMappingsAndContinue,
               },
             }),
@@ -29395,7 +29409,12 @@ var render = function () {
         : _vm._e(),
       _vm._v(" "),
       _vm.currentStep === 3
-        ? [_c("mappings-preview-page", { attrs: { mappings: _vm.mappings } })]
+        ? [
+            _c("mappings-preview-page", {
+              attrs: { mappings: _vm.mappings },
+              on: { "go-back": _vm.goToPreviousStep },
+            }),
+          ]
         : _vm._e(),
     ],
     2
@@ -29636,7 +29655,18 @@ var render = function () {
           ),
         ]),
         _vm._v(" "),
-        _vm._m(1),
+        _c("div", { staticClass: "mappings-preview-page__footer" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-light u-margin-right-small",
+              on: { click: _vm.goToPreviousPage },
+            },
+            [_vm._v("Go Back")]
+          ),
+          _vm._v(" "),
+          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Finish")]),
+        ]),
       ]),
     ]
   )
@@ -29652,18 +29682,6 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Contacts Field")]),
       ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "mappings-preview-page__footer" }, [
-      _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
-        _vm._v("Cancel"),
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Finish")]),
     ])
   },
 ]
