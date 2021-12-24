@@ -5723,12 +5723,20 @@ __webpack_require__.r(__webpack_exports__);
     completeImport: function completeImport() {
       var _this = this;
 
-      var mappingKeys = this.mappings.getMappingKeys();
-      var mappingValues = this.mappings.getMappingValues();
+      var csvFields = this.mappings.getMappingKeys();
+      var contactFields = this.mappings.getMappingValues();
+      var customCsvFields = this.mappings.getCustomMappingKeys();
+      var customContactFields = this.mappings.getCustomMappingValues();
+      console.log(csvFields);
+      console.log(contactFields);
+      console.log(customCsvFields);
+      console.log(customContactFields);
       var formData = new FormData();
       formData.append('csv_file', this.csvFile);
-      formData.append('mapping_keys', JSON.stringify(mappingKeys));
-      formData.append('mapping_values', JSON.stringify(mappingValues));
+      formData.append('contact_fields', JSON.stringify(contactFields));
+      formData.append('custom_contact_fields', JSON.stringify(customContactFields));
+      formData.append('csv_fields', JSON.stringify(csvFields));
+      formData.append('custom_csv_fields', JSON.stringify(customCsvFields));
       axios.post('/imports/contacts/csv', formData).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
@@ -6075,17 +6083,40 @@ var Mappings = /*#__PURE__*/function () {
       this.data[index].value = '';
     }
     /**
-    * Retrieves a list of mapping keys
+    * Retrieves a list of custom mapping keys
     */
+
+  }, {
+    key: "getCustomMappingKeys",
+    value: function getCustomMappingKeys() {
+      var keys = [];
+      this.data.forEach(function (mapping) {
+        if (mapping.isCustom) keys.push(mapping.key);
+      });
+      return keys; // return this.data.map(mapping => {
+      //     if (!mapping.isCustom)
+      //         return ''
+      //
+      //     return mapping.key
+      // })
+    }
+    /**
+     * Retrieves a list of mapping keys
+     */
 
   }, {
     key: "getMappingKeys",
     value: function getMappingKeys() {
       var keys = [];
       this.data.forEach(function (mapping) {
-        keys.push(mapping.key);
+        if (!mapping.isCustom) keys.push(mapping.key);
       });
-      return keys;
+      return keys; // return this.data.map(mapping => {
+      //     if (mapping.isCustom)
+      //         return ''
+      //
+      //     return mapping.key
+      // })
     }
     /**
      * Retrieves a list of mapping values
@@ -6094,11 +6125,49 @@ var Mappings = /*#__PURE__*/function () {
   }, {
     key: "getMappingValues",
     value: function getMappingValues() {
-      var keys = [];
+      var _this2 = this;
+
+      var values = [];
       this.data.forEach(function (mapping) {
-        if (_typeof(mapping.value) === 'object') keys.push(mapping.value.key);else keys.push(mapping.value);
+        if (!mapping.isCustom) values.push(_this2.getMappingValue(mapping));
       });
-      return keys;
+      return values; // return this.data.map(mapping => {
+      //     if (!mapping.isCustom)
+      //         return ''
+      //
+      //     return this.getMappingValue(mapping)
+      // })
+    }
+    /**
+     * Retrieves a list of custom mapping values
+     */
+
+  }, {
+    key: "getCustomMappingValues",
+    value: function getCustomMappingValues() {
+      var _this3 = this;
+
+      var values = [];
+      this.data.forEach(function (mapping) {
+        if (mapping.isCustom) values.push(_this3.getMappingValue(mapping));
+      });
+      return values; // return this.data.map(mapping => {
+      //     if (!mapping.isCustom)
+      //         return ''
+      //
+      //     return this.getMappingValue(mapping)
+      // })
+    }
+    /**
+     * Calculates the value of a mapping.
+     * Reason: Values can be different because are set through a vue-multiselect or a simple input text.
+     */
+
+  }, {
+    key: "getMappingValue",
+    value: function getMappingValue(mapping) {
+      if (_typeof(mapping.value) === 'object') return mapping.value.key;
+      return mapping.value;
     }
   }]);
 

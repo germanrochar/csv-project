@@ -38,29 +38,89 @@ export default class Mappings {
     }
 
     /**
-    * Retrieves a list of mapping keys
+    * Retrieves a list of custom mapping keys
     */
-    getMappingKeys() {
-        let keys = []
+    getCustomMappingKeys() {
+        let keys = [];
         this.data.forEach(mapping => {
-            keys.push(mapping.key)
+            if (mapping.isCustom)
+                keys.push(mapping.key)
         })
 
         return keys
+        // return this.data.map(mapping => {
+        //     if (!mapping.isCustom)
+        //         return ''
+        //
+        //     return mapping.key
+        // })
+    }
+
+    /**
+     * Retrieves a list of mapping keys
+     */
+    getMappingKeys() {
+        let keys = [];
+        this.data.forEach(mapping => {
+            if (!mapping.isCustom)
+                keys.push(mapping.key)
+        })
+
+        return keys
+        // return this.data.map(mapping => {
+        //     if (mapping.isCustom)
+        //         return ''
+        //
+        //     return mapping.key
+        // })
     }
 
     /**
      * Retrieves a list of mapping values
      */
     getMappingValues() {
-        let keys = []
+        let values = [];
         this.data.forEach(mapping => {
-            if (typeof mapping.value === 'object')
-                keys.push(mapping.value.key)
-            else
-                keys.push(mapping.value)
+            if (!mapping.isCustom)
+                values.push(this.getMappingValue(mapping))
         })
 
-        return keys
+        return values
+        // return this.data.map(mapping => {
+        //     if (!mapping.isCustom)
+        //         return ''
+        //
+        //     return this.getMappingValue(mapping)
+        // })
+    }
+
+    /**
+     * Retrieves a list of custom mapping values
+     */
+    getCustomMappingValues() {
+        let values = [];
+        this.data.forEach(mapping => {
+            if (mapping.isCustom)
+                values.push(this.getMappingValue(mapping))
+        })
+
+        return values
+        // return this.data.map(mapping => {
+        //     if (!mapping.isCustom)
+        //         return ''
+        //
+        //     return this.getMappingValue(mapping)
+        // })
+    }
+
+    /**
+     * Calculates the value of a mapping.
+     * Reason: Values can be different because are set through a vue-multiselect or a simple input text.
+     */
+    getMappingValue(mapping) {
+        if (typeof mapping.value === 'object')
+            return mapping.value.key
+
+        return mapping.value
     }
 }

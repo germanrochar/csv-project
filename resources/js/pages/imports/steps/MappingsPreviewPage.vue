@@ -69,13 +69,22 @@ export default {
         },
 
         completeImport() {
-            let mappingKeys = this.mappings.getMappingKeys()
-            let mappingValues = this.mappings.getMappingValues()
+            let csvFields = this.mappings.getMappingKeys()
+            let contactFields = this.mappings.getMappingValues()
+            let customCsvFields = this.mappings.getCustomMappingKeys()
+            let customContactFields = this.mappings.getCustomMappingValues()
+
+            console.log(csvFields);
+            console.log(contactFields);
+            console.log(customCsvFields);
+            console.log(customContactFields);
 
             let formData = new FormData()
             formData.append('csv_file', this.csvFile)
-            formData.append('mapping_keys', JSON.stringify(mappingKeys))
-            formData.append('mapping_values', JSON.stringify(mappingValues))
+            formData.append('contact_fields', JSON.stringify(contactFields))
+            formData.append('custom_contact_fields', JSON.stringify(customContactFields))
+            formData.append('csv_fields', JSON.stringify(csvFields))
+            formData.append('custom_csv_fields', JSON.stringify(customCsvFields))
 
             axios.post(
                 '/imports/contacts/csv',

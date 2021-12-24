@@ -28,18 +28,30 @@ class ImportContactsRequest extends FormRequest
     {
         return [
             'csv_file' => 'required|mimes:csv,txt|max:10240',
-            'mapping_keys' => [
-                'required',
-                'string',
-                new EncodedJsonValuesMustBeStrings,
-                new EncodedJsonValuesNotEmpty
-            ],
-            'mapping_values' => [
+            'contact_fields' => [
                 'required',
                 'string',
                 new EncodedJsonValuesMustBeStrings,
                 new EncodedJsonValuesNotEmpty,
                 new RequiredContactFieldsMustBeProvided
+            ],
+            'custom_contact_fields' => [
+                'required',
+                'string',
+                new EncodedJsonValuesMustBeStrings,
+                new EncodedJsonValuesNotEmpty,
+            ],
+            'csv_fields' => [
+                'required',
+                'string',
+                new EncodedJsonValuesMustBeStrings,
+                new EncodedJsonValuesNotEmpty
+            ],
+            'custom_csv_fields' => [
+                'required',
+                'string',
+                new EncodedJsonValuesMustBeStrings,
+                new EncodedJsonValuesNotEmpty,
             ]
         ];
     }
