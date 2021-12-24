@@ -11369,22 +11369,22 @@ textarea.form-control-lg {
   padding: 2rem;
 }
 
-.map-fields-page {
+.mapping-fields-page {
   padding: 2rem;
 }
-.map-fields-page__filename-box {
+.mapping-fields-page__filename-box {
   background-color: #fff;
   padding: 1rem;
   display: inline-flex;
   flex-direction: column;
 }
-.map-fields-page__filename-box--danger {
+.mapping-fields-page__filename-box--danger {
   border: 1px solid #dc3545;
 }
-.map-fields-page__filename-box--success {
+.mapping-fields-page__filename-box--success {
   border: 1px solid #28a745;
 }
-.map-fields-page__footer {
+.mapping-fields-page__footer {
   width: 100%;
   display: flex;
   justify-content: flex-end;

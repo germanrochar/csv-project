@@ -5403,6 +5403,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsPage",
@@ -5463,10 +5468,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -5544,7 +5549,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: "MapFieldsPage",
+  name: "MappingFieldsPage",
   props: ['csvFile', 'csvFilename', 'mappings'],
   components: {
     Multiselect: (vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default())
@@ -5759,7 +5764,7 @@ Vue.component('example-component', (__webpack_require__(/*! ./components/Example
 Vue.component('import-contacts-page', (__webpack_require__(/*! ./pages/ImportContactsPage.vue */ "./resources/js/pages/ImportContactsPage.vue")["default"]));
 Vue.component('import-steps-page', (__webpack_require__(/*! ./pages/ImportStepsPage */ "./resources/js/pages/ImportStepsPage.vue")["default"]));
 Vue.component('upload-csv-page', (__webpack_require__(/*! ./pages/imports/steps/UploadCSVPage */ "./resources/js/pages/imports/steps/UploadCSVPage.vue")["default"]));
-Vue.component('map-fields-page', (__webpack_require__(/*! ./pages/imports/steps/MapFieldsPage */ "./resources/js/pages/imports/steps/MapFieldsPage.vue")["default"]));
+Vue.component('mapping-fields-page', (__webpack_require__(/*! ./pages/imports/steps/MappingFieldsPage */ "./resources/js/pages/imports/steps/MappingFieldsPage.vue")["default"]));
 Vue.component('mappings-preview-page', (__webpack_require__(/*! ./pages/imports/steps/MappingsPreviewPage */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue")["default"]));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -28820,10 +28825,10 @@ component.options.__file = "resources/js/pages/ImportStepsPage.vue"
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue":
-/*!************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue ***!
-  \************************************************************/
+/***/ "./resources/js/pages/imports/steps/MappingFieldsPage.vue":
+/*!****************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingFieldsPage.vue ***!
+  \****************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -28831,8 +28836,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MapFieldsPage.vue?vue&type=template&id=956f443c& */ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&");
-/* harmony import */ var _MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MapFieldsPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&");
+/* harmony import */ var _MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MappingFieldsPage.vue?vue&type=template&id=436d7ed4& */ "./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4&");
+/* harmony import */ var _MappingFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MappingFieldsPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=script&lang=js&");
 /* harmony import */ var vue_multiselect_dist_vue_multiselect_min_css_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-multiselect/dist/vue-multiselect.min.css?vue&type=style&index=0&lang=css& */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.css?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -28844,9 +28849,9 @@ __webpack_require__.r(__webpack_exports__);
 /* normalize component */
 
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
-  _MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.render,
-  _MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _MappingFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
   null,
@@ -28856,7 +28861,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
 
 /* hot reload */
 if (false) { var api; }
-component.options.__file = "resources/js/pages/imports/steps/MapFieldsPage.vue"
+component.options.__file = "resources/js/pages/imports/steps/MappingFieldsPage.vue"
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
 
 /***/ }),
@@ -29003,10 +29008,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&":
-/*!*************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js& ***!
-  \*************************************************************************************/
+/***/ "./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29014,8 +29019,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapFieldsPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=script&lang=js&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingFieldsPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -29132,19 +29137,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c& ***!
-  \*******************************************************************************************/
+/***/ "./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4& ***!
+  \***********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFieldsPage_vue_vue_type_template_id_956f443c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MapFieldsPage.vue?vue&type=template&id=956f443c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingFieldsPage.vue?vue&type=template&id=436d7ed4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4&");
 
 
 /***/ }),
@@ -29394,7 +29399,7 @@ var render = function () {
       _vm._v(" "),
       _vm.currentStep === 2
         ? [
-            _c("map-fields-page", {
+            _c("mapping-fields-page", {
               attrs: {
                 "csv-file": _vm.csvFile,
                 "csv-filename": _vm.csvFilename,
@@ -29427,10 +29432,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c&":
-/*!**********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MapFieldsPage.vue?vue&type=template&id=956f443c& ***!
-  \**********************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -29443,11 +29448,11 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "map-fields-page" }, [
+  return _c("div", { staticClass: "mapping-fields-page" }, [
     _c("div", { staticClass: "col-md-12" }, [
       _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "map-fields-page__feedback" }, [
+      _c("div", { staticClass: "mapping-fields-page__feedback" }, [
         !_vm.scanErrorsAreEmpty
           ? _c(
               "div",
@@ -29469,7 +29474,7 @@ var render = function () {
                   "div",
                   {
                     staticClass:
-                      "map-fields-page__filename-box map-fields-page__filename-box--danger",
+                      "mapping-fields-page__filename-box mapping-fields-page__filename-box--danger",
                   },
                   [
                     _c("span", [
@@ -29505,7 +29510,7 @@ var render = function () {
                   "div",
                   {
                     staticClass:
-                      "map-fields-page__filename-box map-fields-page__filename-box--success",
+                      "mapping-fields-page__filename-box mapping-fields-page__filename-box--success",
                   },
                   [
                     _c("span", [
@@ -29564,7 +29569,7 @@ var render = function () {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "map-fields-page__footer" }, [
+      _c("div", { staticClass: "mapping-fields-page__footer" }, [
         _c(
           "button",
           {

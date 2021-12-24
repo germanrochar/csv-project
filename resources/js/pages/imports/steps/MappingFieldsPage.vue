@@ -1,5 +1,5 @@
 <template>
-    <div class="map-fields-page">
+    <div class="mapping-fields-page">
         <div class="col-md-12">
             <div>
                 <h3>Map Fields</h3>
@@ -7,7 +7,7 @@
             </div>
 
             <!--   Scan feedback     -->
-            <div class="map-fields-page__feedback">
+            <div class="mapping-fields-page__feedback">
                 <div class="alert alert-danger" role="alert" v-if="!scanErrorsAreEmpty">
                     <span class="sr-only">The following errors were found in your csv file:</span>
 
@@ -16,7 +16,7 @@
                         <li v-for="scanError in scanErrors">{{ scanError }}</li>
                     </ul>
 
-                    <div class="map-fields-page__filename-box map-fields-page__filename-box--danger">
+                    <div class="mapping-fields-page__filename-box mapping-fields-page__filename-box--danger">
                     <span>
                         <span class="fw-bold">File name</span>: {{ csvFilename}}
                     </span>
@@ -26,7 +26,7 @@
 
                 <div class="alert alert-success" role="alert" v-else>
                     <p class="fw-bold">Found 1000 contacts in:</p>
-                    <div class="map-fields-page__filename-box map-fields-page__filename-box--success">
+                    <div class="mapping-fields-page__filename-box mapping-fields-page__filename-box--success">
                     <span>
                         <span class="fw-bold">File name</span>: {{ csvFilename}}
                     </span>
@@ -56,7 +56,7 @@
             </div>
 
             <!--    Footer    -->
-            <div class="map-fields-page__footer">
+            <div class="mapping-fields-page__footer">
                 <button class="btn btn-light u-margin-right-small" @click="cancelMapping">Cancel</button>
                 <button class="btn btn-primary" @click="setMappingsAndContinue">Continue</button>
             </div>
@@ -67,7 +67,7 @@
 <script>
 import Multiselect from 'vue-multiselect'
 export default {
-    name: "MapFieldsPage",
+    name: "MappingFieldsPage",
     props: ['csvFile', 'csvFilename', 'mappings'],
     components: { Multiselect },
 

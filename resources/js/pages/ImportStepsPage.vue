@@ -5,22 +5,27 @@
         </div>
 
         <template v-if="currentStep === 1">
-            <upload-csv-page @canceled="goToPreviousStep" @uploaded="storeFileAndContinue"></upload-csv-page>
+            <upload-csv-page
+                @canceled="goToPreviousStep"
+                @uploaded="storeFileAndContinue"
+            ></upload-csv-page>
         </template>
 
         <template v-if="currentStep === 2">
-            <map-fields-page
+            <mapping-fields-page
                 @canceled="removeDataAndGoBack"
                 @completed="storeMappingsAndContinue"
                 :csv-file="csvFile"
                 :csv-filename="csvFilename"
                 :mappings="mappings"
-            >
-            </map-fields-page>
+            ></mapping-fields-page>
         </template>
 
         <template v-if="currentStep === 3">
-            <mappings-preview-page @go-back='goToPreviousStep' :mappings="mappings"></mappings-preview-page>
+            <mappings-preview-page
+                @go-back='goToPreviousStep'
+                :mappings="mappings"
+            ></mappings-preview-page>
         </template>
     </div>
 </template>

@@ -26,7 +26,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('import-contacts-page', require('./pages/ImportContactsPage.vue').default);
 Vue.component('import-steps-page', require('./pages/ImportStepsPage').default);
 Vue.component('upload-csv-page', require('./pages/imports/steps/UploadCSVPage').default);
-Vue.component('map-fields-page', require('./pages/imports/steps/MapFieldsPage').default);
+Vue.component('mapping-fields-page', require('./pages/imports/steps/MappingFieldsPage').default);
 Vue.component('mappings-preview-page', require('./pages/imports/steps/MappingsPreviewPage').default);
 
 /**
