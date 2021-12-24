@@ -35,7 +35,7 @@ class ContactsImport implements ToModel, WithHeadingRow
     {
         \Log::info('Mappings', ['contact_mapings' => $this->contactMappings, 'custom_mappings' => $this->customMappings]);
         // sanitize data
-        $contact = new Contact([
+        $contact = Contact::create([
             'team_id' => isset($this->contactMappings['team_id']) ? $row[$this->contactMappings['team_id']] : null,
             'name' => isset($this->contactMappings['name']) ? $row[$this->contactMappings['name']] : null,
             'phone' => isset($this->contactMappings['phone']) ? $row[$this->contactMappings['phone']] : null,
@@ -43,9 +43,12 @@ class ContactsImport implements ToModel, WithHeadingRow
             'sticky_phone_number_id' => isset($this->contactMappings['sticky_phone_number_id']) ? $row[$this->contactMappings['sticky_phone_number_id']] : null
         ]);
 
+        $customAttribute = new CustomAttribute(['contact_id' => 1, 'key' => 'test', 'value' => 'testing']);
+        \Log::info('Custom attribute', ['custom' => $customAttribute]);
+
         foreach ($this->customMappings as $key => $value) {
             // TODO: Create addCustomMapping method
-            new CustomAttribute([
+            CustomAttribute::create([
                 'contact_id' => $contact->id,
                 'key' => $key,
                 'value' =>  $row[$this->customMappings[$key]]

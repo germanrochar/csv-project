@@ -74,11 +74,6 @@ export default {
             let customCsvFields = this.mappings.getCustomMappingKeys()
             let customContactFields = this.mappings.getCustomMappingValues()
 
-            console.log(csvFields);
-            console.log(contactFields);
-            console.log(customCsvFields);
-            console.log(customContactFields);
-
             let formData = new FormData()
             formData.append('csv_file', this.csvFile)
             formData.append('contact_fields', JSON.stringify(contactFields))

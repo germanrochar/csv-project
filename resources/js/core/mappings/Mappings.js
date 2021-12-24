@@ -48,12 +48,6 @@ export default class Mappings {
         })
 
         return keys
-        // return this.data.map(mapping => {
-        //     if (!mapping.isCustom)
-        //         return ''
-        //
-        //     return mapping.key
-        // })
     }
 
     /**
@@ -86,12 +80,6 @@ export default class Mappings {
         })
 
         return values
-        // return this.data.map(mapping => {
-        //     if (!mapping.isCustom)
-        //         return ''
-        //
-        //     return this.getMappingValue(mapping)
-        // })
     }
 
     /**
@@ -105,12 +93,6 @@ export default class Mappings {
         })
 
         return values
-        // return this.data.map(mapping => {
-        //     if (!mapping.isCustom)
-        //         return ''
-        //
-        //     return this.getMappingValue(mapping)
-        // })
     }
 
     /**
