@@ -39,30 +39,34 @@
                 <p class="fw-bold"> Map your fields to Contacts' fields</p>
                 <table class="table table-bordered">
                     <thead>
-                    <tr>
-                        <th scope="col">CSV File Field</th>
-                        <th scope="col">Contacts Field</th>
-                    </tr>
+                        <tr>
+                            <th class="mapping-fields-page__table-headings" scope="col">CSV File Field</th>
+                            <th class="mapping-fields-page__table-headings" scope="col">Contacts Field</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(mapping, index) in mappings">
+                    <tr v-for="(mapping, index) in mappings.getAll()">
                         <td>{{ mapping.key }}</td>
                         <td>
-                            <multiselect
+                            <div v-if="!mapping.isCustom">
+                                <multiselect
                                 v-model="mapping.value"
                                 :options="options"
                                 track-by="humanReadableName"
                                 placeholder="Select field"
                                 label="humanReadableName"
                                 @select="checkIfIsCustomOption($event, index)"
-                                v-if="!mapping.isCustom"
-                            ></multiselect>
-                            <input type="text"
-                               v-model="mapping.value"
-                               v-if="mapping.isCustom"
-                               class="form-control"
-                               placeholder="Type custom field"
-                            >
+                                ></multiselect>
+                            </div>
+                            <div v-if="mapping.isCustom" class="d-flex align-items-center">
+                                <input type="text"
+                                   v-model="mapping.value"
+                                   v-if="mapping.isCustom"
+                                   class="form-control u-margin-right-small"
+                                   placeholder="Type custom field"
+                                >
+                                <button class="btn btn-secondary" @click="markAsNotCustomField(index)">Cancel</button>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
@@ -98,9 +102,9 @@ export default {
     },
 
     computed: {
-      errorsAreEmpty() {
+        errorsAreEmpty() {
           return this.errors.length === 0;
-      }
+        }
     },
 
     methods: {
@@ -121,7 +125,7 @@ export default {
                 this.contactsFields = response.data.contactsFields
 
                 this.options = new ContactMappingOptions(this.contactsFields, this.contactsFields).getAll()
-                this.mappings = Object.keys(this.oldMappings).length > 0 ? this.oldMappings : new Mappings(this.csvFields).getAll()
+                this.mappings = Object.keys(this.oldMappings).length > 0 ? this.oldMappings : new Mappings(this.csvFields)
             }).catch(error => {
                 this.errors = error.response.data.errors['csv_file'] ?? ['Something went wrong. Please contact tech support.']
             })
@@ -140,8 +144,11 @@ export default {
                 return
             }
 
-            this.mappings[index].isCustom = true
-            this.$nextTick(() => this.mappings[index].value = '')
+            this.$nextTick(() => this.mappings.markAsCustom(index))
+        },
+
+        markAsNotCustomField(index) {
+            this.$nextTick(() => this.mappings.markAsNotCustom(index))
         }
     },
 

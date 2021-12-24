@@ -5564,6 +5564,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -5601,7 +5605,7 @@ __webpack_require__.r(__webpack_exports__);
         _this.csvFields = response.data.csvFields;
         _this.contactsFields = response.data.contactsFields;
         _this.options = new _core_mappings_ContactMappingOptions__WEBPACK_IMPORTED_MODULE_2__["default"](_this.contactsFields, _this.contactsFields).getAll();
-        _this.mappings = Object.keys(_this.oldMappings).length > 0 ? _this.oldMappings : new _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__["default"](_this.csvFields).getAll();
+        _this.mappings = Object.keys(_this.oldMappings).length > 0 ? _this.oldMappings : new _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__["default"](_this.csvFields);
       })["catch"](function (error) {
         var _error$response$data$;
 
@@ -5621,9 +5625,15 @@ __webpack_require__.r(__webpack_exports__);
         return;
       }
 
-      this.mappings[index].isCustom = true;
       this.$nextTick(function () {
-        return _this2.mappings[index].value = '';
+        return _this2.mappings.markAsCustom(index);
+      });
+    },
+    markAsNotCustomField: function markAsNotCustomField(index) {
+      var _this3 = this;
+
+      this.$nextTick(function () {
+        return _this3.mappings.markAsNotCustom(index);
       });
     }
   },
@@ -5713,8 +5723,8 @@ __webpack_require__.r(__webpack_exports__);
     completeImport: function completeImport() {
       var _this = this;
 
-      var mappingKeys = Object.keys(this.mappings);
-      var mappingValues = Object.values(this.mappings);
+      var mappingKeys = this.mappings.getMappingKeys();
+      var mappingValues = this.mappings.getMappingValues();
       var formData = new FormData();
       formData.append('csv_file', this.csvFile);
       formData.append('mapping_keys', JSON.stringify(mappingKeys));
@@ -6007,6 +6017,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ Mappings)
 /* harmony export */ });
 /* harmony import */ var _Mapping__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Mapping */ "./resources/js/core/mappings/Mapping.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -6039,6 +6051,54 @@ var Mappings = /*#__PURE__*/function () {
     key: "getAll",
     value: function getAll() {
       return this.data;
+    }
+    /**
+     * Marks a mapping as custom given an index referencing the list of mappings
+     * @param index
+     */
+
+  }, {
+    key: "markAsCustom",
+    value: function markAsCustom(index) {
+      this.data[index].isCustom = true;
+      this.data[index].value = '';
+    }
+    /**
+     * Marks a mapping as NOT custom given an index referencing the list of mappings
+     * @param index
+     */
+
+  }, {
+    key: "markAsNotCustom",
+    value: function markAsNotCustom(index) {
+      this.data[index].isCustom = false;
+      this.data[index].value = '';
+    }
+    /**
+    * Retrieves a list of mapping keys
+    */
+
+  }, {
+    key: "getMappingKeys",
+    value: function getMappingKeys() {
+      var keys = [];
+      this.data.forEach(function (mapping) {
+        keys.push(mapping.key);
+      });
+      return keys;
+    }
+    /**
+     * Retrieves a list of mapping values
+     */
+
+  }, {
+    key: "getMappingValues",
+    value: function getMappingValues() {
+      var keys = [];
+      this.data.forEach(function (mapping) {
+        if (_typeof(mapping.value) === 'object') keys.push(mapping.value.key);else keys.push(mapping.value);
+      });
+      return keys;
     }
   }]);
 
@@ -29773,72 +29833,96 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.mappings, function (mapping, index) {
+                _vm._l(_vm.mappings.getAll(), function (mapping, index) {
                   return _c("tr", [
                     _c("td", [_vm._v(_vm._s(mapping.key))]),
                     _vm._v(" "),
-                    _c(
-                      "td",
-                      [
-                        !mapping.isCustom
-                          ? _c("multiselect", {
-                              attrs: {
-                                options: _vm.options,
-                                "track-by": "humanReadableName",
-                                placeholder: "Select field",
-                                label: "humanReadableName",
-                              },
-                              on: {
-                                select: function ($event) {
-                                  return _vm.checkIfIsCustomOption(
-                                    $event,
-                                    index
-                                  )
+                    _c("td", [
+                      !mapping.isCustom
+                        ? _c(
+                            "div",
+                            [
+                              _c("multiselect", {
+                                attrs: {
+                                  options: _vm.options,
+                                  "track-by": "humanReadableName",
+                                  placeholder: "Select field",
+                                  label: "humanReadableName",
                                 },
-                              },
-                              model: {
-                                value: mapping.value,
-                                callback: function ($$v) {
-                                  _vm.$set(mapping, "value", $$v)
+                                on: {
+                                  select: function ($event) {
+                                    return _vm.checkIfIsCustomOption(
+                                      $event,
+                                      index
+                                    )
+                                  },
                                 },
-                                expression: "mapping.value",
-                              },
-                            })
-                          : _vm._e(),
-                        _vm._v(" "),
-                        mapping.isCustom
-                          ? _c("input", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
+                                model: {
                                   value: mapping.value,
+                                  callback: function ($$v) {
+                                    _vm.$set(mapping, "value", $$v)
+                                  },
                                   expression: "mapping.value",
                                 },
-                              ],
-                              staticClass: "form-control",
-                              attrs: {
-                                type: "text",
-                                placeholder: "Type custom field",
-                              },
-                              domProps: { value: mapping.value },
-                              on: {
-                                input: function ($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    mapping,
-                                    "value",
-                                    $event.target.value
-                                  )
+                              }),
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      mapping.isCustom
+                        ? _c(
+                            "div",
+                            { staticClass: "d-flex align-items-center" },
+                            [
+                              mapping.isCustom
+                                ? _c("input", {
+                                    directives: [
+                                      {
+                                        name: "model",
+                                        rawName: "v-model",
+                                        value: mapping.value,
+                                        expression: "mapping.value",
+                                      },
+                                    ],
+                                    staticClass:
+                                      "form-control u-margin-right-small",
+                                    attrs: {
+                                      type: "text",
+                                      placeholder: "Type custom field",
+                                    },
+                                    domProps: { value: mapping.value },
+                                    on: {
+                                      input: function ($event) {
+                                        if ($event.target.composing) {
+                                          return
+                                        }
+                                        _vm.$set(
+                                          mapping,
+                                          "value",
+                                          $event.target.value
+                                        )
+                                      },
+                                    },
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.markAsNotCustomField(index)
+                                    },
+                                  },
                                 },
-                              },
-                            })
-                          : _vm._e(),
-                      ],
-                      1
-                    ),
+                                [_vm._v("Cancel")]
+                              ),
+                            ]
+                          )
+                        : _vm._e(),
+                    ]),
                   ])
                 }),
                 0
@@ -29887,9 +29971,23 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("CSV File Field")]),
+        _c(
+          "th",
+          {
+            staticClass: "mapping-fields-page__table-headings",
+            attrs: { scope: "col" },
+          },
+          [_vm._v("CSV File Field")]
+        ),
         _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [_vm._v("Contacts Field")]),
+        _c(
+          "th",
+          {
+            staticClass: "mapping-fields-page__table-headings",
+            attrs: { scope: "col" },
+          },
+          [_vm._v("Contacts Field")]
+        ),
       ]),
     ])
   },
@@ -29958,7 +30056,7 @@ var render = function () {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.mappings, function (mapping) {
+            _vm._l(_vm.mappings.getAll(), function (mapping) {
               return _c("tr", [
                 _c("td", [_vm._v(_vm._s(mapping.key))]),
                 _vm._v(" "),

@@ -11384,6 +11384,9 @@ textarea.form-control-lg {
 .mapping-fields-page__filename-box--success {
   border: 1px solid #28a745;
 }
+.mapping-fields-page__table-headings {
+  width: 50%;
+}
 .mapping-fields-page__footer {
   width: 100%;
   display: flex;
