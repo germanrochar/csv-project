@@ -1,0 +1,15 @@
+import Option from '../components/Option';
+export default class ContactMappingOptions {
+    constructor(data) {
+        this.data = []
+        this.data.push(new Option('custom', 'Add a custom field'))
+
+        data.forEach((key, index) => {
+            this.data.push(new Option(key, key))
+        })
+    }
+
+    getAll() {
+        return this.data
+    }
+}
