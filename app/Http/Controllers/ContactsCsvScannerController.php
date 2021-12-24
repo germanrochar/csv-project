@@ -21,13 +21,7 @@ class ContactsCsvScannerController extends Controller
 
         return new JsonResponse([
             'csvFields' => $headingRows,
-            'contactsFields' => [
-                'team_id',
-                'name',
-                'phone',
-                'email',
-                'sticky_phone_number_id'
-            ]
+            'contactsFields' => Contact::getColumnsAllowedForImport()
         ]);
     }
 }

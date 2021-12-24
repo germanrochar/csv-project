@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 /**
  * @property int id
@@ -20,5 +21,25 @@ class Contact extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
+    /**
+    * @var array
+    */
+    private static $columnsNotAllowedForImport = [
+        'id',
+        'created_at',
+        'updated_at'
+    ];
+
+    public static function getColumnsAllowedForImport(): array {
+        $contactsFields = Schema::getColumnListing('contacts');
+
+        return array_values(
+            array_filter($contactsFields, static function ($field) {
+                return !in_array($field, self::$columnsNotAllowedForImport, true);
+            })
+        );
+    }
 
 }
