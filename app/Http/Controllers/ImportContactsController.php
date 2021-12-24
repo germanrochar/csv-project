@@ -18,20 +18,26 @@ class ImportContactsController extends Controller
     public function store(ImportContactsRequest $request)
     {
         $csvFile = $request->file('csv_file');
-        $mappingKeys = json_decode($request->input('mapping_keys'));
-        $mappingValues = json_decode($request->input('mapping_values'));
+        $contactFields = json_decode($request->input('contact_fields'));
+        $csvFields = json_decode($request->input('csv_fields'));
 
-        $mappings = [];
-        foreach ($mappingKeys as $index => $key) {
-            $mappings[$key] = $mappingValues[$index];
+        $customContactFields = json_decode($request->input('custom_contact_fields'));
+        $customCsvFields = json_decode($request->input('custom_csv_fields'));
+
+        $contactsMappings = [];
+        foreach ($csvFields as $index => $key) {
+            $contactsMappings[$key] = $contactFields[$index];
         }
 
-        $contactsColumns = Contact::getColumnsAllowedForImport();
-        $contactsMappings = array_flip(array_intersect($mappings, $contactsColumns));
-        $customMappings = array_flip(array_diff($mappings, $contactsColumns));
+        $customContactMappings = [];
+        foreach ($customCsvFields as $index => $key) {
+            $customContactMappings[$key] = $customContactFields[$index];
+        }
+
+        $contactsMappings = array_flip($contactsMappings);
+        $customMappings = array_flip($customContactMappings);
 
         \Log::info('Mappings', ['contactsMappings' => $contactsMappings, 'customMappings' => $customMappings]);
-
 
         // Reading the same file twice is not great for performance but, I wasn't sure how much the performance
         // was a priority for this exercise. So, I decided to create two import classes to make the code cleaner.
