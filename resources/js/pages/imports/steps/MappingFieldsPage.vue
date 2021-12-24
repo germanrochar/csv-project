@@ -58,10 +58,10 @@
                                 v-if="!mapping.isCustom"
                             ></multiselect>
                             <input type="text"
-                                   v-model="mapping.value"
-                                   v-if="mapping.isCustom"
-                                   class="form-control"
-                                   placeholder="Type custom field"
+                               v-model="mapping.value"
+                               v-if="mapping.isCustom"
+                               class="form-control"
+                               placeholder="Type custom field"
                             >
                         </td>
                     </tr>
@@ -136,8 +136,6 @@ export default {
         },
 
         checkIfIsCustomOption(selectedOption, index) {
-            console.log('selected option');
-            console.log(selectedOption);
             if (selectedOption.key !== 'custom') {
                 return
             }

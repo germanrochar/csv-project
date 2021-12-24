@@ -24,9 +24,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(value, key) in mappings">
-                    <td>{{ key }}</td>
-                    <td>{{ value }}</td>
+                <tr v-for="mapping in mappings">
+                    <td>{{ mapping.key }}</td>
+                    <td>
+                        <template v-if="typeof mapping.value === 'object'">
+                            {{ mapping.value.humanReadableName }}
+                        </template>
+                        <template v-else>
+                            {{ mapping.value }}
+                        </template>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -80,6 +87,6 @@ export default {
                 this.errors = error.response.data.errors ?? []
             })
         }
-    },
+    }
 }
 </script>

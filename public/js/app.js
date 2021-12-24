@@ -5617,9 +5617,6 @@ __webpack_require__.r(__webpack_exports__);
     checkIfIsCustomOption: function checkIfIsCustomOption(selectedOption, index) {
       var _this2 = this;
 
-      console.log('selected option');
-      console.log(selectedOption);
-
       if (selectedOption.key !== 'custom') {
         return;
       }
@@ -5648,6 +5645,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5893,6 +5897,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Option class represents an option of a select input
+ */
 var Option = /*#__PURE__*/_createClass(function Option(key, humanReadableName) {
   _classCallCheck(this, Option);
 
@@ -5923,6 +5930,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
+/**
+ * This class handles mapping options in MappingFieldsPage.vue
+ */
 
 var ContactMappingOptions = /*#__PURE__*/function () {
   function ContactMappingOptions(data) {
@@ -29948,11 +29958,31 @@ var render = function () {
           _vm._v(" "),
           _c(
             "tbody",
-            _vm._l(_vm.mappings, function (value, key) {
+            _vm._l(_vm.mappings, function (mapping) {
               return _c("tr", [
-                _c("td", [_vm._v(_vm._s(key))]),
+                _c("td", [_vm._v(_vm._s(mapping.key))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(value))]),
+                _c(
+                  "td",
+                  [
+                    typeof mapping.value === "object"
+                      ? [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(mapping.value.humanReadableName) +
+                              "\n                    "
+                          ),
+                        ]
+                      : [
+                          _vm._v(
+                            "\n                        " +
+                              _vm._s(mapping.value) +
+                              "\n                    "
+                          ),
+                        ],
+                  ],
+                  2
+                ),
               ])
             }),
             0
