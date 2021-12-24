@@ -1,4 +1,8 @@
 import Option from '../components/Option';
+
+/**
+ * This class handles mapping options in MappingFieldsPage.vue
+ */
 export default class ContactMappingOptions {
     constructor(data) {
         this.data = []
