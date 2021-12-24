@@ -1,5 +1,5 @@
 <template>
-    <div class="import-steps-page">
+    <div class="import-steps-page container">
         <div class="import-steps-page__header">
             <steps-navigator :total-steps="totalSteps" :current-step="currentStep"></steps-navigator>
         </div>
@@ -13,7 +13,7 @@
         </template>
 
         <template v-if="currentStep === 3">
-            <mappings-preview-page :mappedKeys="mappedKeys" :mappedValues="mappedValues"></mappings-preview-page>
+            <mappings-preview-page :mappings="mappings"></mappings-preview-page>
         </template>
     </div>
 </template>
@@ -30,8 +30,7 @@ export default {
             totalSteps: 3,
             csvFile: '',
             csvFilename: '',
-            mappedKeys: [],
-            mappedValues: []
+            mappings: {}
         }
     },
 
@@ -77,9 +76,8 @@ export default {
             this.goToPreviousStep()
         },
 
-        storeMappingsAndContinue(mappedKeys, mappedValues) {
-            this.mappedKeys = mappedKeys
-            this.mappedValues = mappedValues
+        storeMappingsAndContinue(mappings) {
+            this.mappings = mappings
 
             this.goToNextStep()
         }

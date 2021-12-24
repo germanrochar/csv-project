@@ -5408,8 +5408,7 @@ __webpack_require__.r(__webpack_exports__);
       totalSteps: 3,
       csvFile: '',
       csvFilename: '',
-      mappedKeys: [],
-      mappedValues: []
+      mappings: {}
     };
   },
   computed: {
@@ -5447,9 +5446,8 @@ __webpack_require__.r(__webpack_exports__);
       this.csvFilename = '';
       this.goToPreviousStep();
     },
-    storeMappingsAndContinue: function storeMappingsAndContinue(mappedKeys, mappedValues) {
-      this.mappedKeys = mappedKeys;
-      this.mappedValues = mappedValues;
+    storeMappingsAndContinue: function storeMappingsAndContinue(mappings) {
+      this.mappings = mappings;
       this.goToNextStep();
     }
   }
@@ -5470,6 +5468,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
 //
 //
 //
@@ -5578,8 +5579,14 @@ __webpack_require__.r(__webpack_exports__);
     cancelMapping: function cancelMapping() {
       this.$emit('canceled');
     },
-    goToMappingsPreviewPage: function goToMappingsPreviewPage() {
-      this.$emit('completed', this.csvFields, this.mappedValues);
+    setMappingsAndContinue: function setMappingsAndContinue() {
+      var _this2 = this;
+
+      var mappings = {};
+      this.csvFields.forEach(function (field, index) {
+        mappings[field] = _this2.mappedValues[index];
+      });
+      this.$emit('completed', mappings);
     }
   },
   mounted: function mounted() {
@@ -5611,16 +5618,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MappingsPreviewPage",
-  props: ['mappedKeys', 'mappedValues'],
+  props: ['mappings'],
   data: function data() {
     return {};
   },
   mounted: function mounted() {
     console.log('component mounted');
-    console.log(this.mappedKeys);
-    console.log(this.mappedValues);
+    console.log(this.mappings);
   }
 });
 
@@ -29330,7 +29352,7 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "import-steps-page" },
+    { staticClass: "import-steps-page container" },
     [
       _c(
         "div",
@@ -29373,14 +29395,7 @@ var render = function () {
         : _vm._e(),
       _vm._v(" "),
       _vm.currentStep === 3
-        ? [
-            _c("mappings-preview-page", {
-              attrs: {
-                mappedKeys: _vm.mappedKeys,
-                mappedValues: _vm.mappedValues,
-              },
-            }),
-          ]
+        ? [_c("mappings-preview-page", { attrs: { mappings: _vm.mappings } })]
         : _vm._e(),
     ],
     2
@@ -29409,141 +29424,146 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container map-fields-page" }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "map-fields-page__feedback" }, [
-      !_vm.scanErrorsAreEmpty
-        ? _c(
-            "div",
-            { staticClass: "alert alert-danger", attrs: { role: "alert" } },
-            [
-              _c("span", { staticClass: "sr-only" }, [
-                _vm._v("The following errors were found in your csv file:"),
-              ]),
+  return _c("div", { staticClass: "map-fields-page row" }, [
+    _c("div", { staticClass: "col-md-12" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "map-fields-page__feedback" }, [
+        !_vm.scanErrorsAreEmpty
+          ? _c(
+              "div",
+              { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+              [
+                _c("span", { staticClass: "sr-only" }, [
+                  _vm._v("The following errors were found in your csv file:"),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "ul",
+                  _vm._l(_vm.scanErrors, function (scanError) {
+                    return _c("li", [_vm._v(_vm._s(scanError))])
+                  }),
+                  0
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "map-fields-page__filename-box map-fields-page__filename-box--danger",
+                  },
+                  [
+                    _c("span", [
+                      _c("span", { staticClass: "fw-bold" }, [
+                        _vm._v("File name"),
+                      ]),
+                      _vm._v(
+                        ": " + _vm._s(_vm.csvFilename) + "\n                "
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        attrs: { href: "#" },
+                        on: { click: _vm.cancelMapping },
+                      },
+                      [_vm._v("Upload a different file")]
+                    ),
+                  ]
+                ),
+              ]
+            )
+          : _c(
+              "div",
+              { staticClass: "alert alert-success", attrs: { role: "alert" } },
+              [
+                _c("p", { staticClass: "fw-bold" }, [
+                  _vm._v("Found 1000 contacts in:"),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "map-fields-page__filename-box map-fields-page__filename-box--success",
+                  },
+                  [
+                    _c("span", [
+                      _c("span", { staticClass: "fw-bold" }, [
+                        _vm._v("File name"),
+                      ]),
+                      _vm._v(
+                        ": " + _vm._s(_vm.csvFilename) + "\n                "
+                      ),
+                    ]),
+                  ]
+                ),
+              ]
+            ),
+      ]),
+      _vm._v(" "),
+      _vm.scanErrorsAreEmpty
+        ? _c("div", [
+            _c("p", { staticClass: "fw-bold" }, [
+              _vm._v(" Map your fields to Contacts' fields"),
+            ]),
+            _vm._v(" "),
+            _c("table", { staticClass: "table table-bordered" }, [
+              _vm._m(1),
               _vm._v(" "),
               _c(
-                "ul",
-                _vm._l(_vm.scanErrors, function (scanError) {
-                  return _c("li", [_vm._v(_vm._s(scanError))])
+                "tbody",
+                _vm._l(_vm.csvFields, function (csvField, index) {
+                  return _c("tr", [
+                    _c("td", [_vm._v(_vm._s(csvField))]),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      [
+                        _c("multiselect", {
+                          attrs: {
+                            options: _vm.contactsFields,
+                            placeholder: "Select field",
+                          },
+                          model: {
+                            value: _vm.mappedValues[index],
+                            callback: function ($$v) {
+                              _vm.$set(_vm.mappedValues, index, $$v)
+                            },
+                            expression: "mappedValues[index]",
+                          },
+                        }),
+                      ],
+                      1
+                    ),
+                  ])
                 }),
                 0
               ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "map-fields-page__filename-box map-fields-page__filename-box--danger",
-                },
-                [
-                  _c("span", [
-                    _c("span", { staticClass: "fw-bold" }, [
-                      _vm._v("File name"),
-                    ]),
-                    _vm._v(
-                      ": " + _vm._s(_vm.csvFilename) + "\n                "
-                    ),
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { attrs: { href: "#" }, on: { click: _vm.cancelMapping } },
-                    [_vm._v("Upload a different file")]
-                  ),
-                ]
-              ),
-            ]
-          )
-        : _c(
-            "div",
-            { staticClass: "alert alert-success", attrs: { role: "alert" } },
-            [
-              _c("p", { staticClass: "fw-bold" }, [
-                _vm._v("Found 1000 contacts in:"),
-              ]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass:
-                    "map-fields-page__filename-box map-fields-page__filename-box--success",
-                },
-                [
-                  _c("span", [
-                    _c("span", { staticClass: "fw-bold" }, [
-                      _vm._v("File name"),
-                    ]),
-                    _vm._v(
-                      ": " + _vm._s(_vm.csvFilename) + "\n                "
-                    ),
-                  ]),
-                ]
-              ),
-            ]
-          ),
-    ]),
-    _vm._v(" "),
-    _vm.scanErrorsAreEmpty
-      ? _c("div", [
-          _c("p", { staticClass: "fw-bold" }, [
-            _vm._v(" Map your fields to Contacts' fields"),
-          ]),
-          _vm._v(" "),
-          _c("table", { staticClass: "table table-bordered" }, [
-            _vm._m(1),
-            _vm._v(" "),
-            _c(
-              "tbody",
-              _vm._l(_vm.csvFields, function (csvField, index) {
-                return _c("tr", [
-                  _c("td", [_vm._v(_vm._s(csvField))]),
-                  _vm._v(" "),
-                  _c(
-                    "td",
-                    [
-                      _c("multiselect", {
-                        attrs: {
-                          options: _vm.contactsFields,
-                          placeholder: "Select field",
-                        },
-                        model: {
-                          value: _vm.mappedValues[index],
-                          callback: function ($$v) {
-                            _vm.$set(_vm.mappedValues, index, $$v)
-                          },
-                          expression: "mappedValues[index]",
-                        },
-                      }),
-                    ],
-                    1
-                  ),
-                ])
-              }),
-              0
-            ),
-          ]),
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c("div", { staticClass: "map-fields-page__footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-light u-margin-right-small",
-          on: { click: _vm.cancelMapping },
-        },
-        [_vm._v("Cancel")]
-      ),
+            ]),
+          ])
+        : _vm._e(),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary",
-          on: { click: _vm.goToMappingsPreviewPage },
-        },
-        [_vm._v("Continue")]
-      ),
+      _c("div", { staticClass: "map-fields-page__footer" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-light u-margin-right-small",
+            on: { click: _vm.cancelMapping },
+          },
+          [_vm._v("Cancel")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            on: { click: _vm.setMappingsAndContinue },
+          },
+          [_vm._v("Continue")]
+        ),
+      ]),
     ]),
   ])
 }
@@ -29593,23 +29613,53 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row" }, [
+    _c("div", { staticClass: "col-md-6" }, [
+      _c("h4", [_vm._v("Field Mapping Preview")]),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-bordered" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.mappings, function (value, key) {
+            return _c("tr", [
+              _c("td", [_vm._v(_vm._s(key))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(value))]),
+            ])
+          }),
+          0
+        ),
+      ]),
+    ]),
+    _vm._v(" "),
+    _vm._m(1),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("span", [_vm._v("Confirm Mappings")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "map-fields-page__footer" }, [
-        _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
-          _vm._v("Cancel"),
-        ]),
+    return _c("thead", [
+      _c("tr", { staticClass: "table-secondary" }, [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("CSV File Field")]),
         _vm._v(" "),
-        _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Continue")]),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Contacts Field")]),
       ]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "map-fields-page__footer" }, [
+      _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
+        _vm._v("Cancel"),
+      ]),
+      _vm._v(" "),
+      _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Finish")]),
     ])
   },
 ]
