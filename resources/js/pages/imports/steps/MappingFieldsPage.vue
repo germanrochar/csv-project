@@ -45,10 +45,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(csvField, index) in csvFields">
-                        <td>{{ csvField }}</td>
+                    <tr v-for="(mapping, index) in mappings">
+                        <td>{{ mapping.key }}</td>
                         <td>
-                            <multiselect v-model="mappedValues[index]" :options="contactsFields" placeholder="Select field"></multiselect>
+                            <multiselect
+                                v-model="mapping.value"
+                                :options="contactsFields"
+                                placeholder="Select field"
+                                @select="checkIfCustom"
+                            ></multiselect>
                         </td>
                     </tr>
                     </tbody>
@@ -66,9 +71,10 @@
 
 <script>
 import Multiselect from 'vue-multiselect'
+import Mappings from "../../../core/mappings/Mappings";
 export default {
     name: "MappingFieldsPage",
-    props: ['csvFile', 'csvFilename', 'mappings'],
+    props: ['csvFile', 'csvFilename', 'oldMappings'],
     components: { Multiselect },
 
     data() {
@@ -76,7 +82,8 @@ export default {
             scanErrors: [],
             csvFields: [],
             contactsFields: [],
-            mappedValues: []
+            mappings: {},
+            test:true
         }
     },
 
@@ -102,12 +109,13 @@ export default {
             ).then(response => {
                 this.csvFields = response.data.csvFields
                 this.contactsFields = response.data.contactsFields
+                // this.contactsFields.push('Add a custom field')
 
-                if (Object.keys(this.mappings).length > 0) {
-                    this.mappedValues = Object.values(this.mappings)
+
+                if (Object.keys(this.oldMappings).length > 0) {
+                    this.mappings = this.oldMappings
                 } else {
-                    // Create an empty array with same length than csv fields
-                    this.mappedValues = this.csvFields.map(field => '')
+                    this.mappings = new Mappings(this.csvFields).getAll()
                 }
             }).catch(error => {
                 this.scanErrors = error.response.data.errors['csv_file'] ?? ['Something went wrong. Please contact tech support.']
@@ -119,12 +127,13 @@ export default {
         },
 
         setMappingsAndContinue() {
-            let mappings = {}
-            this.csvFields.forEach((field, index) => {
-                mappings[field] = this.mappedValues[index]
-            })
+            this.$emit('completed', this.mappings)
+        },
 
-            this.$emit('completed', mappings)
+        checkIfCustom(selectedOption) {
+            console.log('selected option');
+            console.log(selectedOption);
+            this.test = false
         }
     },
 

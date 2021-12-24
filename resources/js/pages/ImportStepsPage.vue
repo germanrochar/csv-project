@@ -17,7 +17,7 @@
                 @completed="storeMappingsAndContinue"
                 :csv-file="csvFile"
                 :csv-filename="csvFilename"
-                :mappings="mappings"
+                :old-mappings="mappings"
             ></mapping-fields-page>
         </template>
 

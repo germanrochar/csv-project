@@ -5482,6 +5482,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../core/mappings/Mappings */ "./resources/js/core/mappings/Mappings.js");
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5549,9 +5555,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MappingFieldsPage",
-  props: ['csvFile', 'csvFilename', 'mappings'],
+  props: ['csvFile', 'csvFilename', 'oldMappings'],
   components: {
     Multiselect: (vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default())
   },
@@ -5560,7 +5567,8 @@ __webpack_require__.r(__webpack_exports__);
       scanErrors: [],
       csvFields: [],
       contactsFields: [],
-      mappedValues: []
+      mappings: {},
+      test: true
     };
   },
   computed: {
@@ -5580,15 +5588,12 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         _this.csvFields = response.data.csvFields;
-        _this.contactsFields = response.data.contactsFields;
+        _this.contactsFields = response.data.contactsFields; // this.contactsFields.push('Add a custom field')
 
-        if (Object.keys(_this.mappings).length > 0) {
-          _this.mappedValues = Object.values(_this.mappings);
+        if (Object.keys(_this.oldMappings).length > 0) {
+          _this.mappings = _this.oldMappings;
         } else {
-          // Create an empty array with same length than csv fields
-          _this.mappedValues = _this.csvFields.map(function (field) {
-            return '';
-          });
+          _this.mappings = new _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__["default"](_this.csvFields).getAll();
         }
       })["catch"](function (error) {
         var _error$response$data$;
@@ -5600,13 +5605,12 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('canceled');
     },
     setMappingsAndContinue: function setMappingsAndContinue() {
-      var _this2 = this;
-
-      var mappings = {};
-      this.csvFields.forEach(function (field, index) {
-        mappings[field] = _this2.mappedValues[index];
-      });
-      this.$emit('completed', mappings);
+      this.$emit('completed', this.mappings);
+    },
+    checkIfCustom: function checkIfCustom(selectedOption) {
+      console.log('selected option');
+      console.log(selectedOption);
+      this.test = false;
     }
   },
   mounted: function mounted() {
@@ -5852,6 +5856,87 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/core/mappings/Mapping.js":
+/*!***********************************************!*\
+  !*** ./resources/js/core/mappings/Mapping.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Mapping)
+/* harmony export */ });
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Mapping = /*#__PURE__*/_createClass(function Mapping(key, value) {
+  var isCustom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+  _classCallCheck(this, Mapping);
+
+  this.key = key;
+  this.value = value;
+  this.isCustom = isCustom;
+});
+
+
+
+/***/ }),
+
+/***/ "./resources/js/core/mappings/Mappings.js":
+/*!************************************************!*\
+  !*** ./resources/js/core/mappings/Mappings.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Mappings)
+/* harmony export */ });
+/* harmony import */ var _Mapping__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Mapping */ "./resources/js/core/mappings/Mapping.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
+
+var Mappings = /*#__PURE__*/function () {
+  /**
+   * Initialize the class using a list of keys for mappings
+   * @param keys
+   */
+  function Mappings(keys) {
+    var _this = this;
+
+    _classCallCheck(this, Mappings);
+
+    this.data = [];
+    keys.forEach(function (key) {
+      _this.data.push(new _Mapping__WEBPACK_IMPORTED_MODULE_0__["default"](key, ''));
+    });
+  }
+
+  _createClass(Mappings, [{
+    key: "getAll",
+    value: function getAll() {
+      return this.data;
+    }
+  }]);
+
+  return Mappings;
+}();
+
+
 
 /***/ }),
 
@@ -29444,7 +29529,7 @@ var render = function () {
               attrs: {
                 "csv-file": _vm.csvFile,
                 "csv-filename": _vm.csvFilename,
-                mappings: _vm.mappings,
+                "old-mappings": _vm.mappings,
               },
               on: {
                 canceled: _vm.removeDataAndGoBack,
@@ -29579,9 +29664,9 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.csvFields, function (csvField, index) {
+                _vm._l(_vm.mappings, function (mapping, index) {
                   return _c("tr", [
-                    _c("td", [_vm._v(_vm._s(csvField))]),
+                    _c("td", [_vm._v(_vm._s(mapping.key))]),
                     _vm._v(" "),
                     _c(
                       "td",
@@ -29591,12 +29676,13 @@ var render = function () {
                             options: _vm.contactsFields,
                             placeholder: "Select field",
                           },
+                          on: { select: _vm.checkIfCustom },
                           model: {
-                            value: _vm.mappedValues[index],
+                            value: mapping.value,
                             callback: function ($$v) {
-                              _vm.$set(_vm.mappedValues, index, $$v)
+                              _vm.$set(mapping, "value", $$v)
                             },
-                            expression: "mappedValues[index]",
+                            expression: "mapping.value",
                           },
                         }),
                       ],
