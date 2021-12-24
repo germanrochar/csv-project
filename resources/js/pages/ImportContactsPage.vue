@@ -6,7 +6,7 @@
                 <div class="d-flex flex-column align-items-center justify-content-center">
                     <h3>Import CSV File</h3>
                     <p>Import your contacts from a csv file</p>
-                    <button type="button" class="btn btn-success flex-grow-*" @click="goToImportSteps">Import</button>
+                    <button type="button" class="btn btn-primary flex-grow-*" @click="goToImportSteps">Import</button>
                 </div>
             </div>
         </template>

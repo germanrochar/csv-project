@@ -5408,6 +5408,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsPage",
@@ -5655,7 +5656,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MappingsPreviewPage",
-  props: ['mappings'],
+  props: ['mappings', 'csvFile'],
   data: function data() {
     return {};
   },
@@ -5664,8 +5665,23 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('go-back');
     },
     completeImport: function completeImport() {
-      axios.post().then(function (response) {})["catch"](function (error) {});
+      var formData = new FormData();
+      formData.append('csv_file', this.csvFile);
+
+      for (var key in this.mappings) {
+        formData.append(key, this.mappings[key]);
+      }
+
+      axios.post('/imports/contacts/csv', formData).then(function (response) {
+        console.log(response.data);
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
     }
+  },
+  created: function created() {
+    console.log(this.csvFile);
+    console.log(this.mappings);
   }
 });
 
@@ -28882,7 +28898,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&");
+/* harmony import */ var _MappingsPreviewPage_vue_vue_type_template_id_ac760260___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MappingsPreviewPage.vue?vue&type=template&id=ac760260& */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&");
 /* harmony import */ var _MappingsPreviewPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MappingsPreviewPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -28894,11 +28910,11 @@ __webpack_require__.r(__webpack_exports__);
 ;
 var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _MappingsPreviewPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
-  _MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _MappingsPreviewPage_vue_vue_type_template_id_ac760260___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MappingsPreviewPage_vue_vue_type_template_id_ac760260___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  "ac760260",
+  null,
   null
   
 )
@@ -29159,19 +29175,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&":
-/*!*************************************************************************************************************!*\
-  !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& ***!
-  \*************************************************************************************************************/
+/***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260& ***!
+  \*************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&");
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsPreviewPage_vue_vue_type_template_id_ac760260___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingsPreviewPage.vue?vue&type=template&id=ac760260& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&");
 
 
 /***/ }),
@@ -29331,7 +29347,7 @@ var render = function () {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-success flex-grow-*",
+                      staticClass: "btn btn-primary flex-grow-*",
                       attrs: { type: "button" },
                       on: { click: _vm.goToImportSteps },
                     },
@@ -29421,7 +29437,7 @@ var render = function () {
       _vm.currentStep === 3
         ? [
             _c("mappings-preview-page", {
-              attrs: { mappings: _vm.mappings },
+              attrs: { mappings: _vm.mappings, "csv-file": _vm.csvFile },
               on: { "go-back": _vm.goToPreviousStep },
             }),
           ]
@@ -29627,10 +29643,10 @@ render._withStripped = true
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true&":
-/*!****************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&scoped=true& ***!
-  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260&":
+/*!****************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=template&id=ac760260& ***!
+  \****************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

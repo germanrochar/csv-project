@@ -25,6 +25,7 @@
             <mappings-preview-page
                 @go-back='goToPreviousStep'
                 :mappings="mappings"
+                :csv-file="csvFile"
             ></mappings-preview-page>
         </template>
     </div>

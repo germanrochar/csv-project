@@ -19,7 +19,7 @@
 
             <div class="mappings-preview-page__footer">
                 <button class="btn btn-light u-margin-right-small" @click="goToPreviousPage">Go Back</button>
-                <button class="btn btn-primary">Finish</button>
+                <button class="btn btn-primary" @click="completeImport">Finish</button>
             </div>
         </div>
     </div>
@@ -28,7 +28,8 @@
 <script>
 export default {
     name: "MappingsPreviewPage",
-    props: ['mappings'],
+    props: ['mappings', 'csvFile'],
+
     data() {
         return {
 
@@ -38,12 +39,29 @@ export default {
     methods: {
         goToPreviousPage() {
             this.$emit('go-back')
+        },
+
+        completeImport() {
+            let formData = new FormData()
+            formData.append('csv_file', this.csvFile)
+            for(let key in this.mappings) {
+                formData.append(key, this.mappings[key])
+            }
+            axios.post(
+                '/imports/contacts/csv',
+                formData
+            )
+            .then(response => {
+                console.log(response.data);
+            }).catch(error => {
+                console.log(error.response);
+            })
         }
     },
 
+    created() {
+        console.log(this.csvFile);
+        console.log(this.mappings);
+    }
 }
 </script>
-
-<style scoped>
-
-</style>

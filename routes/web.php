@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactsCsvScannerController;
-use App\Http\Controllers\CsvUploadsController;
+use App\Http\Controllers\ImportContactsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,5 +19,8 @@ Route::get('/', function () {
     return view('imports.contacts');
 });
 
-
+// Scanners
 Route::post('/scan/csv', [ContactsCsvScannerController::class, 'index']);
+
+// Imports
+Route::post('/imports/contacts/csv', [ImportContactsController::class, 'store']);
