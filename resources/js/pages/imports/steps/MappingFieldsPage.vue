@@ -58,7 +58,7 @@
             <!--    Footer    -->
             <div class="mapping-fields-page__footer">
                 <button class="btn btn-light u-margin-right-small" @click="cancelMapping">Cancel</button>
-                <button class="btn btn-primary" @click="setMappingsAndContinue">Continue</button>
+                <button class="btn btn-primary" @click="setMappingsAndContinue" :disabled="!scanErrorsAreEmpty">Continue</button>
             </div>
         </div>
     </div>
@@ -106,11 +106,11 @@ export default {
                 if (Object.keys(this.mappings).length > 0) {
                     this.mappedValues = Object.values(this.mappings)
                 } else {
-                    // Create an empty array with same length than csvFields
+                    // Create an empty array with same length than csv fields
                     this.mappedValues = this.csvFields.map(field => '')
                 }
             }).catch(error => {
-                this.scanErrors = error.response.data.errors['csv_file'] // TODO: Assert this param exists.
+                this.scanErrors = error.response.data.errors['csv_file'] ?? ['Something went wrong. Please contact tech support.']
             })
         },
 

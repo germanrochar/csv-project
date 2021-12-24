@@ -5584,13 +5584,15 @@ __webpack_require__.r(__webpack_exports__);
         if (Object.keys(_this.mappings).length > 0) {
           _this.mappedValues = Object.values(_this.mappings);
         } else {
-          // Create an empty array with same length than csvFields
+          // Create an empty array with same length than csv fields
           _this.mappedValues = _this.csvFields.map(function (field) {
             return '';
           });
         }
       })["catch"](function (error) {
-        _this.scanErrors = error.response.data.errors['csv_file']; // TODO: Assert this param exists.
+        var _error$response$data$;
+
+        _this.scanErrors = (_error$response$data$ = error.response.data.errors['csv_file']) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : ['Something went wrong. Please contact tech support.'];
       });
     },
     cancelMapping: function cancelMapping() {
@@ -5660,6 +5662,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     goToPreviousPage: function goToPreviousPage() {
       this.$emit('go-back');
+    },
+    completeImport: function completeImport() {
+      axios.post().then(function (response) {})["catch"](function (error) {});
     }
   }
 });
@@ -5709,13 +5714,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    uploadFile: function uploadFile(e) {
+    upload: function upload(e) {
       var files = e.target.files || e.dataTransfer.files;
       this.csvFile = files[0];
       this.csvFilename = files[0].name;
       this.emitUploadedEvent();
     },
-    goToMapFieldsPage: function goToMapFieldsPage() {
+    goToNextPage: function goToNextPage() {
       if (this.csvFile.length <= 0 || this.csvFilename <= 0) {
         alert('Something went wrong. Please contact tech support.');
         return;
@@ -29583,6 +29588,7 @@ var render = function () {
           "button",
           {
             staticClass: "btn btn-primary",
+            attrs: { disabled: !_vm.scanErrorsAreEmpty },
             on: { click: _vm.setMappingsAndContinue },
           },
           [_vm._v("Continue")]
@@ -29670,7 +29676,14 @@ var render = function () {
             [_vm._v("Go Back")]
           ),
           _vm._v(" "),
-          _c("button", { staticClass: "btn btn-primary" }, [_vm._v("Finish")]),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              on: { click: _vm.completeImport },
+            },
+            [_vm._v("Finish")]
+          ),
         ]),
       ]),
     ]
@@ -29722,7 +29735,7 @@ var render = function () {
         _c("input", {
           staticClass: "form-control",
           attrs: { type: "file", accept: ".csv" },
-          on: { change: _vm.uploadFile },
+          on: { change: _vm.upload },
         }),
       ]),
     ]),
@@ -29748,7 +29761,7 @@ var render = function () {
           attrs: { disabled: !_vm.csvIsUploaded },
           on: {
             click: function ($event) {
-              return _vm.goToMapFieldsPage()
+              return _vm.goToNextPage()
             },
           },
         },
