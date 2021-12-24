@@ -5483,6 +5483,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-multiselect */ "./node_modules/vue-multiselect/dist/vue-multiselect.min.js");
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../core/mappings/Mappings */ "./resources/js/core/mappings/Mappings.js");
+/* harmony import */ var _core_mappings_ContactMappingOptions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../core/mappings/ContactMappingOptions */ "./resources/js/core/mappings/ContactMappingOptions.js");
 //
 //
 //
@@ -5554,6 +5555,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5564,16 +5575,16 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      scanErrors: [],
+      errors: [],
       csvFields: [],
       contactsFields: [],
       mappings: {},
-      test: true
+      options: {}
     };
   },
   computed: {
-    scanErrorsAreEmpty: function scanErrorsAreEmpty() {
-      return this.scanErrors.length === 0;
+    errorsAreEmpty: function errorsAreEmpty() {
+      return this.errors.length === 0;
     }
   },
   methods: {
@@ -5588,29 +5599,35 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (response) {
         _this.csvFields = response.data.csvFields;
-        _this.contactsFields = response.data.contactsFields; // this.contactsFields.push('Add a custom field')
-
-        if (Object.keys(_this.oldMappings).length > 0) {
-          _this.mappings = _this.oldMappings;
-        } else {
-          _this.mappings = new _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__["default"](_this.csvFields).getAll();
-        }
+        _this.contactsFields = response.data.contactsFields;
+        _this.options = new _core_mappings_ContactMappingOptions__WEBPACK_IMPORTED_MODULE_2__["default"](_this.contactsFields, _this.contactsFields).getAll();
+        _this.mappings = Object.keys(_this.oldMappings).length > 0 ? _this.oldMappings : new _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__["default"](_this.csvFields).getAll();
       })["catch"](function (error) {
         var _error$response$data$;
 
-        _this.scanErrors = (_error$response$data$ = error.response.data.errors['csv_file']) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : ['Something went wrong. Please contact tech support.'];
+        _this.errors = (_error$response$data$ = error.response.data.errors['csv_file']) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : ['Something went wrong. Please contact tech support.'];
       });
     },
     cancelMapping: function cancelMapping() {
       this.$emit('canceled');
     },
-    setMappingsAndContinue: function setMappingsAndContinue() {
+    goToNextStep: function goToNextStep() {
       this.$emit('completed', this.mappings);
     },
-    checkIfCustom: function checkIfCustom(selectedOption) {
+    checkIfIsCustomOption: function checkIfIsCustomOption(selectedOption, index) {
+      var _this2 = this;
+
       console.log('selected option');
       console.log(selectedOption);
-      this.test = false;
+
+      if (selectedOption.key !== 'custom') {
+        return;
+      }
+
+      this.mappings[index].isCustom = true;
+      this.$nextTick(function () {
+        return _this2.mappings[index].value = '';
+      });
     }
   },
   mounted: function mounted() {
@@ -5859,6 +5876,81 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
+/***/ "./resources/js/core/components/Option.js":
+/*!************************************************!*\
+  !*** ./resources/js/core/components/Option.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Option)
+/* harmony export */ });
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Option = /*#__PURE__*/_createClass(function Option(key, humanReadableName) {
+  _classCallCheck(this, Option);
+
+  this.key = key;
+  this.humanReadableName = humanReadableName;
+});
+
+
+
+/***/ }),
+
+/***/ "./resources/js/core/mappings/ContactMappingOptions.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/core/mappings/ContactMappingOptions.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ ContactMappingOptions)
+/* harmony export */ });
+/* harmony import */ var _components_Option__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Option */ "./resources/js/core/components/Option.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
+
+var ContactMappingOptions = /*#__PURE__*/function () {
+  function ContactMappingOptions(data) {
+    var _this = this;
+
+    _classCallCheck(this, ContactMappingOptions);
+
+    this.data = [];
+    this.data.push(new _components_Option__WEBPACK_IMPORTED_MODULE_0__["default"]('custom', 'Add a custom field'));
+    data.forEach(function (key, index) {
+      _this.data.push(new _components_Option__WEBPACK_IMPORTED_MODULE_0__["default"](key, key));
+    });
+  }
+
+  _createClass(ContactMappingOptions, [{
+    key: "getAll",
+    value: function getAll() {
+      return this.data;
+    }
+  }]);
+
+  return ContactMappingOptions;
+}();
+
+
+
+/***/ }),
+
 /***/ "./resources/js/core/mappings/Mapping.js":
 /*!***********************************************!*\
   !*** ./resources/js/core/mappings/Mapping.js ***!
@@ -5876,6 +5968,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Mapping class handles the data of a single mapping
+ */
 var Mapping = /*#__PURE__*/_createClass(function Mapping(key, value) {
   var isCustom = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
@@ -5925,6 +6020,10 @@ var Mappings = /*#__PURE__*/function () {
       _this.data.push(new _Mapping__WEBPACK_IMPORTED_MODULE_0__["default"](key, ''));
     });
   }
+  /**
+   * Retrieves all data mappings
+   */
+
 
   _createClass(Mappings, [{
     key: "getAll",
@@ -29579,7 +29678,7 @@ var render = function () {
       _vm._m(0),
       _vm._v(" "),
       _c("div", { staticClass: "mapping-fields-page__feedback" }, [
-        !_vm.scanErrorsAreEmpty
+        !_vm.errorsAreEmpty
           ? _c(
               "div",
               { staticClass: "alert alert-danger", attrs: { role: "alert" } },
@@ -29590,8 +29689,8 @@ var render = function () {
                 _vm._v(" "),
                 _c(
                   "ul",
-                  _vm._l(_vm.scanErrors, function (scanError) {
-                    return _c("li", [_vm._v(_vm._s(scanError))])
+                  _vm._l(_vm.errors, function (error) {
+                    return _c("li", [_vm._v(_vm._s(error))])
                   }),
                   0
                 ),
@@ -29608,7 +29707,9 @@ var render = function () {
                         _vm._v("File name"),
                       ]),
                       _vm._v(
-                        ": " + _vm._s(_vm.csvFilename) + "\n                "
+                        ": " +
+                          _vm._s(_vm.csvFilename) +
+                          "\n                    "
                       ),
                     ]),
                     _vm._v(" "),
@@ -29628,10 +29729,6 @@ var render = function () {
               "div",
               { staticClass: "alert alert-success", attrs: { role: "alert" } },
               [
-                _c("p", { staticClass: "fw-bold" }, [
-                  _vm._v("Found 1000 contacts in:"),
-                ]),
-                _vm._v(" "),
                 _c(
                   "div",
                   {
@@ -29644,7 +29741,9 @@ var render = function () {
                         _vm._v("File name"),
                       ]),
                       _vm._v(
-                        ": " + _vm._s(_vm.csvFilename) + "\n                "
+                        ": " +
+                          _vm._s(_vm.csvFilename) +
+                          "\n                    "
                       ),
                     ]),
                   ]
@@ -29653,7 +29752,7 @@ var render = function () {
             ),
       ]),
       _vm._v(" "),
-      _vm.scanErrorsAreEmpty
+      _vm.errorsAreEmpty
         ? _c("div", [
             _c("p", { staticClass: "fw-bold" }, [
               _vm._v(" Map your fields to Contacts' fields"),
@@ -29671,20 +29770,62 @@ var render = function () {
                     _c(
                       "td",
                       [
-                        _c("multiselect", {
-                          attrs: {
-                            options: _vm.contactsFields,
-                            placeholder: "Select field",
-                          },
-                          on: { select: _vm.checkIfCustom },
-                          model: {
-                            value: mapping.value,
-                            callback: function ($$v) {
-                              _vm.$set(mapping, "value", $$v)
-                            },
-                            expression: "mapping.value",
-                          },
-                        }),
+                        !mapping.isCustom
+                          ? _c("multiselect", {
+                              attrs: {
+                                options: _vm.options,
+                                "track-by": "humanReadableName",
+                                placeholder: "Select field",
+                                label: "humanReadableName",
+                              },
+                              on: {
+                                select: function ($event) {
+                                  return _vm.checkIfIsCustomOption(
+                                    $event,
+                                    index
+                                  )
+                                },
+                              },
+                              model: {
+                                value: mapping.value,
+                                callback: function ($$v) {
+                                  _vm.$set(mapping, "value", $$v)
+                                },
+                                expression: "mapping.value",
+                              },
+                            })
+                          : _vm._e(),
+                        _vm._v(" "),
+                        mapping.isCustom
+                          ? _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: mapping.value,
+                                  expression: "mapping.value",
+                                },
+                              ],
+                              staticClass: "form-control",
+                              attrs: {
+                                type: "text",
+                                placeholder: "Type custom field",
+                              },
+                              domProps: { value: mapping.value },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    mapping,
+                                    "value",
+                                    $event.target.value
+                                  )
+                                },
+                              },
+                            })
+                          : _vm._e(),
                       ],
                       1
                     ),
@@ -29710,8 +29851,8 @@ var render = function () {
           "button",
           {
             staticClass: "btn btn-primary",
-            attrs: { disabled: !_vm.scanErrorsAreEmpty },
-            on: { click: _vm.setMappingsAndContinue },
+            attrs: { disabled: !_vm.errorsAreEmpty },
+            on: { click: _vm.goToNextStep },
           },
           [_vm._v("Continue")]
         ),

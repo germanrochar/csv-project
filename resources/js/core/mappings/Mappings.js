@@ -1,6 +1,5 @@
 import Mapping from './Mapping'
 export default class Mappings {
-
     /**
      * Initialize the class using a list of keys for mappings
      * @param keys
@@ -13,6 +12,9 @@ export default class Mappings {
         })
     }
 
+    /**
+     * Retrieves all data mappings
+     */
     getAll() {
         return this.data
     }

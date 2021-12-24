@@ -8,12 +8,12 @@
 
             <!--   Scan feedback     -->
             <div class="mapping-fields-page__feedback">
-                <div class="alert alert-danger" role="alert" v-if="!scanErrorsAreEmpty">
+                <div class="alert alert-danger" role="alert" v-if="!errorsAreEmpty">
                     <span class="sr-only">The following errors were found in your csv file:</span>
 
                     <!--       List Scan Errors         -->
                     <ul>
-                        <li v-for="scanError in scanErrors">{{ scanError }}</li>
+                        <li v-for="error in errors">{{ error }}</li>
                     </ul>
 
                     <div class="mapping-fields-page__filename-box mapping-fields-page__filename-box--danger">
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="alert alert-success" role="alert" v-else>
-                    <p class="fw-bold">Found 1000 contacts in:</p>
+<!--                    <p class="fw-bold">Found 1000 contacts in:</p>-->
                     <div class="mapping-fields-page__filename-box mapping-fields-page__filename-box--success">
                     <span>
                         <span class="fw-bold">File name</span>: {{ csvFilename}}
@@ -35,7 +35,7 @@
             </div>
 
             <!--   Mappings table     -->
-            <div v-if="scanErrorsAreEmpty">
+            <div v-if="errorsAreEmpty">
                 <p class="fw-bold"> Map your fields to Contacts' fields</p>
                 <table class="table table-bordered">
                     <thead>
@@ -50,10 +50,19 @@
                         <td>
                             <multiselect
                                 v-model="mapping.value"
-                                :options="contactsFields"
+                                :options="options"
+                                track-by="humanReadableName"
                                 placeholder="Select field"
-                                @select="checkIfCustom"
+                                label="humanReadableName"
+                                @select="checkIfIsCustomOption($event, index)"
+                                v-if="!mapping.isCustom"
                             ></multiselect>
+                            <input type="text"
+                                   v-model="mapping.value"
+                                   v-if="mapping.isCustom"
+                                   class="form-control"
+                                   placeholder="Type custom field"
+                            >
                         </td>
                     </tr>
                     </tbody>
@@ -63,7 +72,7 @@
             <!--    Footer    -->
             <div class="mapping-fields-page__footer">
                 <button class="btn btn-light u-margin-right-small" @click="cancelMapping">Cancel</button>
-                <button class="btn btn-primary" @click="setMappingsAndContinue" :disabled="!scanErrorsAreEmpty">Continue</button>
+                <button class="btn btn-primary" @click="goToNextStep" :disabled="!errorsAreEmpty">Continue</button>
             </div>
         </div>
     </div>
@@ -72,6 +81,7 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import Mappings from "../../../core/mappings/Mappings";
+import ContactMappingOptions from "../../../core/mappings/ContactMappingOptions"
 export default {
     name: "MappingFieldsPage",
     props: ['csvFile', 'csvFilename', 'oldMappings'],
@@ -79,17 +89,17 @@ export default {
 
     data() {
         return {
-            scanErrors: [],
+            errors: [],
             csvFields: [],
             contactsFields: [],
             mappings: {},
-            test:true
+            options: {}
         }
     },
 
     computed: {
-      scanErrorsAreEmpty() {
-          return this.scanErrors.length === 0;
+      errorsAreEmpty() {
+          return this.errors.length === 0;
       }
     },
 
@@ -109,16 +119,11 @@ export default {
             ).then(response => {
                 this.csvFields = response.data.csvFields
                 this.contactsFields = response.data.contactsFields
-                // this.contactsFields.push('Add a custom field')
 
-
-                if (Object.keys(this.oldMappings).length > 0) {
-                    this.mappings = this.oldMappings
-                } else {
-                    this.mappings = new Mappings(this.csvFields).getAll()
-                }
+                this.options = new ContactMappingOptions(this.contactsFields, this.contactsFields).getAll()
+                this.mappings = Object.keys(this.oldMappings).length > 0 ? this.oldMappings : new Mappings(this.csvFields).getAll()
             }).catch(error => {
-                this.scanErrors = error.response.data.errors['csv_file'] ?? ['Something went wrong. Please contact tech support.']
+                this.errors = error.response.data.errors['csv_file'] ?? ['Something went wrong. Please contact tech support.']
             })
         },
 
@@ -126,14 +131,19 @@ export default {
             this.$emit('canceled')
         },
 
-        setMappingsAndContinue() {
+        goToNextStep() {
             this.$emit('completed', this.mappings)
         },
 
-        checkIfCustom(selectedOption) {
+        checkIfIsCustomOption(selectedOption, index) {
             console.log('selected option');
             console.log(selectedOption);
-            this.test = false
+            if (selectedOption.key !== 'custom') {
+                return
+            }
+
+            this.mappings[index].isCustom = true
+            this.$nextTick(() => this.mappings[index].value = '')
         }
     },
 
