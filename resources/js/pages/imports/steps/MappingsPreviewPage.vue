@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row d-flex justify-content-center mappings-preview-page">
         <div class="col-md-6">
             <h4>Field Mapping Preview</h4>
             <table class="table table-bordered">
@@ -16,11 +16,11 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
 
-        <div class="map-fields-page__footer">
-            <button class="btn btn-light u-margin-right-small">Cancel</button>
-            <button class="btn btn-primary">Finish</button>
+            <div class="mappings-preview-page__footer">
+                <button class="btn btn-light u-margin-right-small">Cancel</button>
+                <button class="btn btn-primary">Finish</button>
+            </div>
         </div>
     </div>
 </template>

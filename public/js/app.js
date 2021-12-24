@@ -29424,7 +29424,7 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "map-fields-page row" }, [
+  return _c("div", { staticClass: "map-fields-page" }, [
     _c("div", { staticClass: "col-md-12" }, [
       _vm._m(0),
       _vm._v(" "),
@@ -29613,29 +29613,33 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-6" }, [
-      _c("h4", [_vm._v("Field Mapping Preview")]),
-      _vm._v(" "),
-      _c("table", { staticClass: "table table-bordered" }, [
-        _vm._m(0),
+  return _c(
+    "div",
+    { staticClass: "row d-flex justify-content-center mappings-preview-page" },
+    [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("h4", [_vm._v("Field Mapping Preview")]),
         _vm._v(" "),
-        _c(
-          "tbody",
-          _vm._l(_vm.mappings, function (value, key) {
-            return _c("tr", [
-              _c("td", [_vm._v(_vm._s(key))]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(value))]),
-            ])
-          }),
-          0
-        ),
+        _c("table", { staticClass: "table table-bordered" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            _vm._l(_vm.mappings, function (value, key) {
+              return _c("tr", [
+                _c("td", [_vm._v(_vm._s(key))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(value))]),
+              ])
+            }),
+            0
+          ),
+        ]),
+        _vm._v(" "),
+        _vm._m(1),
       ]),
-    ]),
-    _vm._v(" "),
-    _vm._m(1),
-  ])
+    ]
+  )
 }
 var staticRenderFns = [
   function () {
@@ -29654,7 +29658,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "map-fields-page__footer" }, [
+    return _c("div", { staticClass: "mappings-preview-page__footer" }, [
       _c("button", { staticClass: "btn btn-light u-margin-right-small" }, [
         _vm._v("Cancel"),
       ]),

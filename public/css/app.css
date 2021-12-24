@@ -11389,3 +11389,9 @@ textarea.form-control-lg {
   display: flex;
   justify-content: flex-end;
 }
+
+.mappings-preview-page__footer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

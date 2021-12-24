@@ -1,5 +1,5 @@
 <template>
-    <div class="map-fields-page row">
+    <div class="map-fields-page">
         <div class="col-md-12">
             <div>
                 <h3>Map Fields</h3>
@@ -120,6 +120,7 @@ export default {
             this.csvFields.forEach((field, index) => {
                 mappings[field] = this.mappedValues[index]
             })
+
             this.$emit('completed', mappings)
         }
     },
