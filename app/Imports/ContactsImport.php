@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Contact;
+use App\Models\CustomAttribute;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -11,11 +12,17 @@ class ContactsImport implements ToModel, WithHeadingRow
     /**
     * @var array Keys: contact columns | Values: csv fields
     */
-    private $mappings;
+    private $contactMappings;
 
-    public function __construct(array $mappings)
+    /**
+     * @var array Keys: custom keys | Values: custom values
+     */
+    private $customMappings;
+
+    public function __construct(array $contactMappings, array $customMappings)
     {
-        $this->mappings = $mappings;
+        $this->contactMappings = $contactMappings;
+        $this->customMappings = $customMappings;
     }
 
 
@@ -27,12 +34,23 @@ class ContactsImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         // sanitize data
-        return new Contact([
-            'team_id' => $row[$this->mappings['team_id']],
-            'name' => $row[$this->mappings['name']],
-            'phone' => $row[$this->mappings['phone']],
-            'email' => $row[$this->mappings['email']],
-            'sticky_phone_number_id' => $row[$this->mappings['sticky_phone_number_id']]
+        $contact = new Contact([
+            'team_id' => $row[$this->contactMappings['team_id']],
+            'name' => $row[$this->contactMappings['name']],
+            'phone' => $row[$this->contactMappings['phone']],
+            'email' => $row[$this->contactMappings['email']],
+            'sticky_phone_number_id' => $row[$this->contactMappings['sticky_phone_number_id']]
         ]);
+
+        foreach ($this->customMappings as $key => $value) {
+            // TODO: Create addCustomMapping method
+            new CustomAttribute([
+                'contact_id' => $contact->id,
+                'key' => $row[$this->customMappings[$key]],
+                'value' =>  $row[$this->customMappings[$value]]
+            ]);
+        }
+
+        return $contact;
     }
 }

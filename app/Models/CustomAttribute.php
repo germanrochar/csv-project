@@ -17,4 +17,6 @@ use Illuminate\Database\Eloquent\Model;
 class CustomAttribute extends Model
 {
     use HasFactory;
+
+    protected $guarded = [];
 }

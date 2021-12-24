@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ImportContactsRequest;
 use App\Imports\ContactsImport;
+use App\Imports\CustomAttributeImport;
 use App\Models\Contact;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -33,7 +34,9 @@ class ImportContactsController extends Controller
         \Log::info('Mappings', ['contactsMappings' => $contactsMappings, 'customMappings' => $customMappings]);
 
 
-        // Call Importer and pass the file
-        Excel::import(new ContactsImport($contactsMappings), $csvFile);
+        // Reading the same file twice is not great for performance but, I wasn't sure how much the performance
+        // was a priority for this exercise. So, I decided to create two import classes to make the code cleaner.
+        Excel::import(new ContactsImport($contactsMappings, $customMappings), $csvFile);
+//        Excel::import(new CustomAttributeImport($customMappings), $csvFile);
     }
 }

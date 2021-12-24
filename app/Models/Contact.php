@@ -41,5 +41,4 @@ class Contact extends Model
             })
         );
     }
-
 }
