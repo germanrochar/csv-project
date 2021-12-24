@@ -5654,34 +5654,54 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MappingsPreviewPage",
   props: ['mappings', 'csvFile'],
   data: function data() {
-    return {};
+    return {
+      errors: []
+    };
+  },
+  computed: {
+    errorsAreEmpty: function errorsAreEmpty() {
+      return this.errors.length === 0;
+    }
   },
   methods: {
     goToPreviousPage: function goToPreviousPage() {
       this.$emit('go-back');
     },
     completeImport: function completeImport() {
+      var _this = this;
+
+      var mappingKeys = Object.keys(this.mappings);
+      var mappingValues = Object.values(this.mappings);
       var formData = new FormData();
       formData.append('csv_file', this.csvFile);
-
-      for (var key in this.mappings) {
-        formData.append(key, this.mappings[key]);
-      }
-
+      formData.append('mapping_keys', JSON.stringify(mappingKeys));
+      formData.append('mapping_values', JSON.stringify(mappingValues));
       axios.post('/imports/contacts/csv', formData).then(function (response) {
         console.log(response.data);
       })["catch"](function (error) {
-        console.log(error.response);
+        var _error$response$data$;
+
+        _this.errors = (_error$response$data$ = error.response.data.errors) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : [];
       });
     }
-  },
-  created: function created() {
-    console.log(this.csvFile);
-    console.log(this.mappings);
   }
 });
 
@@ -29664,6 +29684,36 @@ var render = function () {
     { staticClass: "row d-flex justify-content-center mappings-preview-page" },
     [
       _c("div", { staticClass: "col-md-6" }, [
+        _c("div", {}, [
+          !_vm.errorsAreEmpty
+            ? _c(
+                "div",
+                { staticClass: "alert alert-danger", attrs: { role: "alert" } },
+                [
+                  _c("span", { staticClass: "sr-only" }, [_vm._v("Error:")]),
+                  _vm._v(" "),
+                  _c(
+                    "ul",
+                    [
+                      _vm._l(_vm.errors, function (errorKey) {
+                        return _vm._l(errorKey, function (error) {
+                          return _c("li", [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(error) +
+                                "\n                        "
+                            ),
+                          ])
+                        })
+                      }),
+                    ],
+                    2
+                  ),
+                ]
+              )
+            : _vm._e(),
+        ]),
+        _vm._v(" "),
         _c("h4", [_vm._v("Field Mapping Preview")]),
         _vm._v(" "),
         _c("table", { staticClass: "table table-bordered" }, [

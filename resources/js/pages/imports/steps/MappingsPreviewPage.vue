@@ -1,6 +1,20 @@
 <template>
     <div class="row d-flex justify-content-center mappings-preview-page">
         <div class="col-md-6">
+            <div class="">
+                <div class="alert alert-danger" role="alert" v-if="!errorsAreEmpty">
+                    <span class="sr-only">Error:</span>
+
+                    <ul>
+                        <template v-for="errorKey in errors">
+                            <li v-for="error in errorKey">
+                                {{ error }}
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </div>
+
             <h4>Field Mapping Preview</h4>
             <table class="table table-bordered">
                 <thead>
@@ -32,7 +46,13 @@ export default {
 
     data() {
         return {
+            errors: []
+        }
+    },
 
+    computed: {
+        errorsAreEmpty() {
+            return this.errors.length === 0
         }
     },
 
@@ -42,11 +62,14 @@ export default {
         },
 
         completeImport() {
+            let mappingKeys = Object.keys(this.mappings)
+            let mappingValues = Object.values(this.mappings)
+
             let formData = new FormData()
             formData.append('csv_file', this.csvFile)
-            for(let key in this.mappings) {
-                formData.append(key, this.mappings[key])
-            }
+            formData.append('mapping_keys', JSON.stringify(mappingKeys))
+            formData.append('mapping_values', JSON.stringify(mappingValues))
+
             axios.post(
                 '/imports/contacts/csv',
                 formData
@@ -54,14 +77,9 @@ export default {
             .then(response => {
                 console.log(response.data);
             }).catch(error => {
-                console.log(error.response);
+                this.errors = error.response.data.errors ?? []
             })
         }
     },
-
-    created() {
-        console.log(this.csvFile);
-        console.log(this.mappings);
-    }
 }
 </script>
