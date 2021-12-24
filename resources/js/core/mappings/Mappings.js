@@ -18,4 +18,49 @@ export default class Mappings {
     getAll() {
         return this.data
     }
+
+    /**
+     * Marks a mapping as custom given an index referencing the list of mappings
+     * @param index
+     */
+    markAsCustom(index) {
+        this.data[index].isCustom = true
+        this.data[index].value = ''
+    }
+
+    /**
+     * Marks a mapping as NOT custom given an index referencing the list of mappings
+     * @param index
+     */
+    markAsNotCustom(index) {
+        this.data[index].isCustom = false
+        this.data[index].value = ''
+    }
+
+    /**
+    * Retrieves a list of mapping keys
+    */
+    getMappingKeys() {
+        let keys = []
+        this.data.forEach(mapping => {
+            keys.push(mapping.key)
+        })
+
+        return keys
+    }
+
+    /**
+     * Retrieves a list of mapping values
+     */
+    getMappingValues() {
+        let keys = []
+        this.data.forEach(mapping => {
+            if (typeof mapping.value === 'object')
+                keys.push(mapping.value.key)
+            else
+                keys.push(mapping.value)
+        })
+
+        return keys
+    }
 }

@@ -18,13 +18,13 @@
             <h4>Field Mapping Preview</h4>
             <table class="table table-bordered">
                 <thead>
-                <tr class="table-secondary">
-                    <th scope="col">CSV File Field</th>
-                    <th scope="col">Contacts Field</th>
-                </tr>
+                    <tr class="table-secondary">
+                        <th scope="col">CSV File Field</th>
+                        <th scope="col">Contacts Field</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr v-for="mapping in mappings">
+                <tr v-for="mapping in mappings.getAll()">
                     <td>{{ mapping.key }}</td>
                     <td>
                         <template v-if="typeof mapping.value === 'object'">
@@ -69,8 +69,8 @@ export default {
         },
 
         completeImport() {
-            let mappingKeys = Object.keys(this.mappings)
-            let mappingValues = Object.values(this.mappings)
+            let mappingKeys = this.mappings.getMappingKeys()
+            let mappingValues = this.mappings.getMappingValues()
 
             let formData = new FormData()
             formData.append('csv_file', this.csvFile)
