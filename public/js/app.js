@@ -5727,10 +5727,6 @@ __webpack_require__.r(__webpack_exports__);
       var contactFields = this.mappings.getMappingValues();
       var customCsvFields = this.mappings.getCustomMappingKeys();
       var customContactFields = this.mappings.getCustomMappingValues();
-      console.log(csvFields);
-      console.log(contactFields);
-      console.log(customCsvFields);
-      console.log(customContactFields);
       var formData = new FormData();
       formData.append('csv_file', this.csvFile);
       formData.append('contact_fields', JSON.stringify(contactFields));
@@ -6093,12 +6089,7 @@ var Mappings = /*#__PURE__*/function () {
       this.data.forEach(function (mapping) {
         if (mapping.isCustom) keys.push(mapping.key);
       });
-      return keys; // return this.data.map(mapping => {
-      //     if (!mapping.isCustom)
-      //         return ''
-      //
-      //     return mapping.key
-      // })
+      return keys;
     }
     /**
      * Retrieves a list of mapping keys
@@ -6131,12 +6122,7 @@ var Mappings = /*#__PURE__*/function () {
       this.data.forEach(function (mapping) {
         if (!mapping.isCustom) values.push(_this2.getMappingValue(mapping));
       });
-      return values; // return this.data.map(mapping => {
-      //     if (!mapping.isCustom)
-      //         return ''
-      //
-      //     return this.getMappingValue(mapping)
-      // })
+      return values;
     }
     /**
      * Retrieves a list of custom mapping values
@@ -6151,12 +6137,7 @@ var Mappings = /*#__PURE__*/function () {
       this.data.forEach(function (mapping) {
         if (mapping.isCustom) values.push(_this3.getMappingValue(mapping));
       });
-      return values; // return this.data.map(mapping => {
-      //     if (!mapping.isCustom)
-      //         return ''
-      //
-      //     return this.getMappingValue(mapping)
-      // })
+      return values;
     }
     /**
      * Calculates the value of a mapping.

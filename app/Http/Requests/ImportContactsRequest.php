@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\EncodedJsonValuesCannotBeDuplicated;
 use App\Rules\EncodedJsonValuesMustBeStrings;
 use App\Rules\EncodedJsonValuesNotEmpty;
 use App\Rules\RequiredContactFieldsMustBeProvided;
@@ -33,13 +34,15 @@ class ImportContactsRequest extends FormRequest
                 'string',
                 new EncodedJsonValuesMustBeStrings,
                 new EncodedJsonValuesNotEmpty,
-                new RequiredContactFieldsMustBeProvided
+                new RequiredContactFieldsMustBeProvided,
+                new EncodedJsonValuesCannotBeDuplicated
             ],
             'custom_contact_fields' => [
                 'required',
                 'string',
                 new EncodedJsonValuesMustBeStrings,
                 new EncodedJsonValuesNotEmpty,
+                new EncodedJsonValuesCannotBeDuplicated
             ],
             'csv_fields' => [
                 'required',

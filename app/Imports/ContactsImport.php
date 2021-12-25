@@ -43,9 +43,6 @@ class ContactsImport implements ToModel, WithHeadingRow
             'sticky_phone_number_id' => isset($this->contactMappings['sticky_phone_number_id']) ? $row[$this->contactMappings['sticky_phone_number_id']] : null
         ]);
 
-        $customAttribute = new CustomAttribute(['contact_id' => 1, 'key' => 'test', 'value' => 'testing']);
-        \Log::info('Custom attribute', ['custom' => $customAttribute]);
-
         foreach ($this->customMappings as $key => $value) {
             // TODO: Create addCustomMapping method
             CustomAttribute::create([
