@@ -2,6 +2,11 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
+
+/**
+ * This is a wrapper class for mappings used to import contacts from csv files
+ */
 class Mappings
 {
     /**
@@ -17,7 +22,7 @@ class Mappings
         }
 
         foreach ($keys as $index => $key) {
-            $this->data[$key] = $values[$index];
+            $this->data[$key] = Str::snake($values[$index]);
         }
     }
 

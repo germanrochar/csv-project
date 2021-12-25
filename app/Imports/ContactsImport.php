@@ -4,7 +4,6 @@ namespace App\Imports;
 
 use App\Mappings;
 use App\Models\Contact;
-use App\Models\CustomAttribute;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
