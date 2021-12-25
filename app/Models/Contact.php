@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -32,6 +33,19 @@ class Contact extends Model
         'updated_at'
     ];
 
+    /**
+     * @return HasMany
+     */
+    public function customAttributes(): HasMany
+    {
+        return $this->hasMany(CustomAttribute::class);
+    }
+
+    /**
+     * Retrieves a list of columns allowed to be imported from a file
+     *
+     * @return array
+    */
     public static function getColumnsAllowedForImport(): array {
         $contactsFields = Schema::getColumnListing('contacts');
 
@@ -40,5 +54,21 @@ class Contact extends Model
                 return !in_array($field, self::$columnsNotAllowedForImport, true);
             })
         );
+    }
+
+
+    /**
+     * Creates a new custom attribute
+     *
+     * @param string $key
+     * @param string $value
+     * @return Model
+    */
+    public function addCustomAttribute(string $key, string $value): Model
+    {
+        return $this->customAttributes()->create([
+            'key' => $key,
+            'value' => $value
+        ]);
     }
 }
