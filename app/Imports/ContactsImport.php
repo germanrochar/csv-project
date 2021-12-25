@@ -34,7 +34,7 @@ class ContactsImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        \Log::info('Mappings', [
+        info('Mappings', [
             'contact_mapings' => $this->contactMappings,
             'custom_mappings' => $this->customMappings,
             'row' => $row
@@ -60,12 +60,7 @@ class ContactsImport implements ToModel, WithHeadingRow
         ]);
 
         foreach ($this->customMappings->getAll() as $key => $value) {
-            // TODO: Create addCustomMapping method
-            CustomAttribute::create([
-                'contact_id' => $contact->id,
-                'key' => $key,
-                'value' =>  $row[$value]
-            ]);
+            $contact->addCustomAttribute($key, $row[$value]);
         }
 
         return $contact;

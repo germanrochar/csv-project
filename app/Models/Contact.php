@@ -56,7 +56,6 @@ class Contact extends Model
         );
     }
 
-
     /**
      * Creates a new custom attribute
      *
