@@ -40,7 +40,7 @@ class ContactsImport implements ToModel, WithHeadingRow
             'row' => $row
         ]);
 
-        // sanitize data
+        // TODO: sanitize data
         $contact = Contact::create([
             'team_id' => $this->contactMappings->has('team_id')
                 ? $row[$this->contactMappings->get('team_id')]

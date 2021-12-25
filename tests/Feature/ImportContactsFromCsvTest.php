@@ -16,7 +16,7 @@ class ImportContactsFromCsvTest extends TestCase
     {
         $header = 'name,phone_number,teams_ids,custom';
         $row1 = 'german,(555) 555-1234,45,lorem ipsum';
-        $row2 = 'john,(555) 777-1234,11,lorem est';
+        $row2 = 'john,(555) 777-1234,11,lorem est'; // TODO: Remove this row at the end
         $content = implode("\n", [$header, $row1, $row2]);
 
         $csvFile = $this->createCsvFileFrom($content);
@@ -72,12 +72,128 @@ class ImportContactsFromCsvTest extends TestCase
         $this->assertEquals('john', $customAttributes->last()->value);
     }
 
+    /** @test */
+    public function non_snake_csv_headers_types_are_imported_properly()
+    {
+
+    }
+
+    /** @test */
+    public function team_id_is_required_in_contact_mappings_list()
+    {
+        $header = 'name,phone_number,teams_ids,custom';
+        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $contactFields = ['name', 'phone']; // Exclude team_id
+        $csvFields = ['teams_ids', 'phone_number'];
+
+        $customContactFields = ['custom', 'custom_two'];
+        $customCsvFields = ['custom', 'name'];
+
+        $data = [
+            'contact_fields' => json_encode($contactFields),
+            'csv_fields' => json_encode($csvFields),
+            'custom_contact_fields' => json_encode($customContactFields),
+            'custom_csv_fields' => json_encode($customCsvFields),
+            'csv_file' => $csvFile
+        ];
+
+        $this->post('/imports/contacts/csv', $data)
+            ->assertInvalid(['contact_fields']);
+    }
+    /** @test */
+    public function phone_is_required_in_mappings_list()
+    {
+        $header = 'name,phone_number,teams_ids,custom';
+        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $contactFields = ['name', 'email']; // Exclude phone
+        $csvFields = ['teams_ids', 'phone_number'];
+
+        $customContactFields = ['custom', 'custom_two'];
+        $customCsvFields = ['custom', 'name'];
+
+        $data = [
+            'contact_fields' => json_encode($contactFields),
+            'csv_fields' => json_encode($csvFields),
+            'custom_contact_fields' => json_encode($customContactFields),
+            'custom_csv_fields' => json_encode($customCsvFields),
+            'csv_file' => $csvFile
+        ];
+
+        $this->post('/imports/contacts/csv', $data)
+            ->assertInvalid(['contact_fields']);
+    }
+
+    /** @test */
+    public function all_mappings_fields_are_required()
+    {
+        $header = 'name,phone_number,teams_ids,custom';
+        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $data = [
+            'csv_file' => $csvFile
+        ];
+
+        $this->post('/imports/contacts/csv', $data)
+            ->assertInvalid(['contact_fields', 'csv_fields', 'custom_contact_fields', 'custom_csv_fields']);
+    }
+
+    /** @test */
+    public function csv_file_is_required()
+    {
+        $contactFields = ['name', 'email'];
+        $csvFields = ['teams_ids', 'phone_number'];
+
+        $customContactFields = ['custom', 'custom_two'];
+        $customCsvFields = ['custom', 'name'];
+
+        $data = [
+            'contact_fields' => json_encode($contactFields),
+            'csv_fields' => json_encode($csvFields),
+            'custom_contact_fields' => json_encode($customContactFields),
+            'custom_csv_fields' => json_encode($customCsvFields)
+        ];
+
+        $this->post('/imports/contacts/csv', $data)
+            ->assertInvalid(['csv_file']);
+    }
+
+    /** @test */
+    public function all_contact_fields_mappings_must_exist_in_contacts_table()
+    {
+        //
+    }
+
+    /** @test */
+    public function all_mapping_field_pairs_must_have_the_same_length()
+    {
+
+    }
+
+    /** @test */
+    public function fields_in_csv_file_that_dont_have_matching_types_with_db_columns_throw_errors()
+    {
+
+    }
+
+
+
     /**
      * Generates a csv file based on the provided content
      * @param string $content
      * @return UploadedFile
      */
-    protected function  createCsvFileFrom(string $content): UploadedFile
+    protected function createCsvFileFrom(string $content): UploadedFile
     {
         return UploadedFile::fake()
             ->createWithContent(
