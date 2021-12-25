@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Mappings;
 use App\Models\Contact;
 use App\Models\CustomAttribute;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -10,16 +11,16 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class ContactsImport implements ToModel, WithHeadingRow
 {
     /**
-    * @var array Keys: contact columns | Values: csv fields
+    * @var Mappings Keys: contact columns | Values: csv fields
     */
     private $contactMappings;
 
     /**
-     * @var array Keys: custom keys | Values: custom values
+     * @var Mappings Keys: custom keys | Values: custom values
      */
     private $customMappings;
 
-    public function __construct(array $contactMappings, array $customMappings)
+    public function __construct(Mappings $contactMappings, Mappings $customMappings)
     {
         $this->contactMappings = $contactMappings;
         $this->customMappings = $customMappings;
@@ -33,22 +34,37 @@ class ContactsImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        \Log::info('Mappings', ['contact_mapings' => $this->contactMappings, 'custom_mappings' => $this->customMappings]);
-        // sanitize data
-        $contact = Contact::create([
-            'team_id' => isset($this->contactMappings['team_id']) ? $row[$this->contactMappings['team_id']] : null,
-            'name' => isset($this->contactMappings['name']) ? $row[$this->contactMappings['name']] : null,
-            'phone' => isset($this->contactMappings['phone']) ? $row[$this->contactMappings['phone']] : null,
-            'email' => isset($this->contactMappings['email']) ? $row[$this->contactMappings['email']] : null,
-            'sticky_phone_number_id' => isset($this->contactMappings['sticky_phone_number_id']) ? $row[$this->contactMappings['sticky_phone_number_id']] : null
+        \Log::info('Mappings', [
+            'contact_mapings' => $this->contactMappings,
+            'custom_mappings' => $this->customMappings,
+            'row' => $row
         ]);
 
-        foreach ($this->customMappings as $key => $value) {
+        // sanitize data
+        $contact = Contact::create([
+            'team_id' => $this->contactMappings->has('team_id')
+                ? $row[$this->contactMappings->get('team_id')]
+                : null,
+            'name' => $this->contactMappings->has('name')
+                ? $row[$this->contactMappings->get('name')]
+                : null,
+            'phone' => $this->contactMappings->has('phone')
+                ? $row[$this->contactMappings->get('phone')]
+                : null,
+            'email' => $this->contactMappings->has('email')
+                ? $row[$this->contactMappings->get('email')]
+                : null,
+            'sticky_phone_number_id' => $this->contactMappings->has('sticky_phone_number_id')
+                ? $row[$this->contactMappings->get('sticky_phone_number_id')]
+                : null
+        ]);
+
+        foreach ($this->customMappings->getAll() as $key => $value) {
             // TODO: Create addCustomMapping method
             CustomAttribute::create([
                 'contact_id' => $contact->id,
                 'key' => $key,
-                'value' =>  $row[$this->customMappings[$key]]
+                'value' =>  $row[$value]
             ]);
         }
 

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ImportContactsRequest;
 use App\Imports\ContactsImport;
-use App\Models\Contact;
+use App\Mappings;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ImportContactsController extends Controller
@@ -24,23 +24,9 @@ class ImportContactsController extends Controller
         $customContactFields = json_decode($request->input('custom_contact_fields'));
         $customCsvFields = json_decode($request->input('custom_csv_fields'));
 
-        $contactsMappings = [];
-        foreach ($csvFields as $index => $key) {
-            $contactsMappings[$key] = $contactFields[$index];
-        }
+        $contactsMappings = new Mappings($contactFields, $csvFields);
+        $customMappings = new Mappings($customContactFields, $customCsvFields);
 
-        $customContactMappings = [];
-        foreach ($customCsvFields as $index => $key) {
-            $customContactMappings[$key] = $customContactFields[$index];
-        }
-
-        $contactsMappings = array_flip($contactsMappings);
-        $customMappings = array_flip($customContactMappings);
-
-        \Log::info('Mappings', ['contactsMappings' => $contactsMappings, 'customMappings' => $customMappings]);
-
-        // Reading the same file twice is not great for performance but, I wasn't sure how much the performance
-        // was a priority for this exercise. So, I decided to create two import classes to make the code cleaner.
         Excel::import(new ContactsImport($contactsMappings, $customMappings), $csvFile);
     }
 }
