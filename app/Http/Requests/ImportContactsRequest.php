@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\ContactFieldsMustExistsInDB;
 use App\Rules\EncodedJsonValuesCannotBeDuplicated;
 use App\Rules\EncodedJsonValuesMustBeStrings;
 use App\Rules\EncodedJsonValuesNotEmpty;
@@ -35,8 +36,8 @@ class ImportContactsRequest extends FormRequest
                 new EncodedJsonValuesMustBeStrings,
                 new EncodedJsonValuesNotEmpty,
                 new RequiredContactFieldsMustBeProvided,
-                new EncodedJsonValuesCannotBeDuplicated
-                // TODO: Make sure values belong to contacts table
+                new EncodedJsonValuesCannotBeDuplicated,
+                new ContactFieldsMustExistsInDB
             ],
             'custom_contact_fields' => [
                 'required',

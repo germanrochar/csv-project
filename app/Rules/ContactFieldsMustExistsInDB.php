@@ -2,9 +2,10 @@
 
 namespace App\Rules;
 
+use App\Models\Contact;
 use Illuminate\Contracts\Validation\Rule;
 
-class RequiredContactFieldsMustBeProvided implements Rule
+class ContactFieldsMustExistsInDB implements Rule
 {
     /**
      * Create a new rule instance.
@@ -25,9 +26,11 @@ class RequiredContactFieldsMustBeProvided implements Rule
      */
     public function passes($attribute, $value)
     {
-        $columns = json_decode($value, true);
+        $fields = json_decode($value);
 
-        return in_array('phone', $columns, true) && in_array('team_id', $columns, true);
+        $columns = Contact::getColumnsAllowedForImport();
+
+        return count(array_diff($fields, $columns)) < 1;
     }
 
     /**
@@ -37,6 +40,6 @@ class RequiredContactFieldsMustBeProvided implements Rule
      */
     public function message()
     {
-        return 'Contact fields [phone] and [team_id] must be mapped.';
+        return 'One or more fields in contacts mappings don\'t exist in DB.';
     }
 }

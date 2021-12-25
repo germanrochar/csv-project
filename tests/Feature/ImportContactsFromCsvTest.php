@@ -171,7 +171,34 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function all_contact_fields_mappings_must_exist_in_contacts_table()
     {
-        //
+        $header = 'name,phone_number,teams_ids,custom';
+        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $contactMappings = [
+            'non_existing_column'=> 'teams_ids',
+            'custom'=> 'phone_number',
+            'phone'=> 'name',
+            'team_id'=> 'custom'
+        ];
+
+        $customMappings = [
+            'custom' => 'custom',
+            'custom_two' => 'name'
+        ];
+
+        $data = [
+            'contact_fields' => json_encode(array_keys($contactMappings)),
+            'csv_fields' => json_encode(array_values($contactMappings)),
+            'custom_contact_fields' => json_encode(array_keys($customMappings)),
+            'custom_csv_fields' => json_encode(array_values($customMappings)),
+            'csv_file' => $csvFile
+        ];
+
+        $this->post('/imports/contacts/csv', $data)
+            ->assertInvalid(['contact_fields']);
     }
 
     /** @test */
