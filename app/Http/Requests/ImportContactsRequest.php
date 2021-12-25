@@ -36,6 +36,7 @@ class ImportContactsRequest extends FormRequest
                 new EncodedJsonValuesNotEmpty,
                 new RequiredContactFieldsMustBeProvided,
                 new EncodedJsonValuesCannotBeDuplicated
+                // TODO: Make sure values belong to contacts table
             ],
             'custom_contact_fields' => [
                 'required',

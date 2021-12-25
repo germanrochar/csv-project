@@ -18,7 +18,7 @@ class ContactTest extends TestCase
 
         $this->assertCount(0, $contact->customAttributes()->get());
 
-        $contact->addCustomAttribute('test-key', '123');
+        $contact->addCustomAttribute('test_key', '123');
 
         $this->assertCount(1, $contact->customAttributes()->get());
 

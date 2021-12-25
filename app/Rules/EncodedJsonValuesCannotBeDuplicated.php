@@ -27,6 +27,10 @@ class EncodedJsonValuesCannotBeDuplicated implements Rule
     {
         $values = json_decode($value);
 
+        if (!is_array($values)) {
+            throw new \LogicException(sprintf('Rule [%s] was applied to a field that is not a json.', self::class));
+        }
+
         return count(array_unique($values)) === count($values);
     }
 

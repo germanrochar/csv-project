@@ -27,6 +27,10 @@ class RequiredContactFieldsMustBeProvided implements Rule
     {
         $columns = json_decode($value, true);
 
+        if (!is_array($columns)) {
+            throw new \LogicException(sprintf('Rule [%s] was applied to a field that is not a json.', self::class));
+        }
+
         return in_array('phone', $columns, true) && in_array('team_id', $columns, true);
     }
 
