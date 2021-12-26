@@ -6,7 +6,7 @@
                 <p>Map fields in your csv file to contacts table fields</p>
             </div>
 
-            <!--   Scan feedback     -->
+            <!--   Feedback     -->
             <div class="mapping-fields-page__feedback">
                 <div class="alert alert-danger" role="alert" v-if="!errorsAreEmpty">
                     <span class="sr-only">The following errors were found in your csv file:</span>
@@ -25,7 +25,6 @@
                 </div>
 
                 <div class="alert alert-success" role="alert" v-else>
-<!--                    <p class="fw-bold">Found 1000 contacts in:</p>-->
                     <div class="mapping-fields-page__filename-box mapping-fields-page__filename-box--success">
                     <span>
                         <span class="fw-bold">File name</span>: {{ csvFilename}}

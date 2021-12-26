@@ -18,14 +18,14 @@
 
                 <template v-if="currentStep === 1">
                     <upload-csv-page
-                        @canceled="goToPreviousStep"
+                        @canceled="hideImportSteps"
                         @uploaded="storeFileAndContinue"
                     ></upload-csv-page>
                 </template>
 
                 <template v-if="currentStep === 2">
                     <mapping-fields-page
-                        @canceled="removeDataAndGoBack"
+                        @canceled="removeMappingsAndFileAndGoBack"
                         @completed="storeMappingsAndContinue"
                         :csv-file="csvFile"
                         :csv-filename="csvFilename"
@@ -97,7 +97,7 @@ export default {
 
         goToPreviousStep() {
             if (this.isFirstStep) {
-                this.showImportSteps = false
+                alert('Something went wrong. Please contact tech support.')
                 return
             }
 
@@ -111,7 +111,7 @@ export default {
             this.goToNextStep()
         },
 
-        removeDataAndGoBack() {
+        removeMappingsAndFileAndGoBack() {
             this.csvFile = ''
             this.csvFilename = ''
             this.mappings = ''

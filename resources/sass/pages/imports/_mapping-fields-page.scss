@@ -2,17 +2,17 @@
     padding: 2rem;
 
     &__filename-box {
-        background-color: #fff;
+        background-color: $color-white;
         padding: 1rem;
         display: inline-flex;
         flex-direction: column;
 
         &--danger {
-            border: 1px solid #dc3545;
+            border: 1px solid $color-danger;
         }
 
         &--success {
-            border: 1px solid #28a745;
+            border: 1px solid $color-success;
         }
     }
 

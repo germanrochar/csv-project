@@ -5420,7 +5420,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     goToPreviousStep: function goToPreviousStep() {
       if (this.isFirstStep) {
-        this.showImportSteps = false;
+        alert('Something went wrong. Please contact tech support.');
         return;
       }
 
@@ -5431,7 +5431,7 @@ __webpack_require__.r(__webpack_exports__);
       this.csvFilename = filename;
       this.goToNextStep();
     },
-    removeDataAndGoBack: function removeDataAndGoBack() {
+    removeMappingsAndFileAndGoBack: function removeMappingsAndFileAndGoBack() {
       this.csvFile = '';
       this.csvFilename = '';
       this.mappings = '';
@@ -5461,7 +5461,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_multiselect__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_multiselect__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _core_mappings_Mappings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../core/mappings/Mappings */ "./resources/js/core/mappings/Mappings.js");
 /* harmony import */ var _core_mappings_ContactMappingOptions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../core/mappings/ContactMappingOptions */ "./resources/js/core/mappings/ContactMappingOptions.js");
-//
 //
 //
 //
@@ -29716,7 +29715,7 @@ var render = function () {
                   ? [
                       _c("upload-csv-page", {
                         on: {
-                          canceled: _vm.goToPreviousStep,
+                          canceled: _vm.hideImportSteps,
                           uploaded: _vm.storeFileAndContinue,
                         },
                       }),
@@ -29732,7 +29731,7 @@ var render = function () {
                           "old-mappings": _vm.mappings,
                         },
                         on: {
-                          canceled: _vm.removeDataAndGoBack,
+                          canceled: _vm.removeMappingsAndFileAndGoBack,
                           completed: _vm.storeMappingsAndContinue,
                         },
                       }),
@@ -29823,9 +29822,7 @@ var render = function () {
                         _vm._v("File name"),
                       ]),
                       _vm._v(
-                        ": " +
-                          _vm._s(_vm.csvFilename) +
-                          "\n                    "
+                        ": " + _vm._s(_vm.csvFilename) + "\n                "
                       ),
                     ]),
                     _vm._v(" "),
@@ -29857,9 +29854,7 @@ var render = function () {
                         _vm._v("File name"),
                       ]),
                       _vm._v(
-                        ": " +
-                          _vm._s(_vm.csvFilename) +
-                          "\n                    "
+                        ": " + _vm._s(_vm.csvFilename) + "\n                "
                       ),
                     ]),
                   ]
