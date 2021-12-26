@@ -16,8 +16,7 @@ class ImportContactsFromCsvTest extends TestCase
     {
         $header = 'name,phone_number,teams_ids,custom,email';
         $row1 = 'german,(555) 555-1234,45,lorem ipsum,germçççan@test.com';
-        $row2 = 'john,(555) 777-1234,11,lorem est'; // TODO: Remove this row at the end
-        $content = implode("\n", [$header, $row1, $row2]);
+        $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
@@ -40,18 +39,13 @@ class ImportContactsFromCsvTest extends TestCase
             ->assertSuccessful();
 
         $contacts = Contact::all();
-        $this->assertCount(2, $contacts);
+        $this->assertCount(1, $contacts);
 
         // Check Contacts info
         $this->assertEquals('45', $contacts->first()->team_id);
         $this->assertEquals('(555) 555-1234', $contacts->first()->phone);
 
-        $secondContact = $contacts->last();
-        $this->assertEquals('11', $secondContact->team_id);
-        $this->assertEquals('(555) 777-1234', $secondContact->phone);
-
         // Check Custom Attributes info
-        // Contact #1 | Attributes
         $customAttributes = $contacts->first()->customAttributes()->get();
         $this->assertCount(2, $customAttributes);
 
@@ -60,16 +54,6 @@ class ImportContactsFromCsvTest extends TestCase
 
         $this->assertEquals('custom_two', $customAttributes->last()->key);
         $this->assertEquals('german', $customAttributes->last()->value);
-
-        // Contact #2 | Attributes:
-        $customAttributes = $contacts->last()->customAttributes()->get();
-        $this->assertCount(2, $customAttributes);
-
-        $this->assertEquals('custom', $customAttributes->first()->key);
-        $this->assertEquals('lorem est', $customAttributes->first()->value);
-
-        $this->assertEquals('custom_two', $customAttributes->last()->key);
-        $this->assertEquals('john', $customAttributes->last()->value);
     }
 
     /** @test */
