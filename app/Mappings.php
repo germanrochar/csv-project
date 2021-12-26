@@ -21,6 +21,7 @@ class Mappings
             throw new \LogicException('Arrays must be of the same length');
         }
 
+        $this->data = [];
         foreach ($keys as $index => $key) {
             $this->data[$key] = Str::snake($values[$index]);
         }
