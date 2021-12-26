@@ -20,12 +20,9 @@ class CreateCustomAttributesTable extends Migration
             $table->string('key');
             $table->string('value');
             $table->timestamps();
+            $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('CASCADE');
         });
         DB::statement('ALTER TABLE custom_attributes AUTO_INCREMENT = 256;');
-
-        Schema::table('custom_attributes', function (Blueprint $table) {
-           $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('CASCADE');
-        });
     }
 
     /**
