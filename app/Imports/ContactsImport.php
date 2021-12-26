@@ -6,9 +6,10 @@ use App\Mappings;
 use App\Models\Contact;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ContactsImport implements ToModel, WithHeadingRow, WithBatchInserts
+class ContactsImport implements ToModel, WithHeadingRow, WithBatchInserts, WithChunkReading
 {
     /**
     * @var Mappings Keys: contact columns | Values: csv fields
@@ -61,11 +62,23 @@ class ContactsImport implements ToModel, WithHeadingRow, WithBatchInserts
     }
 
     /**
-     * Insert the contacts in chunks to reduce the import duration
+     * Set amount of records that will be inserted per batch
+     * to reduce the import duration
      *
      * @return int
     */
     public function batchSize(): int
+    {
+        return 1000;
+    }
+
+    /**
+     * Set amount of records that will be read from file per batch
+     * to mitigate the increase of memory usage
+     *
+     * @return int
+    */
+    public function chunkSize(): int
     {
         return 1000;
     }
