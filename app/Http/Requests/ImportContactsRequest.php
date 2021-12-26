@@ -50,13 +50,15 @@ class ImportContactsRequest extends FormRequest
                 'required',
                 'string',
                 new EncodedJsonValuesMustBeStrings,
-                new EncodedJsonValuesNotEmpty
+                new EncodedJsonValuesNotEmpty,
+                new EncodedJsonValuesCannotBeDuplicated
             ],
             'custom_csv_fields' => [
                 'required',
                 'string',
                 new EncodedJsonValuesMustBeStrings,
                 new EncodedJsonValuesNotEmpty,
+                new EncodedJsonValuesCannotBeDuplicated
             ]
         ];
     }
