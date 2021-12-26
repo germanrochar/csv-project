@@ -38,6 +38,6 @@ class ImportContactsController extends Controller
             ], 400);
         }
 
-        return new JsonResponse('Contacts imported successfully.');
+        return new JsonResponse(['message' => 'Contacts imported successfully.']);
     }
 }

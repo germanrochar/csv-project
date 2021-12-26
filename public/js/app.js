@@ -5409,6 +5409,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ImportStepsPage",
@@ -5418,7 +5423,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       currentStep: 1,
-      totalSteps: 3,
+      totalSteps: 4,
       csvFile: '',
       csvFilename: '',
       mappings: {}
@@ -5644,6 +5649,31 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: "MappingsCompletedPage.vue"
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js& ***!
@@ -5734,9 +5764,17 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('csv_fields', JSON.stringify(csvFields));
       formData.append('custom_csv_fields', JSON.stringify(customCsvFields));
       axios.post('/imports/contacts/csv', formData).then(function (response) {
-        console.log(response.data);
+        _this.$emit('imported');
       })["catch"](function (error) {
         var _error$response$data$;
+
+        if (error.response.status === 400) {
+          console.log('hehe');
+          console.log(error.response.data);
+          _this.errors = {
+            'csv_fields': error.response.data
+          };
+        }
 
         _this.errors = (_error$response$data$ = error.response.data.errors) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : [];
       });
@@ -5846,6 +5884,7 @@ Vue.component('import-steps-page', (__webpack_require__(/*! ./pages/ImportStepsP
 Vue.component('upload-csv-page', (__webpack_require__(/*! ./pages/imports/steps/UploadCSVPage */ "./resources/js/pages/imports/steps/UploadCSVPage.vue")["default"]));
 Vue.component('mapping-fields-page', (__webpack_require__(/*! ./pages/imports/steps/MappingFieldsPage */ "./resources/js/pages/imports/steps/MappingFieldsPage.vue")["default"]));
 Vue.component('mappings-preview-page', (__webpack_require__(/*! ./pages/imports/steps/MappingsPreviewPage */ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue")["default"]));
+Vue.component('mappings-completed-page', (__webpack_require__(/*! ./pages/imports/steps/MappingsCompletedPage */ "./resources/js/pages/imports/steps/MappingsCompletedPage.vue")["default"]));
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -29211,6 +29250,45 @@ component.options.__file = "resources/js/pages/imports/steps/MappingFieldsPage.v
 
 /***/ }),
 
+/***/ "./resources/js/pages/imports/steps/MappingsCompletedPage.vue":
+/*!********************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsCompletedPage.vue ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MappingsCompletedPage_vue_vue_type_template_id_1de29213___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MappingsCompletedPage.vue?vue&type=template&id=1de29213& */ "./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=template&id=1de29213&");
+/* harmony import */ var _MappingsCompletedPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MappingsCompletedPage.vue?vue&type=script&lang=js& */ "./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MappingsCompletedPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MappingsCompletedPage_vue_vue_type_template_id_1de29213___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MappingsCompletedPage_vue_vue_type_template_id_1de29213___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/pages/imports/steps/MappingsCompletedPage.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue":
 /*!******************************************************************!*\
   !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue ***!
@@ -29369,6 +29447,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsCompletedPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingsCompletedPage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsCompletedPage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js&":
 /*!*******************************************************************************************!*\
   !*** ./resources/js/pages/imports/steps/MappingsPreviewPage.vue?vue&type=script&lang=js& ***!
@@ -29495,6 +29589,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingFieldsPage_vue_vue_type_template_id_436d7ed4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingFieldsPage.vue?vue&type=template&id=436d7ed4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingFieldsPage.vue?vue&type=template&id=436d7ed4&");
+
+
+/***/ }),
+
+/***/ "./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=template&id=1de29213&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=template&id=1de29213& ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsCompletedPage_vue_vue_type_template_id_1de29213___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsCompletedPage_vue_vue_type_template_id_1de29213___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MappingsCompletedPage_vue_vue_type_template_id_1de29213___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MappingsCompletedPage.vue?vue&type=template&id=1de29213& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=template&id=1de29213&");
 
 
 /***/ }),
@@ -29762,10 +29873,15 @@ var render = function () {
         ? [
             _c("mappings-preview-page", {
               attrs: { mappings: _vm.mappings, "csv-file": _vm.csvFile },
-              on: { "go-back": _vm.goToPreviousStep },
+              on: {
+                "go-back": _vm.goToPreviousStep,
+                imported: _vm.goToNextStep,
+              },
             }),
           ]
         : _vm._e(),
+      _vm._v(" "),
+      _vm.currentStep === 4 ? [_c("mappings-completed-page")] : _vm._e(),
     ],
     2
   )
@@ -30039,6 +30155,44 @@ var staticRenderFns = [
           [_vm._v("Contacts Field")]
         ),
       ]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=template&id=1de29213&":
+/*!******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/pages/imports/steps/MappingsCompletedPage.vue?vue&type=template&id=1de29213& ***!
+  \******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm._m(0)
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "d-flex justify-content-center" }, [
+      _c(
+        "div",
+        { staticClass: "alert alert-success", attrs: { role: "alert" } },
+        [_vm._v("\n        Import Completed Successfully!\n    ")]
+      ),
     ])
   },
 ]

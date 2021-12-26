@@ -24,9 +24,14 @@
         <template v-if="currentStep === 3">
             <mappings-preview-page
                 @go-back='goToPreviousStep'
+                @imported="goToNextStep"
                 :mappings="mappings"
                 :csv-file="csvFile"
             ></mappings-preview-page>
+        </template>
+
+        <template v-if="currentStep === 4">
+            <mappings-completed-page></mappings-completed-page>
         </template>
     </div>
 </template>
@@ -40,7 +45,7 @@ export default {
     data() {
         return {
             currentStep: 1,
-            totalSteps: 3,
+            totalSteps: 4,
             csvFile: '',
             csvFilename: '',
             mappings: {}
