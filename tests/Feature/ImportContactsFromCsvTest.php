@@ -172,12 +172,6 @@ class ImportContactsFromCsvTest extends TestCase
     }
 
     /** @test */
-    public function only_csv_files_can_be_used_to_import_contacts(): void
-    {
-        //
-    }
-
-    /** @test */
     public function all_mappings_lists_are_required(): void
     {
         $header = 'name,phone_number,teams_ids,custom';
@@ -208,6 +202,29 @@ class ImportContactsFromCsvTest extends TestCase
             'csv_fields' => json_encode($csvFields),
             'custom_contact_fields' => json_encode($customContactFields),
             'custom_csv_fields' => json_encode($customCsvFields)
+        ];
+
+        $this->post('/imports/contacts/csv', $data)
+            ->assertInvalid(['csv_file']);
+    }
+
+    /** @test */
+    public function only_csv_files_can_be_used_to_import_contacts(): void
+    {
+        $excelFile = UploadedFile::fake()->create('excel.xlsx');
+
+        $contactFields = ['name', 'email'];
+        $csvFields = ['teams_ids', 'phone_number'];
+
+        $customContactFields = ['custom', 'custom_two'];
+        $customCsvFields = ['custom', 'name'];
+
+        $data = [
+            'contact_fields' => json_encode($contactFields),
+            'csv_fields' => json_encode($csvFields),
+            'custom_contact_fields' => json_encode($customContactFields),
+            'custom_csv_fields' => json_encode($customCsvFields),
+            'csv_file' => $excelFile
         ];
 
         $this->post('/imports/contacts/csv', $data)
@@ -301,19 +318,5 @@ class ImportContactsFromCsvTest extends TestCase
 
         $this->post('/imports/contacts/csv', $data)
             ->assertStatus(400);
-    }
-
-    /**
-     * Generates a csv file based on the provided content
-     * @param string $content
-     * @return UploadedFile
-     */
-    protected function createCsvFileFrom(string $content): UploadedFile
-    {
-        return UploadedFile::fake()
-            ->createWithContent(
-                'contacts_list.csv',
-                $content
-            );
     }
 }
