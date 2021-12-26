@@ -5,7 +5,6 @@ namespace App\Imports;
 use App\Mappings;
 use App\Models\Contact;
 use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ContactsImport implements ToModel, WithHeadingRow
