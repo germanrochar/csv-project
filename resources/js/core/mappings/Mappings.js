@@ -43,7 +43,7 @@ export default class Mappings {
     getCustomMappingKeys() {
         let keys = [];
         this.data.forEach(mapping => {
-            if (mapping.isCustom)
+            if (mapping.isCustom && !this.hasEmptyValue(mapping))
                 keys.push(mapping.key)
         })
 
@@ -56,17 +56,11 @@ export default class Mappings {
     getMappingKeys() {
         let keys = [];
         this.data.forEach(mapping => {
-            if (!mapping.isCustom)
+            if (!mapping.isCustom && !this.hasEmptyValue(mapping))
                 keys.push(mapping.key)
         })
 
         return keys
-        // return this.data.map(mapping => {
-        //     if (mapping.isCustom)
-        //         return ''
-        //
-        //     return mapping.key
-        // })
     }
 
     /**
@@ -75,7 +69,7 @@ export default class Mappings {
     getMappingValues() {
         let values = [];
         this.data.forEach(mapping => {
-            if (!mapping.isCustom)
+            if (!mapping.isCustom && !this.hasEmptyValue(mapping))
                 values.push(this.getMappingValue(mapping))
         })
 
@@ -88,7 +82,7 @@ export default class Mappings {
     getCustomMappingValues() {
         let values = [];
         this.data.forEach(mapping => {
-            if (mapping.isCustom)
+            if (mapping.isCustom && !this.hasEmptyValue(mapping))
                 values.push(this.getMappingValue(mapping))
         })
 
@@ -104,5 +98,18 @@ export default class Mappings {
             return mapping.value.key
 
         return mapping.value
+    }
+
+    /**
+     * Checks if mapping has an empty value
+     *
+     * @param mapping
+     * @returns {boolean}
+     */
+    hasEmptyValue(mapping) {
+        if (typeof mapping.value === 'object')
+            return Object.keys(mapping).length === 0
+
+        return mapping.value.length === 0
     }
 }

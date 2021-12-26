@@ -81,6 +81,9 @@
     </div>
 </template>
 
+<!-- Import Vue Multiselect component -->
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <script>
 import Multiselect from 'vue-multiselect'
 import Mappings from "../../../core/mappings/Mappings";
@@ -156,5 +159,3 @@ export default {
     }
 }
 </script>
-
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

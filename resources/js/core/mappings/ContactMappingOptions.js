@@ -8,7 +8,7 @@ export default class ContactMappingOptions {
         this.data = []
         this.data.push(new Option('custom', 'Add a custom field'))
 
-        data.forEach((key, index) => {
+        data.forEach(key => {
             this.data.push(new Option(key, key))
         })
     }
