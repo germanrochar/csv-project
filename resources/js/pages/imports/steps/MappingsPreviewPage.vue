@@ -16,6 +16,7 @@
             </div>
 
             <h4>Field Mapping Preview</h4>
+            <p v-show="importingInProgress">Importing contacts...</p>
             <table class="table table-bordered">
                 <thead>
                     <tr class="table-secondary">
@@ -40,7 +41,7 @@
 
             <div class="mappings-preview-page__footer">
                 <button class="btn btn-light u-margin-right-small" @click="goToPreviousPage">Go Back</button>
-                <button class="btn btn-primary" @click="completeImport">Finish</button>
+                <button class="btn btn-primary" @click="completeImport" :disabled="importingInProgress">Finish</button>
             </div>
         </div>
     </div>
@@ -53,7 +54,8 @@ export default {
 
     data() {
         return {
-            errors: []
+            errors: [],
+            importingInProgress: false
         }
     },
 
@@ -81,11 +83,13 @@ export default {
             formData.append('csv_fields', JSON.stringify(csvFields))
             formData.append('custom_csv_fields', JSON.stringify(customCsvFields))
 
+            this.importingInProgress = true
             axios.post(
                 '/imports/contacts/csv',
                 formData
             )
             .then(response => {
+                this.importingInProgress = false
                 this.$emit('imported')
             }).catch(error => {
                 // This can definitely be improved but I'll leave it like this to speed up the delivery of the project.
