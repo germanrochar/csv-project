@@ -33,25 +33,19 @@ class ContactsImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        info('Mappings', [
-            'contact_mapings' => $this->contactMappings,
-            'custom_mappings' => $this->customMappings,
-            'row' => $row
-        ]);
+        // Sanitize data
+        $row = array_map(static function ($item) {
+            return rtrim(addslashes($item));
+        }, $row);
 
-        // TODO: sanitize data
         $contact = Contact::create([
-            'team_id' => $this->contactMappings->has('team_id')
-                ? $row[$this->contactMappings->get('team_id')]
-                : null,
+            'team_id' => $row[$this->contactMappings->get('team_id')],
+            'phone' => $row[$this->contactMappings->get('phone')],
             'name' => $this->contactMappings->has('name')
                 ? $row[$this->contactMappings->get('name')]
                 : null,
-            'phone' => $this->contactMappings->has('phone')
-                ? $row[$this->contactMappings->get('phone')]
-                : null,
             'email' => $this->contactMappings->has('email')
-                ? $row[$this->contactMappings->get('email')]
+                ? filter_var($row[$this->contactMappings->get('email')], FILTER_SANITIZE_EMAIL)
                 : null,
             'sticky_phone_number_id' => $this->contactMappings->has('sticky_phone_number_id')
                 ? $row[$this->contactMappings->get('sticky_phone_number_id')]

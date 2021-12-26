@@ -14,16 +14,16 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function anyone_can_import_contacts_from_csv_file(): void
     {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $header = 'name,phone_number,teams_ids,custom,email';
+        $row1 = 'german,(555) 555-1234,45,lorem ipsum,germçççan@test.com';
         $row2 = 'john,(555) 777-1234,11,lorem est'; // TODO: Remove this row at the end
         $content = implode("\n", [$header, $row1, $row2]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
         // Set up mappings for csv file
-        $contactFields = ['team_id', 'phone'];
-        $csvFields = ['teams_ids', 'phone_number'];
+        $contactFields = ['team_id', 'phone', 'email'];
+        $csvFields = ['teams_ids', 'phone_number', 'email'];
 
         $customContactFields = ['custom', 'custom_two'];
         $customCsvFields = ['custom', 'name'];
@@ -316,5 +316,4 @@ class ImportContactsFromCsvTest extends TestCase
                 $content
             );
     }
-
 }
