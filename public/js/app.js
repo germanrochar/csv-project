@@ -5766,17 +5766,16 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/imports/contacts/csv', formData).then(function (response) {
         _this.$emit('imported');
       })["catch"](function (error) {
-        var _error$response$data$;
-
+        // This can definitely be improved but I'll leave it like this to speed up the delivery of the project.
         if (error.response.status === 400) {
-          console.log('hehe');
-          console.log(error.response.data);
           _this.errors = {
             'csv_fields': error.response.data
           };
-        }
+        } else {
+          var _error$response$data$;
 
-        _this.errors = (_error$response$data$ = error.response.data.errors) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : [];
+          _this.errors = (_error$response$data$ = error.response.data.errors) !== null && _error$response$data$ !== void 0 ? _error$response$data$ : [];
+        }
       });
     }
   }

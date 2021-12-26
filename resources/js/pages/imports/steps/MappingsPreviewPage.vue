@@ -86,9 +86,14 @@ export default {
                 formData
             )
             .then(response => {
-                console.log(response.data);
+                this.$emit('imported')
             }).catch(error => {
-                this.errors = error.response.data.errors ?? []
+                // This can definitely be improved but I'll leave it like this to speed up the delivery of the project.
+                if (error.response.status === 400) {
+                    this.errors = {'csv_fields': error.response.data}
+                } else {
+                    this.errors = error.response.data.errors ?? []
+                }
             })
         }
     }
