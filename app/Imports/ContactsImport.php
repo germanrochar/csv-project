@@ -5,9 +5,10 @@ namespace App\Imports;
 use App\Mappings;
 use App\Models\Contact;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ContactsImport implements ToModel, WithHeadingRow
+class ContactsImport implements ToModel, WithHeadingRow, WithBatchInserts
 {
     /**
     * @var Mappings Keys: contact columns | Values: csv fields
@@ -38,7 +39,7 @@ class ContactsImport implements ToModel, WithHeadingRow
             return rtrim(addslashes($item));
         }, $row);
 
-        $contact = Contact::create([
+        $contact = new Contact([
             'team_id' => $row[$this->contactMappings->get('team_id')],
             'phone' => $row[$this->contactMappings->get('phone')],
             'name' => $this->contactMappings->has('name')
@@ -57,5 +58,15 @@ class ContactsImport implements ToModel, WithHeadingRow
         }
 
         return $contact;
+    }
+
+    /**
+     * Insert the contacts in chunks to reduce the import duration
+     *
+     * @return int
+    */
+    public function batchSize(): int
+    {
+        return 1000;
     }
 }
