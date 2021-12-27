@@ -14,6 +14,8 @@ export default class Mappings {
 
     /**
      * Retrieves all data mappings
+     *
+     * @returns array
      */
     getAll() {
         return this.data
@@ -39,6 +41,8 @@ export default class Mappings {
 
     /**
     * Retrieves a list of custom mapping keys
+     *
+     * @returns array
     */
     getCustomMappingKeys() {
         let keys = [];
@@ -52,6 +56,8 @@ export default class Mappings {
 
     /**
      * Retrieves a list of mapping keys
+     *
+     * @returns array
      */
     getMappingKeys() {
         let keys = [];
@@ -65,6 +71,8 @@ export default class Mappings {
 
     /**
      * Retrieves a list of mapping values
+     *
+     * @returns array
      */
     getMappingValues() {
         let values = [];
@@ -78,6 +86,8 @@ export default class Mappings {
 
     /**
      * Retrieves a list of custom mapping values
+     *
+     * @returns array
      */
     getCustomMappingValues() {
         let values = [];
@@ -92,6 +102,9 @@ export default class Mappings {
     /**
      * Calculates the value of a mapping.
      * Reason: Values can be different because are set through a vue-multiselect or a simple input text.
+     *
+     * @param mapping
+     * @returns string
      */
     getMappingValue(mapping) {
         if (typeof mapping.value === 'object')
