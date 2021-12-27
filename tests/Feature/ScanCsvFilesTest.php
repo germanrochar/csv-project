@@ -23,7 +23,7 @@ class ScanCsvFilesTest extends TestCase
     }
 
     /** @test */
-    public function csv_files_cannot_be_bigger_than_ten_mb(): void
+    public function csv_files_cannot_be_bigger_than_four_mb(): void
     {
         $data = [
             'csv_file' => UploadedFile::fake()->create('file.csv', 40000)

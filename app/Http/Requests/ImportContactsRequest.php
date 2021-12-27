@@ -29,7 +29,7 @@ class ImportContactsRequest extends FormRequest
     public function rules()
     {
         return [
-            'csv_file' => 'required|mimes:csv,txt|max:10240',
+            'csv_file' => 'required|mimes:csv,txt|max:4096',
             'contact_fields' => [
                 'required',
                 'string',

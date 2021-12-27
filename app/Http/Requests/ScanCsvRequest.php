@@ -27,7 +27,7 @@ class ScanCsvRequest extends FormRequest
             'csv_file' => [
                 'required',
                 'mimes:csv,txt',
-                'max:10240',
+                'max:4096',
             ],
         ];
     }
