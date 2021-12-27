@@ -33,6 +33,7 @@ class ImportContactsController extends Controller
         try {
             Excel::import(new ContactsImport($contactsMappings, $customMappings), $csvFile);
         } catch (QueryException $exception) {
+            info('Invalid data found in csv file.', ['exception' => $exception]);
             return new JsonResponse([
                 'message' => 'Please check the data types of your mapped fields in csv file. Some data types doesn\'t match.'
             ], 400);
