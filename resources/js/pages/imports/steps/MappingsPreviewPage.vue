@@ -40,7 +40,7 @@
             </table>
 
             <div class="mappings-preview-page__footer">
-                <button class="btn btn-light u-margin-right-small" @click="goToPreviousPage">Go Back</button>
+                <button class="btn btn-light u-margin-right-small" @click="goToPreviousPage" :disabled="importingInProgress">Go Back</button>
                 <button class="btn btn-primary" @click="completeImport" :disabled="importingInProgress">Finish</button>
             </div>
         </div>
@@ -92,6 +92,8 @@ export default {
                 this.importingInProgress = false
                 this.$emit('imported')
             }).catch(error => {
+                this.importingInProgress = false
+
                 // This can definitely be improved but I'll leave it like this to speed up the delivery of the project.
                 if (error.response.status === 400) {
                     this.errors = {'csv_fields': error.response.data}
