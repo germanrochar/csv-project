@@ -14,7 +14,7 @@ class ImportContactsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ImportContactsRequest $request
      * @return JsonResponse
      */
     public function store(ImportContactsRequest $request)

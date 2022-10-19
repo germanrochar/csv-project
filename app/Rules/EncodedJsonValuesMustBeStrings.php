@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use LogicException;
 
 class EncodedJsonValuesMustBeStrings implements Rule
 {
@@ -28,7 +29,7 @@ class EncodedJsonValuesMustBeStrings implements Rule
         $array = json_decode($value, true);
 
         if (!is_array($array)) {
-            throw new \LogicException(sprintf('Rule [%s] was applied to a field that is not a json.', self::class));
+            throw new LogicException(sprintf('Rule [%s] was applied to a field that is not a json.', self::class));
         }
 
         $stringItems = array_filter($array, static function ($item) {
