@@ -24,22 +24,22 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
-      with:
-        php-version: '8.0'
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.0'
 
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Setup environment
-      run: php -r "file_exists('.env.testing') || copy('.env.testing.ci', '.env.testing');"
+      - name: Setup environment
+        run: php -r "file_exists('.env.testing') || copy('.env.testing.ci', '.env.testing');"
 
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-    - name: Directory Permissions
-      run: chmod -R 777 storage bootstrap/cache
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
 
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_PORT: ${{ job.services.mysql.ports[3306] }}
-      run: vendor/bin/phpunit
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+        run: vendor/bin/phpunit
