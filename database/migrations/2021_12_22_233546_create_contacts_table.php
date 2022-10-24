@@ -23,8 +23,6 @@ class CreateContactsTable extends Migration
             $table->integer('sticky_phone_number_id')->nullable();
             $table->timestamps();
         });
-
-        DB::statement('ALTER TABLE contacts AUTO_INCREMENT = 256;');
     }
 
     /**

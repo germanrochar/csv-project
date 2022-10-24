@@ -22,7 +22,6 @@ class CreateCustomAttributesTable extends Migration
             $table->timestamps();
             $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('CASCADE');
         });
-        DB::statement('ALTER TABLE custom_attributes AUTO_INCREMENT = 256;');
     }
 
     /**
