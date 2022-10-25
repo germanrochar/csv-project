@@ -33,7 +33,7 @@ jobs:
         run: php -r "file_exists('.env.testing') || copy('.env.testing.ci', '.env.testing');"
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-interaction --no-scripts --no-progress
 
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
@@ -73,11 +73,8 @@ jobs:
       - name: Setup environment
         run: php -r "file_exists('.env.testing') || copy('.env.testing.ci', '.env.testing');"
 
-      - name: Update  Dependencies
-        run: composer update
-
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-interaction --no-scripts --no-progress
 
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
