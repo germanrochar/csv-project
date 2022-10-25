@@ -17,25 +17,20 @@ class ImportContactsController extends Controller
      * @param ImportContactsRequest $request
      * @return JsonResponse
      */
-    public function store(ImportContactsRequest $request)
+    public function store(ImportContactsRequest $request): JsonResponse
     {
         $csvFile = $request->file('csv_file');
+        $mappings = json_decode($request->input('mappings'), TRUE);
 
-        $contactsMappings = new Mappings(
-            json_decode($request->input('contact_fields')),
-            json_decode($request->input('csv_fields'))
+        $mappings = new Mappings(
+            array_values($mappings),
+            array_keys($mappings),
         );
-        $customMappings = new Mappings(
-            json_decode($request->input('custom_contact_fields')),
-            json_decode($request->input('custom_csv_fields'))
-        );
-
         try {
-            Excel::import(new ContactsImport($contactsMappings, $customMappings), $csvFile);
-        } catch (QueryException $exception) {
-            info('Invalid data found in csv file.', ['exception' => $exception]);
+            Excel::import(new ContactsImport($mappings), $csvFile);
+        } catch (QueryException $e) {
             return new JsonResponse([
-                'message' => 'Please check the data types of your mapped fields in csv file. Some data types doesn\'t match.'
+                'message' => 'Please check the data types of your mapped fields in csv file. Some data types does not match.'
             ], 400);
         }
 

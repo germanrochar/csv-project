@@ -9,14 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * @property int id
- * @property int team_id
- * @property string name
- * @property string phone
- * @property string email
- * @property int sticky_phone_number_id
- * @property Carbon created_at
- * @property Carbon updated_at
+ * @property int $id
+ * @property int $team_id
+ * @property string|null $name
+ * @property string $phone
+ * @property string|null $email
+ * @property int|null $sticky_phone_number_id
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ *
+ * @property list<CustomAttribute> $customAttributes
  */
 class Contact extends Model
 {
@@ -27,8 +29,9 @@ class Contact extends Model
     /**
     * @var array
     */
-    private static $columnsNotAllowedForImport = [
+    private static array $columnsNotAllowedToImport = [
         'id',
+        'team_id',
         'created_at',
         'updated_at'
     ];
@@ -46,12 +49,12 @@ class Contact extends Model
      *
      * @return array
     */
-    public static function getColumnsAllowedForImport(): array {
+    public static function getColumnsAllowedToImport(): array {
         $contactsFields = Schema::getColumnListing('contacts');
 
         return array_values(
             array_filter($contactsFields, static function ($field) {
-                return !in_array($field, self::$columnsNotAllowedForImport, true);
+                return !in_array($field, self::$columnsNotAllowedToImport, true);
             })
         );
     }

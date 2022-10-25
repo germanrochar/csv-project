@@ -12,6 +12,7 @@ class ContactsCsvScannerController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param ScanCsvRequest $request
      * @return JsonResponse
      */
     public function index(ScanCsvRequest $request): JsonResponse
@@ -24,7 +25,7 @@ class ContactsCsvScannerController extends Controller
 
         return new JsonResponse([
             'csvFields' => $headingRows,
-            'contactsFields' => Contact::getColumnsAllowedForImport()
+            'contactsFields' => Contact::getColumnsAllowedToImport()
         ]);
     }
 }

@@ -2,29 +2,31 @@
 
 namespace App;
 
+use App\Models\Contact;
 use Illuminate\Support\Str;
+use LogicException;
 
 /**
  * This is a wrapper class for mappings used to import contacts from csv files
  */
 class Mappings
 {
-    /**
-    * @var array
-    */
-    private $data;
+    private array $data;
+    private array $customMappingKeys;
 
     public function __construct(array $keys, array $values)
     {
         if (count($keys) !== count($values)) {
             info('Mapping arrays must be of the same length', ['keys' => $keys, 'values' => $values]);
-            throw new \LogicException('Arrays must be of the same length');
+            throw new LogicException('Arrays must be of the same length');
         }
 
         $this->data = [];
         foreach ($keys as $index => $key) {
             $this->data[$key] = Str::snake($values[$index]);
         }
+
+        $this->customMappingKeys = array_values(array_diff(array_keys($this->data), Contact::getColumnsAllowedToImport()));
     }
 
     /**
@@ -60,5 +62,10 @@ class Mappings
     public function getAll(): array
     {
         return $this->data;
+    }
+
+    public function getCustomMappings(): array
+    {
+        return array_filter($this->data, fn ($mapping) => in_array($mapping, $this->customMappingKeys), ARRAY_FILTER_USE_KEY);
     }
 }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Contact;
 use Illuminate\Http\UploadedFile;
+use RuntimeException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -14,24 +15,21 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function anyone_can_import_contacts_from_csv_file(): void
     {
-        $header = 'name,phone_number,teams_ids,custom,email';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum,germçççan@test.com';
+        $header = 'name,phone_number,custom,custom_two,email';
+        $row1 = 'german,(555) 555-1234,lorem ipsum,testing,germçççan@test.com';
         $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
-        // Set up mappings for csv file
-        $contactFields = ['team_id', 'phone', 'email'];
-        $csvFields = ['teams_ids', 'phone_number', 'email'];
-
-        $customContactFields = ['custom', 'custom_two'];
-        $customCsvFields = ['custom', 'name'];
+        $mappings = [
+            'phone_number' => 'phone',
+            'email' => 'email',
+            'custom' => 'custom',
+            'custom_two' => 'another_custom_field',
+        ];
 
         $data = [
-            'contact_fields' => json_encode($contactFields),
-            'csv_fields' => json_encode($csvFields),
-            'custom_contact_fields' => json_encode($customContactFields),
-            'custom_csv_fields' => json_encode($customCsvFields),
+            'mappings' => json_encode($mappings),
             'csv_file' => $csvFile
         ];
 
@@ -42,7 +40,7 @@ class ImportContactsFromCsvTest extends TestCase
         $this->assertCount(1, $contacts);
 
         // Check Contacts info
-        $this->assertEquals('45', $contacts->first()->team_id);
+        $this->assertEquals(1, $contacts->first()->team_id);
         $this->assertEquals('(555) 555-1234', $contacts->first()->phone);
 
         // Check Custom Attributes info
@@ -52,31 +50,27 @@ class ImportContactsFromCsvTest extends TestCase
         $this->assertEquals('custom', $customAttributes->first()->key);
         $this->assertEquals('lorem ipsum', $customAttributes->first()->value);
 
-        $this->assertEquals('custom_two', $customAttributes->last()->key);
-        $this->assertEquals('german', $customAttributes->last()->value);
+        $this->assertEquals('another_custom_field', $customAttributes->last()->key);
+        $this->assertEquals('testing', $customAttributes->last()->value);
     }
 
     /** @test */
     public function non_snake_csv_headers_types_are_imported_properly(): void
     {
-        $header = 'name,phone number,teams ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $header = 'name,phone number,custom field';
+        $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
-        // Set up mappings for csv file
-        $contactFields = ['team_id', 'phone'];
-        $csvFields = ['teams ids', 'phone number'];
-
-        $customContactFields = ['custom', 'custom_two'];
-        $customCsvFields = ['custom', 'name'];
+        $mappings = [
+            'phone_number' => 'phone',
+            'custom field' => 'custom',
+            'name' => 'custom_two',
+        ];
 
         $data = [
-            'contact_fields' => json_encode($contactFields),
-            'csv_fields' => json_encode($csvFields),
-            'custom_contact_fields' => json_encode($customContactFields),
-            'custom_csv_fields' => json_encode($customCsvFields),
+            'mappings' => json_encode($mappings),
             'csv_file' => $csvFile
         ];
 
@@ -87,7 +81,7 @@ class ImportContactsFromCsvTest extends TestCase
         $this->assertCount(1, $contacts);
 
         // Check Contacts info
-        $this->assertEquals('45', $contacts->first()->team_id);
+        $this->assertEquals(1, $contacts->first()->team_id);
         $this->assertEquals('(555) 555-1234', $contacts->first()->phone);
 
         // Check Custom Attributes info
@@ -102,64 +96,33 @@ class ImportContactsFromCsvTest extends TestCase
     }
 
     /** @test */
-    public function team_id_is_required_in_contact_mappings_list(): void
-    {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
-        $content = implode("\n", [$header, $row1]);
-
-        $csvFile = $this->createCsvFileFrom($content);
-
-        $contactFields = ['name', 'phone']; // Exclude team_id
-        $csvFields = ['teams_ids', 'phone_number'];
-
-        $customContactFields = ['custom', 'custom_two'];
-        $customCsvFields = ['custom', 'name'];
-
-        $data = [
-            'contact_fields' => json_encode($contactFields),
-            'csv_fields' => json_encode($csvFields),
-            'custom_contact_fields' => json_encode($customContactFields),
-            'custom_csv_fields' => json_encode($customCsvFields),
-            'csv_file' => $csvFile
-        ];
-
-        $this->post('/imports/contacts/csv', $data)
-            ->assertInvalid(['contact_fields']);
-    }
-
-    /** @test */
     public function phone_is_required_in_contact_mappings_list(): void
     {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $header = 'name,phone_number,custom';
+        $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
-        $contactFields = ['name', 'email']; // Exclude phone
-        $csvFields = ['teams_ids', 'phone_number'];
-
-        $customContactFields = ['custom', 'custom_two'];
-        $customCsvFields = ['custom', 'name'];
+        $mappings = [
+            'phone_number' => 'email',
+            'name' => 'first_name',
+        ];
 
         $data = [
-            'contact_fields' => json_encode($contactFields),
-            'csv_fields' => json_encode($csvFields),
-            'custom_contact_fields' => json_encode($customContactFields),
-            'custom_csv_fields' => json_encode($customCsvFields),
+            'mappings' => json_encode($mappings),
             'csv_file' => $csvFile
         ];
 
         $this->post('/imports/contacts/csv', $data)
-            ->assertInvalid(['contact_fields']);
+            ->assertInvalid(['mappings']);
     }
 
     /** @test */
-    public function all_mappings_lists_are_required(): void
+    public function list_of_mappings_is_required(): void
     {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $header = 'name,phone_number,custom';
+        $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
@@ -169,7 +132,7 @@ class ImportContactsFromCsvTest extends TestCase
         ];
 
         $this->post('/imports/contacts/csv', $data)
-            ->assertInvalid(['contact_fields', 'csv_fields', 'custom_contact_fields', 'custom_csv_fields']);
+            ->assertInvalid(['mappings']);
     }
 
     /** @test */
@@ -216,91 +179,93 @@ class ImportContactsFromCsvTest extends TestCase
     }
 
     /** @test */
-    public function all_mappings_list_cannot_have_duplicate_values(): void
+    public function mappings_cannot_have_duplicate_values(): void
     {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $header = 'name,phone_number,custom';
+        $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
-        // Set up mappings for csv file
-        $contactFields = ['team_id', 'team_id', 'phone'];
-        $csvFields = ['name', 'name', 'phone_number'];
-
-        $customContactFields = ['custom', 'custom'];
-        $customCsvFields = ['name', 'name'];
+        $mappings = [
+            'phone_number' => 'phone',
+            'name' => 'custom',
+            'custom' => 'phone',
+        ];
 
         $data = [
-            'contact_fields' => json_encode($contactFields),
-            'csv_fields' => json_encode($csvFields),
-            'custom_contact_fields' => json_encode($customContactFields),
-            'custom_csv_fields' => json_encode($customCsvFields),
+            'mappings' => json_encode($mappings),
             'csv_file' => $csvFile
         ];
 
         $this->post('/imports/contacts/csv', $data)
-            ->assertInvalid(['csv_fields', 'contact_fields', 'custom_contact_fields', 'custom_csv_fields']);
-    }
-
-    /** @test */
-    public function all_contact_fields_mappings_must_exist_in_contacts_table(): void
-    {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
-        $content = implode("\n", [$header, $row1]);
-
-        $csvFile = $this->createCsvFileFrom($content);
-
-        $contactMappings = [
-            'non_existing_column'=> 'teams_ids',
-            'custom'=> 'phone_number',
-            'phone'=> 'name',
-            'team_id'=> 'custom'
-        ];
-
-        $customMappings = [
-            'custom' => 'custom',
-            'custom_two' => 'name'
-        ];
-
-        $data = [
-            'contact_fields' => json_encode(array_keys($contactMappings)),
-            'csv_fields' => json_encode(array_values($contactMappings)),
-            'custom_contact_fields' => json_encode(array_keys($customMappings)),
-            'custom_csv_fields' => json_encode(array_values($customMappings)),
-            'csv_file' => $csvFile
-        ];
-
-        $this->post('/imports/contacts/csv', $data)
-            ->assertInvalid(['contact_fields']);
+            ->assertInvalid(['mappings']);
     }
 
     /** @test */
     public function fields_in_csv_file_that_dont_have_matching_types_with_db_columns_throw_errors(): void
     {
-        $header = 'name,phone_number,teams_ids,custom';
-        $row1 = 'german,(555) 555-1234,45,lorem ipsum';
+        $header = 'name,phone_number,custom';
+        $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
 
         $csvFile = $this->createCsvFileFrom($content);
 
-        // Set up mappings for csv file
-        $contactFields = ['team_id', 'phone'];
-        $csvFields = ['phone_number', 'name'];
-
-        $customContactFields = ['custom', 'custom_two'];
-        $customCsvFields = ['custom', 'name'];
+        $mappings = [
+            'phone_number' => 'phone',
+            'name' => 'sticky_phone_number_id',
+        ];
 
         $data = [
-            'contact_fields' => json_encode($contactFields),
-            'csv_fields' => json_encode($csvFields),
-            'custom_contact_fields' => json_encode($customContactFields),
-            'custom_csv_fields' => json_encode($customCsvFields),
+            'mappings' => json_encode($mappings),
             'csv_file' => $csvFile
         ];
 
         $this->post('/imports/contacts/csv', $data)
-            ->assertStatus(400);
+            ->assertStatus(400)
+            ->assertJson(['message' => 'Please check the data types of your mapped fields in csv file. Some data types does not match.'])
+        ;
+    }
+
+    /** @test */
+    public function throws_runtime_exception_if_mappings_do_not_exist_in_csv_file(): void
+    {
+        $header = 'name,phone_number,custom';
+        $row1 = 'german,(555) 555-1234,lorem ipsum';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $mappings = [
+            'phone_number' => 'phone',
+            'weird_column' => 'tesitng',
+        ];
+
+        $data = [
+            'mappings' => json_encode($mappings),
+            'csv_file' => $csvFile
+        ];
+
+        self::expectException(RuntimeException::class);
+        self::expectExceptionMessage('Something went wrong while importing contacts.');
+
+        $this->withoutExceptionHandling()
+            ->post('/imports/contacts/csv', $data);
+
+        $mappings = [
+            'phone_number' => 'phone',
+            'weird_column' => 'sticky_phone_number_id',
+        ];
+
+        $data = [
+            'mappings' => json_encode($mappings),
+            'csv_file' => $csvFile
+        ];
+
+        self::expectException(RuntimeException::class);
+        self::expectExceptionMessage('Something went wrong while importing contacts.');
+
+        $this->withoutExceptionHandling()
+            ->post('/imports/contacts/csv', $data);
     }
 }

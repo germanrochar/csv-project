@@ -16,12 +16,6 @@ export default {
     name: "StepsNavigator",
     props: ['totalSteps', 'currentStep'],
 
-    data() {
-        return {
-
-        }
-    },
-
     methods: {
         getBubbleClasses(step) {
             let classes = ['steps-navigator__bubble']
