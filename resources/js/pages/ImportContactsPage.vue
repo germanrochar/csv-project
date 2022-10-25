@@ -53,10 +53,20 @@
 
 <script>
 import StepsNavigator from "../components/imports/StepsNavigator";
+import MappingFieldsPage from "../pages/imports/steps/MappingFieldsPage.vue";
+import MappingsCompletedPage from "../pages/imports/steps/MappingsCompletedPage.vue";
+import MappingsPreviewPage from "../pages/imports/steps/MappingsPreviewPage.vue";
+import UploadCsvPage from "../pages/imports/steps/UploadCSVPage.vue";
 
 export default {
     name: "ImportContactsPage",
-    components: { StepsNavigator },
+    components: {
+        StepsNavigator,
+        UploadCsvPage,
+        MappingFieldsPage,
+        MappingsPreviewPage,
+        MappingsCompletedPage
+    },
 
     data() {
         return {
@@ -114,7 +124,7 @@ export default {
         removeMappingsAndFileAndGoBack() {
             this.csvFile = ''
             this.csvFilename = ''
-            this.mappings = ''
+            this.mappings = {}
 
             this.goToPreviousStep()
         },

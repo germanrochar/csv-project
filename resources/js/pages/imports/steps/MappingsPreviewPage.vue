@@ -48,9 +48,14 @@
 </template>
 
 <script>
+import Mappings from "../../../core/mappings/Mappings";
+
 export default {
     name: "MappingsPreviewPage",
-    props: ['mappings', 'csvFile'],
+    props: {
+        mappings: Mappings,
+        csvFile: File
+    },
 
     data() {
         return {
@@ -71,35 +76,37 @@ export default {
         },
 
         completeImport() {
-            let csvFields = this.mappings.getMappingKeys()
-            let contactFields = this.mappings.getMappingValues()
-            let customCsvFields = this.mappings.getCustomMappingKeys()
-            let customContactFields = this.mappings.getCustomMappingValues()
+            const mappingKeys = this.mappings.getMappingKeys()
+            const mappingValues = this.mappings.getMappingValues()
+
+            if (mappingKeys.length !== mappingValues.length) {
+                this.errors = {'mappings': ['Something went wrong. Please contact tech support.']}
+                return;
+            }
+
+            const mappings = {};
+            mappingKeys.forEach((key, index) => {
+                mappings[key] = mappingValues[index];
+            })
 
             let formData = new FormData()
             formData.append('csv_file', this.csvFile)
-            formData.append('contact_fields', JSON.stringify(contactFields))
-            formData.append('custom_contact_fields', JSON.stringify(customContactFields))
-            formData.append('csv_fields', JSON.stringify(csvFields))
-            formData.append('custom_csv_fields', JSON.stringify(customCsvFields))
+            formData.append('mappings', JSON.stringify(mappings))
 
             this.importingInProgress = true
             axios.post(
                 '/imports/contacts/csv',
                 formData
-            )
-            .then(response => {
-                this.importingInProgress = false
+            ).then(() => {
                 this.$emit('imported')
             }).catch(error => {
-                this.importingInProgress = false
-
-                // This can definitely be improved but I'll leave it like this to speed up the delivery of the project.
                 if (error.response.status === 400) {
                     this.errors = {'csv_fields': error.response.data}
                 } else {
                     this.errors = error.response.data.errors ?? []
                 }
+            }).finally(() => {
+                this.importingInProgress = false
             })
         }
     }

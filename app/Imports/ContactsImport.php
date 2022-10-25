@@ -4,26 +4,23 @@ namespace App\Imports;
 
 use App\Mappings;
 use App\Models\Contact;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use RuntimeException;
+use Throwable;
 
 class ContactsImport implements ToCollection, WithHeadingRow
 {
     /**
     * @var Mappings Keys: contact columns | Values: csv fields
     */
-    private $contactMappings;
+    private Mappings $mappings;
 
-    /**
-     * @var Mappings Keys: custom keys | Values: custom values
-     */
-    private $customMappings;
-
-    public function __construct(Mappings $contactMappings, Mappings $customMappings)
+    public function __construct(Mappings $mappings)
     {
-        $this->contactMappings = $contactMappings;
-        $this->customMappings = $customMappings;
+        $this->mappings = $mappings;
     }
 
     /**
@@ -39,22 +36,30 @@ class ContactsImport implements ToCollection, WithHeadingRow
                 return rtrim(addslashes($item));
             });
 
-            $contact = Contact::create([
-                'team_id' => $row[$this->contactMappings->get('team_id')],
-                'phone' => $row[$this->contactMappings->get('phone')],
-                'name' => $this->contactMappings->has('name')
-                    ? $row[$this->contactMappings->get('name')]
-                    : null,
-                'email' => $this->contactMappings->has('email')
-                    ? filter_var($row[$this->contactMappings->get('email')], FILTER_SANITIZE_EMAIL)
-                    : null,
-                'sticky_phone_number_id' => $this->contactMappings->has('sticky_phone_number_id')
-                    ? $row[$this->contactMappings->get('sticky_phone_number_id')]
-                    : null
-            ]);
+            try {
+                $contact = Contact::create([
+                    'team_id' => 1,
+                    'phone' => $row[$this->mappings->get('phone')],
+                    'name' => $this->mappings->has('name')
+                        ? $row[$this->mappings->get('name')]
+                        : null,
+                    'email' => $this->mappings->has('email')
+                        ? filter_var($row[$this->mappings->get('email')], FILTER_SANITIZE_EMAIL)
+                        : null,
+                    'sticky_phone_number_id' => $this->mappings->has('sticky_phone_number_id')
+                        ? $row[$this->mappings->get('sticky_phone_number_id')]
+                        : null
+                ]);
 
-            foreach ($this->customMappings->getAll() as $key => $value) {
-                $contact->addCustomAttribute($key, $row[$value]);
+                foreach ($this->mappings->getCustomMappings() as $key => $value) {
+                    $contact->addCustomAttribute($key, $row[$value]);
+                }
+            } catch (QueryException $exception) {
+                info('Invalid data found in csv file.', ['exception' => $exception]);
+                throw $exception;
+            } catch (Throwable $exception) {
+                info('Contact or custom attributes failed to be imported.', ['exception' => $exception]);
+                throw new RuntimeException('Something went wrong while importing contacts.');
             }
         }
     }

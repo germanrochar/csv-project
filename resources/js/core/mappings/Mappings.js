@@ -40,33 +40,13 @@ export default class Mappings {
     }
 
     /**
-    * Retrieves a list of custom mapping keys
-     *
-     * @returns array
-    */
-    getCustomMappingKeys() {
-        let keys = [];
-        this.data.forEach(mapping => {
-            if (mapping.isCustom && !this.hasEmptyValue(mapping))
-                keys.push(mapping.key)
-        })
-
-        return keys
-    }
-
-    /**
      * Retrieves a list of mapping keys
      *
      * @returns array
      */
     getMappingKeys() {
-        let keys = [];
-        this.data.forEach(mapping => {
-            if (!mapping.isCustom && !this.hasEmptyValue(mapping))
-                keys.push(mapping.key)
-        })
-
-        return keys
+        return this.data.filter((mapping) => !this.hasEmptyValue(mapping))
+            .map((mapping) => mapping.key)
     }
 
     /**
@@ -75,28 +55,8 @@ export default class Mappings {
      * @returns array
      */
     getMappingValues() {
-        let values = [];
-        this.data.forEach(mapping => {
-            if (!mapping.isCustom && !this.hasEmptyValue(mapping))
-                values.push(this.getMappingValue(mapping))
-        })
-
-        return values
-    }
-
-    /**
-     * Retrieves a list of custom mapping values
-     *
-     * @returns array
-     */
-    getCustomMappingValues() {
-        let values = [];
-        this.data.forEach(mapping => {
-            if (mapping.isCustom && !this.hasEmptyValue(mapping))
-                values.push(this.getMappingValue(mapping))
-        })
-
-        return values
+        return this.data.filter((mapping) => !this.hasEmptyValue(mapping))
+            .map((mapping) => this.getMappingValue(mapping))
     }
 
     /**

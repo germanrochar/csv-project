@@ -20,7 +20,11 @@ class CreateCustomAttributesTable extends Migration
             $table->string('key');
             $table->string('value');
             $table->timestamps();
-            $table->foreign('contact_id')->references('id')->on('contacts')->onDelete('CASCADE');
+
+            $table->foreign('contact_id')
+                ->references('id')
+                ->on('contacts')
+                ->onDelete('CASCADE');
         });
     }
 
