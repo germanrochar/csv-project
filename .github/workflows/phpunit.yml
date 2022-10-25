@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           tools: composer:v2
 
       - uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
         run: php -r "file_exists('.env.testing') || copy('.env.testing.ci', '.env.testing');"
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-interaction --no-scripts --no-progress
 
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           tools: composer:v2
 
       - uses: actions/checkout@v3
@@ -74,7 +74,7 @@ jobs:
         run: php -r "file_exists('.env.testing') || copy('.env.testing.ci', '.env.testing');"
 
       - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: composer install --no-interaction --no-scripts --no-progress
 
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
