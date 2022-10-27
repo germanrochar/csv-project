@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ImportContactsRequest;
-use App\Imports\ContactsImport;
+use App\Jobs\ImportContacts;
 use App\Mappings;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class ImportContactsController extends Controller
 {
@@ -20,20 +19,17 @@ class ImportContactsController extends Controller
     public function store(ImportContactsRequest $request): JsonResponse
     {
         $csvFile = $request->file('csv_file');
-        $mappings = json_decode($request->input('mappings'), TRUE);
+        $mappingsInput = json_decode($request->input('mappings'), TRUE);
+
+        $test = Storage::putFile('/csv/files', $csvFile);
 
         $mappings = new Mappings(
-            array_values($mappings),
-            array_keys($mappings),
+            array_values($mappingsInput),
+            array_keys($mappingsInput),
         );
-        try {
-            Excel::import(new ContactsImport($mappings), $csvFile);
-        } catch (QueryException $e) {
-            return new JsonResponse([
-                'message' => 'Please check the data types of your mapped fields in csv file. Some data types does not match.'
-            ], 400);
-        }
 
-        return new JsonResponse(['message' => 'Contacts imported successfully.']);
+        ImportContacts::dispatch($mappings, $test);
+
+        return new JsonResponse(['message' => 'Import of contacts has started successfully.']);
     }
 }
