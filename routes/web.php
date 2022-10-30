@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactsCsvScannerController;
 use App\Http\Controllers\ImportContactsController;
+use App\Http\Controllers\ImportJobsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +25,6 @@ Route::post('/scan/csv', [ContactsCsvScannerController::class, 'index']);
 
 // Imports
 Route::post('/imports/contacts/csv', [ImportContactsController::class, 'store']);
+
+// Import Jobs
+Route::get('/import/jobs', [ImportJobsController::class, 'index']);
