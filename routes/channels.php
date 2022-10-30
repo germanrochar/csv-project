@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('imports.{team_id}', function ($user, $team_id) {
-    return 1 === (int) $team_id;
+Broadcast::channel('imports', function ($user) {
+    info('eureka');
+    return true;
 });
