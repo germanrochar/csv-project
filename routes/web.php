@@ -27,4 +27,4 @@ Route::post('/scan/csv', [ContactsCsvScannerController::class, 'index']);
 Route::post('/imports/contacts/csv', [ImportContactsController::class, 'store']);
 
 // Import Jobs
-Route::get('/import/jobs', [ImportJobsController::class, 'index']);
+Route::get('/import-jobs', [ImportJobsController::class, 'index']);

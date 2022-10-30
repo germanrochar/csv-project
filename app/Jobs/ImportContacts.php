@@ -40,8 +40,6 @@ class ImportContacts implements ShouldQueue
      */
     public function handle(): void
     {
-        // If import fails, we want to fail the job and fire an pusher event that will be listened by the UI
-        // If import succeeds, we want to fire a pusher event that will change the behavior in the UI
         try {
             Excel::import(new ContactsImport($this->mappings), $this->csvPath, 's3');
         } catch (QueryException|RuntimeException $e) {

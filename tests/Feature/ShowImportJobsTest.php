@@ -17,7 +17,7 @@ class ShowImportJobsTest extends TestCase
         $importedJobOne = ImportJob::factory()->create(['job_id' => 10, 'created_at' => Carbon::now()->tz('America/New_York')]);
         $importedJobTwo = ImportJob::factory()->create(['job_id' => 20, 'created_at' => Carbon::now()->tz('America/New_York')]);
 
-        $this->get('/import/jobs')
+        $this->get('/import-jobs')
             ->assertOk()
             ->assertJson([
                 [
@@ -47,7 +47,7 @@ class ShowImportJobsTest extends TestCase
     {
         ImportJob::factory()->create(['created_at' => Carbon::now()->tz('America/New_York')->subDay()]);
 
-        $this->get('/import/jobs')
+        $this->get('/import-jobs')
             ->assertOk()
             ->assertJson([])
         ;

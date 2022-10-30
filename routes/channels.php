@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('imports', function ($user) {
-    info('eureka');
     return true;
 });

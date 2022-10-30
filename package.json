@@ -28,6 +28,8 @@
     },
     "dependencies": {
         "minimist": ">=1.2.6",
+        "moment": "^2.29.4",
+        "moment-timezone": "^0.5.38",
         "vue-multiselect": "^2.1.6"
     }
 }
