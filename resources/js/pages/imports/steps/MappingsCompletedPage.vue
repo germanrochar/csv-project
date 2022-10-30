@@ -2,14 +2,23 @@
     <div class="container">
         <h1>Status</h1>
 
+        <div class="alert alert-danger" role="alert" v-show="errors">
+            {{ errors }}
+        </div>
+
         <div class="row">
             <div class="col-md-6">
+                <div class="alert alert-warning mt-3" role="alert" v-show="importJobsAreEmpty">
+                    No Import Jobs where found.
+                </div>
+
                 <div v-for="(importJob, index) in importJobs" :key="importJob.id" class="card mt-5 p-1">
                     <div class="card-body">
                         <div class="d-flex">
                             <h5 class="card-title u-margin-right-auto">Import Job #{{ index + 1 }}</h5>
                             <p><span class="fw-bold">Started at: </span>{{ formattedDate(importJob.created_at) }}</p>
                         </div>
+
                         <span :class="getImportJobBadgeStyle(importJob.status)" v-text="getImportJobBadgeText(importJob.status)"></span>
                         <p class="mt-3" v-text="getImportJobStatusText(importJob.status)"></p>
                         <p v-if="importJob.status === 'failed'"><span class="fw-bold">Error: </span> {{ importJob.error_message }}</p>
@@ -36,6 +45,13 @@ export default {
     data() {
         return {
             importJobs: [],
+            errors: null,
+        }
+    },
+
+    computed: {
+        importJobsAreEmpty() {
+            return this.importJobs.length === 0;
         }
     },
 
@@ -44,8 +60,9 @@ export default {
             axios.get('/import-jobs').then(({data}) => {
                 this.importJobs = data;
             }).catch(error => {
-                console.log('error', error);
-            })
+                console.error(error);
+                this.errors = error.response.data.message;
+            });
         },
 
         getImportJobBadgeStyle(status) {
@@ -87,11 +104,9 @@ export default {
 
         Echo.channel(`imports`)
             .listen('ContactsImportFailed', (e) => {
-                console.log('ContactsImportFailed', e);
                 this.getImportJobs();
             })
             .listen('ContactsImportedSucceeded', (e) => {
-                console.log('ContactsImportedSucceeded', e);
                 this.getImportJobs();
             });
     }
