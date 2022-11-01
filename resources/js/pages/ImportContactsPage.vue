@@ -70,8 +70,8 @@ export default {
 
     data() {
         return {
-            showImportSteps: false,
-            currentStep: 1,
+            showImportSteps: true,
+            currentStep: 4,
             totalSteps: 4,
             csvFile: '',
             csvFilename: '',

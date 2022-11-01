@@ -21,14 +21,14 @@ class ImportContactsController extends Controller
         $csvFile = $request->file('csv_file');
         $mappingsInput = json_decode($request->input('mappings'), TRUE);
 
-        $test = Storage::putFile('/csv/files', $csvFile);
+        $csvPath = Storage::putFile('/csv/files', $csvFile);
 
         $mappings = new Mappings(
             array_values($mappingsInput),
             array_keys($mappingsInput),
         );
 
-        ImportContacts::dispatch($mappings, $test);
+        ImportContacts::dispatch($mappings, $csvPath);
 
         return new JsonResponse(['message' => 'Import of contacts has started successfully.']);
     }

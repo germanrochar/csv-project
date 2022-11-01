@@ -45,6 +45,7 @@ class ImportContacts implements ShouldQueue
         } catch (QueryException|RuntimeException $e) {
             ContactsImportFailed::dispatch();
             $this->fail();
+            return;
         }
 
         ContactsImportSucceeded::dispatch();

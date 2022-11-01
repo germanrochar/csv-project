@@ -15,6 +15,7 @@ class ImportJobTest extends TestCase
     public function it_can_filter_jobs_by_only_those_triggered_today(): void
     {
         $importJobOne = ImportJob::factory()->create([
+            'id' => 1,
             'job_id' => 1,
             'uuid' => 'myuuid',
             'status' => ImportJob::STATUS_COMPLETED,
