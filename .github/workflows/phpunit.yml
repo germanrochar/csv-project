@@ -43,10 +43,6 @@ jobs:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
         run: vendor/bin/phpunit --testsuite Unit
 
-      - name: Print log file
-        run: cat storage/logs/laravel.log
-        if: always()
-
   feature:
     runs-on: ubuntu-latest
 
@@ -83,7 +79,3 @@ jobs:
         env:
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
         run: vendor/bin/phpunit --testsuite Feature
-
-      - name: Print log file
-        run: cat storage/logs/laravel.log
-        if: always()
