@@ -18,7 +18,7 @@ class MarkAnImportJobAsFailed
             ->firstOrFail();
 
         $job->update([
-            'state' => ImportJob::STATUS_FAILED,
+            'status' => ImportJob::STATUS_FAILED,
             'error_message' => $event->errorMessage
         ]);
 

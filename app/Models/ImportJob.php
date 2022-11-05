@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property int $job_id
+ * @property string $job_id
  * @property string|null $uuid
  * @property string $status
  * @property string|null $error_message

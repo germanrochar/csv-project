@@ -12,10 +12,10 @@
                     No Import Jobs where found.
                 </div>
 
-                <div v-for="(importJob, index) in importJobs" :key="importJob.id" class="card mt-5 p-1">
+                <div v-for="(importJob) in importJobs" :key="importJob.id" class="card mt-5 p-1">
                     <div class="card-body">
                         <div class="d-flex">
-                            <h5 class="card-title u-margin-right-auto">Import Job #{{ index + 1 }}</h5>
+                            <h5 class="card-title u-margin-right-auto">Import Job #{{ importJob.id }}</h5>
                             <p><span class="fw-bold">Started at: </span>{{ formattedDate(importJob.created_at) }}</p>
                         </div>
 

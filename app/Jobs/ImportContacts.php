@@ -57,7 +57,8 @@ class ImportContacts implements ShouldQueue
             Excel::import(new ContactsImport($this->mappings), $this->csvPath, 's3');
         } catch (RuntimeException $e) {
             ContactsImportFailed::dispatch($this->job, $e->getMessage());
-            throw $e;
+            $this->fail();
+            return;
         }
 
         ContactsImportSucceeded::dispatch($this->job);

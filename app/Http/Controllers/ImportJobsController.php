@@ -16,7 +16,7 @@ class ImportJobsController extends Controller
     {
         $importJobs = ImportJob::query()
             ->importedToday()
-            ->orderBy('job_id', 'desc')
+            ->latest()
             ->get();
 
         return new JsonResponse($importJobs);

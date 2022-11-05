@@ -8,22 +8,22 @@ use App\Jobs\ImportContacts;
 use App\Mappings;
 use App\Models\Contact;
 use App\Models\ImportJob;
+use Aws\Sqs\SqsClient;
 use Illuminate\Container\Container;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Queue\DatabaseQueue;
-use Illuminate\Queue\Jobs\DatabaseJob;
+use Illuminate\Queue\Jobs\SqsJob;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use RuntimeException;
-use stdClass;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Contracts\Queue\Job as JobContract;
 
 class ImportContactsTest extends TestCase
 {
     use RefreshDatabase;
 
-    private DatabaseJob $mockedJob;
+    private SQSJob $mockedJob;
 
     public function setUp(): void
     {
@@ -33,15 +33,24 @@ class ImportContactsTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedDatabaseQueue = $this->getMockBuilder(DatabaseQueue::class)
+        $mockedSqsClient = $this->getMockBuilder(SqsClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedJob = new stdClass();
-        $mockedJob->id = 99;
-        $mockedJob->payload = json_encode(['uuid' => 'my-uuid']);
+        $mockedJob = [
+            'MessageId' => 99,
+            'Body' => json_encode(['uuid' => 'my-uuid']),
+        ];
 
-        $this->mockedJob = new DatabaseJob($mockedContainer, $mockedDatabaseQueue, $mockedJob, 'my-connection', 'my-queue');
+        // @TODO: mock fail call in SQS Job
+        self::mock(JobContract::class)
+            ->shouldReceive('fail')
+            ->andReturnNull();
+        $this->mockedJob = new SqsJob($mockedContainer, $mockedSqsClient, $mockedJob, 'my-connection', 'my-queue');
+//        $mock = \Mockery::mock($this->mockedJob);
+//        $mock->shouldReceive('fail')
+//            ->andReturnNull();
+
     }
 
     /** @test */
@@ -82,7 +91,7 @@ class ImportContactsTest extends TestCase
         self::assertCount(1, $importJobs);
 
         $importJob = $importJobs->first();
-        self::assertSame(99, $importJob->job_id);
+        self::assertSame('99', $importJob->job_id);
         self::assertSame('my-uuid', $importJob->uuid);
         self::assertSame('started', $importJob->status);
         self::assertNull($importJob->error_message);
@@ -124,7 +133,7 @@ class ImportContactsTest extends TestCase
         self::assertCount(1, $importJobs);
 
         $importJob = $importJobs->first();
-        self::assertSame(99, $importJob->job_id);
+        self::assertSame('99', $importJob->job_id);
         self::assertSame('my-uuid', $importJob->uuid);
         self::assertSame('started', $importJob->status);
         self::assertNull($importJob->error_message);
@@ -176,5 +185,4 @@ class ImportContactsTest extends TestCase
     }
 
     // @TODO: When validation is added to each row, add tests here
-    // @TODO: add unit tests for ContactsImport Succeeded/Failed tests and update feature tests
 }
