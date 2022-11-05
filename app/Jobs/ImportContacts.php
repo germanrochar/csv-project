@@ -6,9 +6,9 @@ use App\Events\ContactsImportFailed;
 use App\Events\ContactsImportSucceeded;
 use App\Imports\ContactsImport;
 use App\Mappings;
+use App\Models\ImportJob;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -21,6 +21,13 @@ class ImportContacts implements ShouldQueue
 
     private Mappings $mappings;
     private string $csvPath;
+
+    /**
+     * The number of times the job may be attempted.
+     *
+     * @var int
+     */
+    public int $tries = 25;
 
     /**
      * Create a new job instance.
@@ -40,14 +47,19 @@ class ImportContacts implements ShouldQueue
      */
     public function handle(): void
     {
+        ImportJob::create([
+            'job_id' => $this->job->getJobId(),
+            'uuid' => $this->job->uuid(),
+            'status' => ImportJob::STATUS_STARTED,
+        ]);
+
         try {
             Excel::import(new ContactsImport($this->mappings), $this->csvPath, 's3');
-        } catch (QueryException|RuntimeException $e) {
-            ContactsImportFailed::dispatch();
-            $this->fail();
-            return;
+        } catch (RuntimeException $e) {
+            ContactsImportFailed::dispatch($this->job, $e->getMessage());
+            throw $e;
         }
 
-        ContactsImportSucceeded::dispatch();
+        ContactsImportSucceeded::dispatch($this->job);
     }
 }

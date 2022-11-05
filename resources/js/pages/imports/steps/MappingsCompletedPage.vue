@@ -103,10 +103,10 @@ export default {
         this.getImportJobs();
 
         Echo.channel(`imports`)
-            .listen('ContactsImportFailed', (e) => {
+            .listen('ImportFailed', (e) => {
                 this.getImportJobs();
             })
-            .listen('ContactsImportedSucceeded', (e) => {
+            .listen('ImportSucceeded', (e) => {
                 this.getImportJobs();
             });
     }

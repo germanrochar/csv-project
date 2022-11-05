@@ -56,7 +56,7 @@ class ContactsImport implements ToCollection, WithHeadingRow
                 }
             } catch (QueryException $exception) {
                 info('Invalid data found in csv file.', ['exception' => $exception]);
-                throw $exception;
+                throw new RunTimeException('Mapped columns in the csv does not match the data types.');
             } catch (Throwable $exception) {
                 info('Contact or custom attributes failed to be imported.', ['exception' => $exception]);
                 throw new RuntimeException('Something went wrong while importing contacts.');
