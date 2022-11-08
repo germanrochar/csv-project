@@ -38,6 +38,10 @@ class ContactTest extends TestCase
     /** @test */
     public function it_returns_an_allowed_list_of_columns_that_can_be_imported_into_contacts_table(): void
     {
-        self::assertSame(['name', 'phone', 'email', 'sticky_phone_number_id'], Contact::getColumnsAllowedToImport());
+        self::assertCount(4, Contact::getColumnsAllowedToImport());
+        self::assertContains('name', Contact::getColumnsAllowedToImport());
+        self::assertContains('phone', Contact::getColumnsAllowedToImport());
+        self::assertContains('email', Contact::getColumnsAllowedToImport());
+        self::assertContains('sticky_phone_number_id', Contact::getColumnsAllowedToImport());
     }
 }
