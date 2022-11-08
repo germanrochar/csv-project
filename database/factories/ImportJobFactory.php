@@ -17,7 +17,7 @@ class ImportJobFactory extends Factory
         $statuses = ImportJob::STATUSES;
 
         return [
-            'job_id' => $this->faker->numberBetween(1, 200),
+            'job_id' => $this->faker->uuid,
             'uuid' => $this->faker->uuid,
             'status' => $statuses[$this->faker->numberBetween(0, 2)],
             'error_message' => null

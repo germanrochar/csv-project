@@ -12,10 +12,10 @@ class ShowImportJobsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_guest_can_see_all_the_import_jobs_triggered_today_sorted_by_job_id(): void
+    public function a_guest_can_see_all_the_import_jobs_triggered_today_sorted_by_created_date(): void
     {
-        $importedJobOne = ImportJob::factory()->create(['job_id' => 10, 'created_at' => Carbon::now()->tz('America/New_York')]);
-        $importedJobTwo = ImportJob::factory()->create(['job_id' => 20, 'created_at' => Carbon::now()->tz('America/New_York')]);
+        $importedJobOne = ImportJob::factory()->create(['created_at' => Carbon::now()->subHour()->tz('America/New_York')]);
+        $importedJobTwo = ImportJob::factory()->create(['created_at' => Carbon::now()->tz('America/New_York')]);
 
         $this->get('/import-jobs')
             ->assertOk()

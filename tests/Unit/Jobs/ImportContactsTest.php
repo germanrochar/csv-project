@@ -42,15 +42,10 @@ class ImportContactsTest extends TestCase
             'Body' => json_encode(['uuid' => 'my-uuid']),
         ];
 
-        // @TODO: mock fail call in SQS Job
         self::mock(JobContract::class)
             ->shouldReceive('fail')
             ->andReturnNull();
         $this->mockedJob = new SqsJob($mockedContainer, $mockedSqsClient, $mockedJob, 'my-connection', 'my-queue');
-//        $mock = \Mockery::mock($this->mockedJob);
-//        $mock->shouldReceive('fail')
-//            ->andReturnNull();
-
     }
 
     /** @test */
