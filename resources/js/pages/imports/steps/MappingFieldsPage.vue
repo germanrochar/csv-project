@@ -133,6 +133,7 @@ export default {
                 this.options = new ContactMappingOptions(this.contactsFields, this.contactsFields).getAll()
                 this.mappings = Object.keys(this.oldMappings).length > 0 ? this.oldMappings : new Mappings(this.csvFields)
             }).catch(error => {
+                console.error(error);
                 this.errors = error.response.data.errors['csv_file'] ?? ['Something went wrong. Please contact tech support.']
             })
         },

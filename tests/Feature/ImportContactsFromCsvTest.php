@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Contact;
+use App\Models\ImportJob;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use RuntimeException;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,6 +17,8 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function anyone_can_import_contacts_from_csv_file(): void
     {
+        Storage::fake();
+
         $header = 'name,phone_number,custom,custom_two,email';
         $row1 = 'german,(555) 555-1234,lorem ipsum,testing,germçççan@test.com';
         $content = implode("\n", [$header, $row1]);
@@ -37,26 +41,38 @@ class ImportContactsFromCsvTest extends TestCase
             ->assertSuccessful();
 
         $contacts = Contact::all();
-        $this->assertCount(1, $contacts);
+        self::assertCount(1, $contacts);
 
         // Check Contacts info
-        $this->assertEquals(1, $contacts->first()->team_id);
-        $this->assertEquals('(555) 555-1234', $contacts->first()->phone);
+        self::assertEquals(1, $contacts->first()->team_id);
+        self::assertEquals('(555) 555-1234', $contacts->first()->phone);
 
         // Check Custom Attributes info
         $customAttributes = $contacts->first()->customAttributes()->get();
-        $this->assertCount(2, $customAttributes);
+        self::assertCount(2, $customAttributes);
 
-        $this->assertEquals('custom', $customAttributes->first()->key);
-        $this->assertEquals('lorem ipsum', $customAttributes->first()->value);
+        self::assertEquals('custom', $customAttributes->first()->key);
+        self::assertEquals('lorem ipsum', $customAttributes->first()->value);
 
-        $this->assertEquals('another_custom_field', $customAttributes->last()->key);
-        $this->assertEquals('testing', $customAttributes->last()->value);
+        self::assertEquals('another_custom_field', $customAttributes->last()->key);
+        self::assertEquals('testing', $customAttributes->last()->value);
+
+        // Import Jobs Info
+        $importJobs = ImportJob::all();
+        self::assertCount(1, $importJobs);
+
+        $importJob = $importJobs->first();
+        self::assertSame('completed', $importJob->status);
+        self::assertNotNull($importJob->job_id);
+        self::assertNotNull($importJob->uuid);
+        self::assertNull($importJob->error_message);
     }
 
     /** @test */
     public function non_snake_csv_headers_types_are_imported_properly(): void
     {
+        Storage::fake();
+
         $header = 'name,phone number,custom field';
         $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
@@ -78,26 +94,121 @@ class ImportContactsFromCsvTest extends TestCase
             ->assertSuccessful();
 
         $contacts = Contact::all();
-        $this->assertCount(1, $contacts);
+        self::assertCount(1, $contacts);
 
         // Check Contacts info
-        $this->assertEquals(1, $contacts->first()->team_id);
-        $this->assertEquals('(555) 555-1234', $contacts->first()->phone);
+        self::assertEquals(1, $contacts->first()->team_id);
+        self::assertEquals('(555) 555-1234', $contacts->first()->phone);
 
         // Check Custom Attributes info
         $customAttributes = $contacts->first()->customAttributes()->get();
-        $this->assertCount(2, $customAttributes);
+        self::assertCount(2, $customAttributes);
 
-        $this->assertEquals('custom', $customAttributes->first()->key);
-        $this->assertEquals('lorem ipsum', $customAttributes->first()->value);
+        self::assertEquals('custom', $customAttributes->first()->key);
+        self::assertEquals('lorem ipsum', $customAttributes->first()->value);
 
-        $this->assertEquals('custom_two', $customAttributes->last()->key);
-        $this->assertEquals('german', $customAttributes->last()->value);
+        self::assertEquals('custom_two', $customAttributes->last()->key);
+        self::assertEquals('german', $customAttributes->last()->value);
+
+        // Import Jobs Info
+        $importJobs = ImportJob::all();
+        self::assertCount(1, $importJobs);
+
+        $importJob = $importJobs->first();
+        self::assertSame('completed', $importJob->status);
+        self::assertNotNull($importJob->job_id);
+        self::assertNotNull($importJob->uuid);
+        self::assertNull($importJob->error_message);
+    }
+
+    /** @test */
+    public function stores_a_failed_job_if_a_mappings_does_not_match_any_csv_header(): void
+    {
+        Storage::fake();
+
+        $header = 'name,phone_number,custom,custom_two,email';
+        $row1 = 'german,(555) 555-1234,lorem ipsum,testing,germçççan@test.com';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $mappings = [
+            'phone_number' => 'phone',
+            'invalid email' => 'email',
+            'custom' => 'custom',
+            'custom_two' => 'another_custom_field',
+        ];
+
+        $data = [
+            'mappings' => json_encode($mappings),
+            'csv_file' => $csvFile
+        ];
+
+        try {
+            $this->post('/imports/contacts/csv', $data)
+                ->assertSuccessful();
+        } catch (RuntimeException $e) {
+            //
+        }
+
+        self::assertDatabaseCount('contacts', 0);
+        self::assertDatabaseCount('custom_attributes', 0);
+
+        $importJobs = ImportJob::all();
+        self::assertCount(1, $importJobs);
+
+        $importJob = $importJobs->first();
+        self::assertSame('failed', $importJob->status);
+        self::assertNotNull($importJob->job_id);
+        self::assertNotNull($importJob->uuid);
+        self::assertSame('Something went wrong while importing contacts.', $importJob->error_message);
+    }
+
+    /** @test */
+    public function stores_a_failed_job_if_csv_values_do_not_match_column_data_types(): void
+    {
+        Storage::fake();
+
+        $header = 'name,phone_number,custom,custom_two,email';
+        $row1 = 'german,(555) 555-1234,lorem ipsum,testing,germçççan@test.com';
+        $content = implode("\n", [$header, $row1]);
+
+        $csvFile = $this->createCsvFileFrom($content);
+
+        $mappings = [
+            'phone_number' => 'phone',
+            'custom' => 'sticky_phone_number_id',
+        ];
+
+        $data = [
+            'mappings' => json_encode($mappings),
+            'csv_file' => $csvFile
+        ];
+
+        try {
+            $this->post('/imports/contacts/csv', $data)
+                ->assertSuccessful();
+        } catch (RuntimeException $e) {
+            //
+        }
+
+        self::assertDatabaseCount('contacts', 0);
+        self::assertDatabaseCount('custom_attributes', 0);
+
+        $importJobs = ImportJob::all();
+        self::assertCount(1, $importJobs);
+
+        $importJob = $importJobs->first();
+        self::assertSame('failed', $importJob->status);
+        self::assertNotNull($importJob->job_id);
+        self::assertNotNull($importJob->uuid);
+        self::assertSame('Mapped columns in the csv does not match the data types.', $importJob->error_message);
     }
 
     /** @test */
     public function phone_is_required_in_contact_mappings_list(): void
     {
+        Storage::fake();
         $header = 'name,phone_number,custom';
         $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
@@ -121,6 +232,7 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function list_of_mappings_is_required(): void
     {
+        Storage::fake();
         $header = 'name,phone_number,custom';
         $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
@@ -138,6 +250,7 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function csv_file_is_required(): void
     {
+        Storage::fake();
         $contactFields = ['name', 'email'];
         $csvFields = ['teams_ids', 'phone_number'];
 
@@ -158,6 +271,7 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function only_csv_files_can_be_used_to_import_contacts(): void
     {
+        Storage::fake();
         $excelFile = UploadedFile::fake()->create('excel.xlsx');
 
         $contactFields = ['name', 'email'];
@@ -181,6 +295,7 @@ class ImportContactsFromCsvTest extends TestCase
     /** @test */
     public function mappings_cannot_have_duplicate_values(): void
     {
+        Storage::fake();
         $header = 'name,phone_number,custom';
         $row1 = 'german,(555) 555-1234,lorem ipsum';
         $content = implode("\n", [$header, $row1]);
@@ -200,72 +315,5 @@ class ImportContactsFromCsvTest extends TestCase
 
         $this->post('/imports/contacts/csv', $data)
             ->assertInvalid(['mappings']);
-    }
-
-    /** @test */
-    public function fields_in_csv_file_that_dont_have_matching_types_with_db_columns_throw_errors(): void
-    {
-        $header = 'name,phone_number,custom';
-        $row1 = 'german,(555) 555-1234,lorem ipsum';
-        $content = implode("\n", [$header, $row1]);
-
-        $csvFile = $this->createCsvFileFrom($content);
-
-        $mappings = [
-            'phone_number' => 'phone',
-            'name' => 'sticky_phone_number_id',
-        ];
-
-        $data = [
-            'mappings' => json_encode($mappings),
-            'csv_file' => $csvFile
-        ];
-
-        $this->post('/imports/contacts/csv', $data)
-            ->assertStatus(400)
-            ->assertJson(['message' => 'Please check the data types of your mapped fields in csv file. Some data types does not match.'])
-        ;
-    }
-
-    /** @test */
-    public function throws_runtime_exception_if_mappings_do_not_exist_in_csv_file(): void
-    {
-        $header = 'name,phone_number,custom';
-        $row1 = 'german,(555) 555-1234,lorem ipsum';
-        $content = implode("\n", [$header, $row1]);
-
-        $csvFile = $this->createCsvFileFrom($content);
-
-        $mappings = [
-            'phone_number' => 'phone',
-            'weird_column' => 'tesitng',
-        ];
-
-        $data = [
-            'mappings' => json_encode($mappings),
-            'csv_file' => $csvFile
-        ];
-
-        self::expectException(RuntimeException::class);
-        self::expectExceptionMessage('Something went wrong while importing contacts.');
-
-        $this->withoutExceptionHandling()
-            ->post('/imports/contacts/csv', $data);
-
-        $mappings = [
-            'phone_number' => 'phone',
-            'weird_column' => 'sticky_phone_number_id',
-        ];
-
-        $data = [
-            'mappings' => json_encode($mappings),
-            'csv_file' => $csvFile
-        ];
-
-        self::expectException(RuntimeException::class);
-        self::expectExceptionMessage('Something went wrong while importing contacts.');
-
-        $this->withoutExceptionHandling()
-            ->post('/imports/contacts/csv', $data);
     }
 }

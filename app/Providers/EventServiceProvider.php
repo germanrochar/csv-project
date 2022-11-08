@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\ContactsImportFailed;
+use App\Events\ContactsImportSucceeded;
+use App\Listeners\MarkAnImportJobAsCompleted;
+use App\Listeners\MarkAnImportJobAsFailed;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -27,6 +31,14 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Event::listen(
+            ContactsImportSucceeded::class,
+            [MarkAnImportJobAsCompleted::class, 'handle']
+        );
+
+        Event::listen(
+            ContactsImportFailed::class,
+            [MarkAnImportJobAsFailed::class, 'handle']
+        );
     }
 }
