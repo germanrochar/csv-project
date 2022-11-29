@@ -33,3 +33,33 @@ The requirements for the importer are the following:
 ### UI Requirements
 
 Implement a similar visual flow like this: https://support.autopilothq.com/hc/en-us/articles/203885305-Import-contacts using Vue JS.
+
+
+## Implementation
+
+In the section above I described the requirements settled for the importer that I received from [Voxie Inc](https://www.voxie.com/) for the assignment. Now, in this section I will describe how I implemented a solution to create an importer that satisfies all the requirements specified above.
+
+### Back-end
+#### Importers
+#### Scanner
+
+### Front-end
+#### Vue JS Components
+#### Core Javascript
+
+### Styling
+### SASS
+
+### Tests
+#### Back-end testing | PHPUnit
+#### Component testing | Jest
+#### End-to-end testing | Cypress
+
+### DevOps
+#### GitHub Actions
+#### Docker
+
+### Amazon SQS
+
+### Laravel Excel
+
