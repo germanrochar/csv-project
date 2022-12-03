@@ -93,13 +93,13 @@ _Components:_ https://github.com/germanrochar/csv-project/tree/main/resources/js
 #### Core Javascript
 _Path:_ https://github.com/germanrochar/csv-project/tree/main/resources/js/core
 
-### Styling
+### :art: Styling
 For the styling of the application I'm using Bootstrap to set the layout of the page and use it's components. Also, for custom styles I'm using SASS that's compiled into CSS using webpack (see config [here](https://github.com/germanrochar/csv-project/blob/main/webpack.mix.js)).
 
 #### SASS
 _Path:_ https://github.com/germanrochar/csv-project/tree/main/resources/sass
 
-### Tests
+### :slot_machine: Tests
 All features in the application are covered with automated tests. Backend tests were created using PHPUnit and Frontend tests using Jest and Cypress.
 
 #### Back-end testing | PHPUnit
@@ -112,10 +112,10 @@ _Path:_ To be defined.
 ### :hammer: DevOps
 The application uses Github Actions to run the automated tests on every commit pushed to the repo and Docker to manage the environment.
 
-#### :hammer: GitHub Actions
+#### GitHub Actions
 _Path:_ https://github.com/germanrochar/csv-project/tree/main/.github/workflows
 
-#### :hammer: Docker
+#### Docker
 _Path:_ To be defined.
 
 ### :hammer: Amazon SQS
@@ -126,7 +126,7 @@ To import data from the csv files, I'm using the [Laravel Excel](https://laravel
 
 _Importer:_ [ContactsImport.php](https://github.com/germanrochar/csv-project/blob/main/app/Imports/ContactsImport.php)
 
-### Broadcasting with Pusher
+### :loudspeaker: Broadcasting with Pusher
 In the last step of the process to import data, the users can see a list of import jobs started in the day. Each import job shows if the import was completed successfully, if it's in progress or if it failed. All this info is updated in real time using broadcasting in Laravel with [Pusher](https://pusher.com/).
 
 _Events:_ [ImportSucceeded.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportSucceeded.php) | [ImportFailed.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportFailed.php)
