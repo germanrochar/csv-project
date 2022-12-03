@@ -37,17 +37,48 @@ Implement a similar visual flow like this: https://support.autopilothq.com/hc/en
 
 ## Implementation
 
-In the section above I described the requirements settled for the importer that I received from [Voxie Inc](https://www.voxie.com/) for the assignment. Now, in this section I will describe how I implemented a solution to create an importer that satisfies all the requirements specified above.
+In the previous section I described the requirements for the importer that I received from [Voxie Inc](https://www.voxie.com/) for the assignment. Now, in this section I will provide a general explanation on how I implemented a solution that satisfies the requirements. Also, after a brief explanation, you'll see a link to the logic I'm talking about in case you want to take a deeper look.  
 
 ### Back-end
-#### Importers
+
+In the backend side, there are two main tasks that I need to perform in order to import contacts. The first task is scan the csv file to fetch the headers. This is an important task because we are going to take the headers and map them with the fields in contacts table. The second task, is read the data from the csv file and store it in the database.
+
+#### Importer
+_Controller_: [ImportContactsController.php](https://github.com/germanrochar/csv-project/blob/main/app/Http/Controllers/ImportContactsController.php)
+
+_Job_: [ImportContacts.php](https://github.com/germanrochar/csv-project/blob/main/app/Jobs/ImportContacts.php)
+
+The [ImportContactsController.php](https://github.com/germanrochar/csv-project/blob/main/app/Http/Controllers/ImportContactsController.php) handles the request to import the data from the csv file and store it in the database.
+It expects a csv file and a list of mappings from the frontend as inputs to start the import. Also, it validates the format of the input file and the mappings received. You can find the validation rules in the [ImportContactsRequest.php](https://github.com/germanrochar/csv-project/blob/main/app/Http/Requests/ImportContactsRequest.php).
+Once the inputs are validated, it stores the csv file in an S3 bucket and dispatches a job to perform the import.
+
 #### Scanner
+The [ContactsCsvScannerController](https://github.com/germanrochar/csv-project/blob/main/app/Http/Controllers/ContactsCsvScannerController.php) handles the request to read the headers from the csv file and also validates the format and length of the files. Finally, it returns a list of csv headers and contact fields available.
+
+_Controller_: [ContactsCsvScannerController](https://github.com/germanrochar/csv-project/blob/main/app/Http/Controllers/ContactsCsvScannerController.php)
+
+#### Import Jobs
+_Controller_: [ImportJobsController.php](https://github.com/germanrochar/csv-project/blob/main/app/Http/Controllers/ImportJobsController.php)
+
+
+Since all the imports are done through jobs, I created a table that keeps track of every job fired and it knows if it was completed or failed. In the UI, the last step of the process shows a list of import jobs that started on that day and it shows their status (started, completed and failed). This list of jobs is updated in real time with [Pusher](https://pusher.com/) so there's no need to refresh the page to see updates on their status.
 
 ### Front-end
-#### Vue JS Components
+The frontend follows the same flow as required ([look here](https://support.autopilothq.com/hc/en-us/articles/203885305-Import-contacts)). Therefore, I divided the process to import contacts in four steps. The first step, allows users to upload their csv file. The second step shows a table where users can map csv fields with contact fields or custom attributes in the database. The third step shows a preview of the fields matched so the users can confirm their mappings and make modifications if necessary. On the fourth and last step, the users can see a list of import jobs and their status. In this last step they can see if the data was imported successfully or if there were errors while performing the import.   
+
+#### Vue JS Components and Pages
+
+_Pages:_ https://github.com/germanrochar/csv-project/tree/main/resources/js/pages
+
+_Components:_ https://github.com/germanrochar/csv-project/tree/main/resources/js/components/imports
+
+
 #### Core Javascript
 
+_Path:_ https://github.com/germanrochar/csv-project/tree/main/resources/js/core
+
 ### Styling
+
 ### SASS
 
 ### Tests
