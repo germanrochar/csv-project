@@ -9,18 +9,18 @@ The following table shows a list of all the tools/languages/frameworks used to d
 
 | :wrench: Tool / Language / Framework | 
 |--------------------------------------|
-| PHP 8.1                              | 
-| Laravel 8.x                          |
-| Vue 2                                |
-| MySQL 8.0                            |
-| PHPUnit                              |
-| Jest                                 |
-| Cypress                              |
-| Docker                               |
-| Amazon SQS                           |
-| Pusher                               |
-| SASS                                 |
-| Bootstrap                            |
+| :white_check_mark: PHP 8.1           | 
+| :white_check_mark: Laravel 8.x       |
+| :white_check_mark: Vue 2             |
+| :white_check_mark: MySQL 8.0         |
+| :white_check_mark: PHPUnit           |
+| :white_check_mark: Jest              |
+| :white_check_mark: Cypress           |
+| :white_check_mark: Docker            |
+| :white_check_mark: Amazon SQS        |
+| :white_check_mark: Pusher            |
+| :white_check_mark: SASS              |
+| :white_check_mark: Bootstrap         |
 
 ## Requirements
 
