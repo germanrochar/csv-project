@@ -2,7 +2,25 @@
 
 Originally, this project was created to demonstrate my skills in an interview process for [Voxie Inc](https://www.voxie.com/). back in December 2021. I received an assignment (that I will describe in more detail on next sections) that I had to complete within 4 days and it consisted on creating a csv importer using Laravel and Vue Js. I got the job back then, and now that I'm open for new job opportunities I decided to reuse the project and use it as a skill demonstration for hiring teams. I made some improvements in the original project to show off my skills on both backend/frontend tests, devops, and more. Additionally, I refactored some of the logic that I used to import the data and strengthened the validation of the rows in the csv files.
 
-In the next sections, I will describe the requirements set for the importer in the assignment. Also, I will show an overview of the project so it's easier for the reader to identify where are the tests located at (phpunit tests, jest, tests, cypress tests), where are the styles/assets (sass, css), where is the main logic to read and import the files, etc. Additionally, I will include in this last section, all the tools and services that I'm using to make the importer work. The end goal is to provide a complete demonstration of my skills so the hiring teams can take a decision on whether or not I'm a good fit for their company.
+In the upcoming sections, I will describe the requirements set for the importer in the assignment. Also, I will show an overview of the project so it's easier for the reader to identify where are the tests located at (phpunit tests, jest, tests, cypress tests), where are the styles/assets (sass, css), where is the main logic to read and import the files, etc. Additionally, I will include in this last section, all the tools and services that I'm using to make the importer work. The end goal is to provide a complete demonstration of my skills so the hiring teams can take a decision on whether or not I'm a good fit for their company.
+
+## Web Tools Summary
+The following table shows a list of all the tools/languages/frameworks used to develop the application:
+
+| :wrench: Tool / Language / Framework | 
+|--------------------------------------|
+| PHP 8.1                              | 
+| Laravel 8.x                          |
+| Vue 2                                |
+| MySQL 8.0                            |
+| PHPUnit                              |
+| Jest                                 |
+| Cypress                              |
+| Docker                               |
+| Amazon SQS                           |
+| Pusher                               |
+| SASS                                 |
+| Bootstrap                            |
 
 ## Requirements
 
@@ -111,4 +129,6 @@ _Importer:_ [ContactsImport.php](https://github.com/germanrochar/csv-project/blo
 ### Broadcasting with Pusher
 In the last step of the process to import data, the users can see a list of import jobs started in the day. Each import job shows if the import was completed successfully, if it's in progress or if it failed. All this info is updated in real time using broadcasting in Laravel with [Pusher](https://pusher.com/).
 
-_Events:_ [ImportSucceeded](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportSucceeded.php)|[ImportFailed.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportFailed.php)
+_Events:_ [ImportSucceeded.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportSucceeded.php) | [ImportFailed.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportFailed.php)
+
+_UI:_ [MappinsCompletedPage.vue](https://github.com/germanrochar/csv-project/blob/main/resources/js/pages/imports/steps/MappingsCompletedPage.vue)
