@@ -132,3 +132,6 @@ In the last step of the process to import data, the users can see a list of impo
 - _Events:_ [ImportSucceeded.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportSucceeded.php) | [ImportFailed.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportFailed.php)
 
 - _UI:_ [MappinsCompletedPage.vue](https://github.com/germanrochar/csv-project/blob/main/resources/js/pages/imports/steps/MappingsCompletedPage.vue)
+
+## Contact Info
+If you are interested on my skills or if you have any questions, please contact me at: [german.rocha.ra@gmail.com](mailto:german.rocha.ra@gmail.com).
