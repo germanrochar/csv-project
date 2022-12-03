@@ -1,4 +1,4 @@
-## CSV Importer | Skills Demonstration
+## :bulb: CSV Importer | Skills Demonstration
 
 Originally, this project was created to demonstrate my skills in an interview process for [Voxie Inc](https://www.voxie.com/). back in December 2021. I received an assignment (that I will describe in more detail on next sections) that I had to complete within 4 days and it consisted on creating a csv importer using Laravel and Vue Js. I got the job back then, and now that I'm open for new job opportunities I decided to reuse the project and use it as a skill demonstration for hiring teams. I made some improvements in the original project to show off my skills on both backend/frontend tests, devops, and more. Additionally, I refactored some of the logic that I used to import the data and strengthened the validation of the rows in the csv files.
 
@@ -81,7 +81,7 @@ _Controller_: [ImportJobsController.php](https://github.com/germanrochar/csv-pro
 
 Since all the imports are done through jobs, I created a table that keeps track of every job fired and it knows if it was completed or failed. In the UI, the last step of the process shows a list of import jobs that started on that day and it shows their status (started, completed and failed). This list of jobs is updated in real time with [Pusher](https://pusher.com/) so there's no need to refresh the page to see updates on their status.
 
-### ::high_brightness: Front-end
+### :high_brightness: Front-end
 The frontend follows the same flow as required ([look here](https://support.autopilothq.com/hc/en-us/articles/203885305-Import-contacts)). Therefore, I divided the process to import contacts in four steps. The first step, allows users to upload their csv file. The second step shows a table where users can map csv fields with contact fields or custom attributes in the database. The third step shows a preview of the fields matched so the users can confirm their mappings and make modifications if necessary. On the fourth and last step, the users can see a list of import jobs and their status. In this last step they can see if the data was imported successfully or if there were errors while performing the import.   
 
 #### Vue JS Components and Pages
