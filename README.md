@@ -109,19 +109,19 @@ _Path:_ To be defined.
 #### End-to-end testing | Cypress
 _Path:_ To be defined.
 
-### DevOps
+### :hammer: DevOps
 The application uses Github Actions to run the automated tests on every commit pushed to the repo and Docker to manage the environment.
 
-#### GitHub Actions
+#### :hammer: GitHub Actions
 _Path:_ https://github.com/germanrochar/csv-project/tree/main/.github/workflows
 
-#### Docker
+#### :hammer: Docker
 _Path:_ To be defined.
 
-### Amazon SQS
+### :hammer: Amazon SQS
 The application uses Amazon SQS to set up the queues and process the jobs. The configuration is set in the `.env` file.
 
-### Laravel Excel
+### :hammer: Laravel Excel
 To import data from the csv files, I'm using the [Laravel Excel](https://laravel-excel.com/) package.
 
 _Importer:_ [ContactsImport.php](https://github.com/germanrochar/csv-project/blob/main/app/Imports/ContactsImport.php)
