@@ -1,0 +1,85 @@
+version: '3.5'
+services:
+    laravel.local:
+        image: php:8.1-fpm
+        depends_on:
+            - db
+            - redis
+        networks:
+            csv-project:
+                aliases:
+                    - fpm.local
+        volumes:
+            - ./:/var/www
+        working_dir: /var/www
+    webserver:
+        image: nginx:stable
+        depends_on:
+            - laravel.local
+        networks:
+            - csv-project
+        ports:
+            - "80:80"
+        volumes:
+            - ./public:/var/www/public
+    worker1:
+        image: php:8.1-fpm
+        networks:
+            - csv-project
+        depends_on:
+            - db
+            - redis
+        volumes:
+            - .:/var/www/html
+            - ./.docker/bin/work.sh:/usr/local/bin/work
+        working_dir: /var/www/html
+        command: work
+        restart: always
+    worker2:
+        image: php:8.1-cli
+        networks:
+            - csv-project
+        depends_on:
+            - db
+            - redis
+        volumes:
+            - .:/var/www/html
+            - ./.docker/bin/work.sh:/usr/local/bin/work
+        working_dir: /var/www/html
+        command: work
+        restart: always
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+            MYSQL_DATABASE: csv-project-db
+            MYSQL_USER: keman
+            MYSQL_PASSWORD: password
+        networks:
+            - csv-project
+        platform: linux/amd64
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql:/var/lib/mysql
+    redis:
+        image: redis:alpine
+        networks:
+            - csv-project
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis:/data
+    npm:
+        image: node:18
+        environment:
+            - NPM_TOKEN=${NPM_TOKEN}
+        user: node
+        volumes:
+            - .:/usr/src/app
+        working_dir: /usr/src/app
+networks:
+    csv-project:
+volumes:
+    redis:
+    mysql:
