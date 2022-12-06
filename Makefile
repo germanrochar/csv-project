@@ -11,3 +11,9 @@ tinker: ## Run the tinker command.
 up: ## Run the all container services specified in docker-compose.
 	@echo "+ $@"
 	@docker-compose up --build
+
+.PHONY: fe-test
+fe-test: ## Run the project Jest test suite.
+	@echo "+ $@"
+	@docker-compose run --rm npm \
+		npm run test
