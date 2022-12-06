@@ -20,6 +20,8 @@ install: ## Install the project dependencies, bootstrap the database and compile
 	@docker-compose exec worker1 \
 		composer install
 	@docker-compose exec worker1 \
+		php artisan key:generate
+	@docker-compose exec worker1 \
 		php artisan migrate:fresh
 	@docker-compose run --rm npm \
 		npm ci
