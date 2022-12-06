@@ -1,0 +1,64 @@
+version: '3.5'
+services:
+    laravel.local:
+        image: kemankhan/php:8.1
+        depends_on:
+            - db
+        networks:
+            csv-project:
+                aliases:
+                    - fpm.local
+        volumes:
+            - ./:/var/www
+        working_dir: /var/www
+    webserver:
+        image: nginx:stable
+        depends_on:
+            - laravel.local
+        networks:
+            - csv-project
+        ports:
+            - "8000:80"
+        volumes:
+            - ./public:/var/www/public
+            - ./docker-compose/nginx:/etc/nginx/conf.d
+    worker1:
+        image: kemankhan/php:8.1
+        networks:
+            - csv-project
+        depends_on:
+            - db
+        volumes:
+            - .:/var/www/html
+            - ./.docker/bin/work.sh:/usr/local/bin/work
+        working_dir: /var/www/html
+        command: work
+        restart: always
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_DATABASE: csv_project_db
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_PASSWORD: secret
+            MYSQL_USER: developer
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        networks:
+            - csv-project
+        platform: linux/amd64
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql:/var/lib/mysql
+    npm:
+        image: node:18
+        environment:
+            - NPM_TOKEN=${NPM_TOKEN}
+        user: node
+        volumes:
+            - .:/usr/src/app
+        working_dir: /usr/src/app
+networks:
+    csv-project:
+volumes:
+    mysql:
