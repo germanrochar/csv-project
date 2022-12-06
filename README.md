@@ -9,7 +9,7 @@ In the upcoming sections, I will describe the requirements set for the importer 
 To get started with the project, please run the following commands:
 
 1. Run `make build`
-2. Run `make install`. **Note:** Make sure the build has completed before running this command.
+2. Run `make install`. **Note:** Make sure the build is completed before running this command.
 
 ### SQS Configuration
 The project uses SQS to process the jobs in the application. Please get your AWS credentials and create a new queue in your account. Then, copy and paste your credentials and queue's info in the `.env` file. 
