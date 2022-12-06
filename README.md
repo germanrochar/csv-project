@@ -4,6 +4,19 @@ Originally, this project was created to demonstrate my skills in an interview pr
 
 In the upcoming sections, I will describe the requirements set for the importer in the assignment. Also, I will show an overview of the project so it's easier for the reader to identify where are the tests located at (phpunit tests, jest, tests, cypress tests), where are the styles/assets (sass, css), where is the main logic to read and import the files, etc. Additionally, I will include in this last section, all the tools and services that I'm using to make the importer work. The end goal is to provide a complete demonstration of my skills so the hiring teams can take a decision on whether or not I'm a good fit for their company.
 
+## Installation
+
+To get started with the project, please run the following commands:
+
+1. Run `make build`
+2. Run `make install`. **Note:** Make sure the build has completed before running this command.
+
+### SQS Configuration
+The project uses SQS to process the jobs in the application. Please get your AWS credentials and create a new queue in your account. Then, copy and paste your credentials and queue's info in the `.env` file. 
+
+### Pusher Configuration
+The project use pusher notifications. For this, you need to get your credentials from [Pusher](https://pusher.com/) and paste them in the `.env` file. 
+
 ## Web Tools Summary
 The following table shows a list of all the tools/languages/frameworks used to develop the application:
 
@@ -57,7 +70,7 @@ Implement a similar visual flow like this: https://support.autopilothq.com/hc/en
 
 In the previous section I described the requirements for the importer that I received from [Voxie Inc](https://www.voxie.com/) for the assignment. Now, in this section I will provide a general explanation on how I implemented a solution that satisfies the requirements. Also, after a brief explanation, you'll see a link to the logic I'm talking about in case you want to take a deeper look.  
 
-### :hammer: Back-end
+### Back-end
 
 In the backend side, there are two main tasks that I need to perform in order to import contacts. The first task is scan the csv file to fetch the headers. This is an important task because we are going to take the headers and map them with the fields in contacts table. The second task, is read the data from the csv file and store it in the database.
 
@@ -81,7 +94,7 @@ The [ContactsCsvScannerController](https://github.com/germanrochar/csv-project/b
 
 Since all the imports are done through jobs, I created a table that keeps track of every job fired and it knows if it was completed or failed. In the UI, the last step of the process shows a list of import jobs that started on that day and it shows their status (started, completed and failed). This list of jobs is updated in real time with [Pusher](https://pusher.com/) so there's no need to refresh the page to see updates on their status.
 
-### :high_brightness: Front-end
+### Front-end
 The frontend follows the same flow as required ([look here](https://support.autopilothq.com/hc/en-us/articles/203885305-Import-contacts)). Therefore, I divided the process to import contacts in four steps. The first step, allows users to upload their csv file. The second step shows a table where users can map csv fields with contact fields or custom attributes in the database. The third step shows a preview of the fields matched so the users can confirm their mappings and make modifications if necessary. On the fourth and last step, the users can see a list of import jobs and their status. In this last step they can see if the data was imported successfully or if there were errors while performing the import.   
 
 #### Vue JS Components and Pages
@@ -93,13 +106,13 @@ The frontend follows the same flow as required ([look here](https://support.auto
 #### Core Javascript
 - _Path:_ https://github.com/germanrochar/csv-project/tree/main/resources/js/core
 
-### :art: Styling
+### Styling
 For the styling of the application I'm using Bootstrap to set the layout of the page and use it's components. Also, for custom styles I'm using SASS that's compiled into CSS using webpack (see config [here](https://github.com/germanrochar/csv-project/blob/main/webpack.mix.js)).
 
 #### SASS
 - _Path:_ https://github.com/germanrochar/csv-project/tree/main/resources/sass
 
-### :slot_machine: Tests
+### Tests
 All features in the application are covered with automated tests. Backend tests were created using PHPUnit and Frontend tests using Jest and Cypress.
 
 #### Back-end testing | PHPUnit
@@ -109,7 +122,7 @@ All features in the application are covered with automated tests. Backend tests 
 #### End-to-end testing | Cypress
 - _Path:_ To be defined.
 
-### :hammer: DevOps
+### DevOps
 The application uses Github Actions to run the automated tests on every commit pushed to the repo and Docker to manage the environment.
 
 #### GitHub Actions
@@ -118,15 +131,15 @@ The application uses Github Actions to run the automated tests on every commit p
 #### Docker
 - _Path:_ To be defined.
 
-### :wrench: Amazon SQS
+### Amazon SQS
 The application uses Amazon SQS to set up the queues and process the jobs. The configuration is set in the `.env` file.
 
-### :page_facing_up: Laravel Excel
+### Laravel Excel
 To import data from the csv files, I'm using the [Laravel Excel](https://laravel-excel.com/) package.
 
 - _Importer:_ [ContactsImport.php](https://github.com/germanrochar/csv-project/blob/main/app/Imports/ContactsImport.php)
 
-### :loudspeaker: Broadcasting with Pusher
+### Broadcasting with Pusher
 In the last step of the process to import data, the users can see a list of import jobs started in the day. Each import job shows if the import was completed successfully, if it's in progress or if it failed. All this info is updated in real time using broadcasting in Laravel with [Pusher](https://pusher.com/).
 
 - _Events:_ [ImportSucceeded.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportSucceeded.php) | [ImportFailed.php](https://github.com/germanrochar/csv-project/blob/main/app/Events/ImportFailed.php)
