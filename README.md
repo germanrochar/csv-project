@@ -14,9 +14,9 @@ The following table shows a list of all the tools/languages/frameworks used to d
 | :white_check_mark: Vue 2             |
 | :white_check_mark: MySQL 8.0         |
 | :white_check_mark: PHPUnit           |
-| :white_check_mark: Jest              |
-| :white_check_mark: Cypress           |
-| :white_check_mark: Docker            |
+| :construction: Jest (In Progress)    |
+| :construction: Cypress (In Progress) |
+| :construction: Docker (In Progress)  |
 | :white_check_mark: Amazon SQS        |
 | :white_check_mark: Pusher            |
 | :white_check_mark: SASS              |
