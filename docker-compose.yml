@@ -4,7 +4,6 @@ services:
         image: kemankhan/php:8.1
         depends_on:
             - db
-            - redis
         networks:
             csv-project:
                 aliases:
@@ -29,20 +28,6 @@ services:
             - csv-project
         depends_on:
             - db
-            - redis
-        volumes:
-            - .:/var/www/html
-            - ./.docker/bin/work.sh:/usr/local/bin/work
-        working_dir: /var/www/html
-        command: work
-        restart: always
-    worker2:
-        image: php:8.1-cli
-        networks:
-            - csv-project
-        depends_on:
-            - db
-            - redis
         volumes:
             - .:/var/www/html
             - ./.docker/bin/work.sh:/usr/local/bin/work
@@ -65,14 +50,6 @@ services:
             - "3306:3306"
         volumes:
             - mysql:/var/lib/mysql
-    redis:
-        image: redis:alpine
-        networks:
-            - csv-project
-        ports:
-            - "6379:6379"
-        volumes:
-            - redis:/data
     npm:
         image: node:18
         environment:
@@ -84,5 +61,4 @@ services:
 networks:
     csv-project:
 volumes:
-    redis:
     mysql:
