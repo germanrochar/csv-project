@@ -1,7 +1,14 @@
 version: '3.5'
 services:
     laravel.local:
-        image: php:8.1-fpm
+#        @TODO: create my custom PHP image.
+        build:
+            args:
+                user: keman
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: csv-project
         depends_on:
             - db
             - redis
@@ -24,7 +31,13 @@ services:
             - ./public:/var/www/public
             - ./docker-compose/nginx:/etc/nginx/conf.d
     worker1:
-        image: php:8.1-fpm
+        build:
+            args:
+                user: keman
+                uid: 1000
+            context: ./
+            dockerfile: Dockerfile
+        image: csv-project
         networks:
             - csv-project
         depends_on:
@@ -52,10 +65,12 @@ services:
     db:
         image: mysql:8.0
         environment:
-            MYSQL_ROOT_PASSWORD: password
-            MYSQL_DATABASE: csv-project-db
-            MYSQL_USER: keman
-            MYSQL_PASSWORD: password
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
         networks:
             - csv-project
         platform: linux/amd64
