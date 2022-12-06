@@ -1,14 +1,7 @@
 version: '3.5'
 services:
     laravel.local:
-#        @TODO: create my custom PHP image.
-        build:
-            args:
-                user: keman
-                uid: 1000
-            context: ./
-            dockerfile: Dockerfile
-        image: csv-project
+        image: kemankhan/php:8.1
         depends_on:
             - db
             - redis
@@ -31,13 +24,7 @@ services:
             - ./public:/var/www/public
             - ./docker-compose/nginx:/etc/nginx/conf.d
     worker1:
-        build:
-            args:
-                user: keman
-                uid: 1000
-            context: ./
-            dockerfile: Dockerfile
-        image: csv-project
+        image: kemankhan/php:8.1
         networks:
             - csv-project
         depends_on:
