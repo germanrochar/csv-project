@@ -8,7 +8,7 @@ tinker: ## Run the tinker command.
 		php artisan tinker
 
 .PHONY: build
-up: ## Run the all container services specified in docker-compose.
+build: ## Run the all container services specified in docker-compose.
 	@echo "+ $@"
 	@docker-compose up --build
 
