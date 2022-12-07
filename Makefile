@@ -7,8 +7,8 @@ tinker: ## Run the tinker command.
 	@docker-compose exec worker1 \
 		php artisan tinker
 
-.PHONY: build
-build: ## Run the all container services specified in docker-compose.
+.PHONY: up
+up: ## Run the all container services specified in docker-compose.
 	@echo "+ $@"
 	@docker-compose up --build
 
@@ -29,6 +29,8 @@ install: ## Install the project dependencies, bootstrap the database and compile
 		npm run dev
 	@rm -f .env.testing
 	@cp .env.testing.example .env.testing
+	@docker-compose exec db \
+		mysql --user="root" --password="secret" --execute "create database if not exists csv_testing;"
 
 
 .PHONY: fe-test
