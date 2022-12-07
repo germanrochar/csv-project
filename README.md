@@ -8,7 +8,7 @@ In the upcoming sections, I will describe the requirements set for the importer 
 
 To get started with the project, please run the following commands:
 
-1. Run `make build`
+1. Run `make up`
 2. Run `make install`. **Note:** Make sure the build is completed before running this command.
 
 ### SQS Configuration
