@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\ContactsImportFailed;
 use App\Events\ContactsImportSucceeded;
+use App\Events\ImportJobCreated;
 use App\Listeners\MarkAnImportJobAsCompleted;
 use App\Listeners\MarkAnImportJobAsFailed;
+use App\Listeners\ReloadImportJobs;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -39,6 +41,11 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(
             ContactsImportFailed::class,
             [MarkAnImportJobAsFailed::class, 'handle']
+        );
+
+        Event::listen(
+            ImportJobCreated::class,
+            [ReloadImportJobs::class, 'handle']
         );
     }
 }

@@ -100,6 +100,7 @@ export default {
     },
 
     mounted() {
+        console.log('Component mounted.');
         this.getImportJobs();
 
         Echo.channel(`imports`)
@@ -108,7 +109,12 @@ export default {
             })
             .listen('ImportSucceeded', (e) => {
                 this.getImportJobs();
-            });
+            })
+            .listen('ReloadImportJobs', (e) => {
+                console.log('reloading import jobs...');
+                this.getImportJobs();
+            })
+        ;
     }
 }
 </script>

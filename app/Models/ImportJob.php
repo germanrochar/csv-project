@@ -36,11 +36,25 @@ class ImportJob extends Model
     ];
 
     /**
+     * The event map for the model.
+     *
+     * Allows for object-based events for native Eloquent events.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => \App\Events\ImportJobCreated::class,
+    ];
+
+    /**
      * @param  Builder  $query
      * @return Builder
     */
     public function scopeImportedToday(Builder $query): Builder
     {
-        return $query->whereDate('created_at', '=', Carbon::now()->tz('America/New_York')->toDateString());
+        $startOfDay = Carbon::now()->startOfDay();
+        $endOfDay = Carbon::now()->endOfDay();
+
+        return $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
     }
 }
