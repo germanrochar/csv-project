@@ -36,17 +36,6 @@ class ImportJob extends Model
     ];
 
     /**
-     * The event map for the model.
-     *
-     * Allows for object-based events for native Eloquent events.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'created' => \App\Events\ImportJobCreated::class,
-    ];
-
-    /**
      * @param  Builder  $query
      * @return Builder
     */

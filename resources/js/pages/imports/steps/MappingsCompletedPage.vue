@@ -12,10 +12,6 @@
                     No Import Jobs where found.
                 </div>
 
-                <div class="mt-3" v-show="loadingImportJobs">
-                    <LoadingComponent text="Loading import jobs..." :width="20"></LoadingComponent>
-                </div>
-
                 <div v-for="(importJob) in importJobs" :key="importJob.id" class="card mt-3 p-1">
                     <div class="card-body">
                         <div class="d-flex">
@@ -26,6 +22,10 @@
                         <span :class="getImportJobBadgeStyle(importJob.status)" v-text="getImportJobBadgeText(importJob.status)"></span>
                         <p class="mt-3" v-text="getImportJobStatusText(importJob.status)"></p>
                         <p v-if="importJob.status === 'failed'"><span class="fw-bold">Error: </span> {{ importJob.error_message }}</p>
+
+                        <template v-if="importJob.status === 'started'">
+                            <loading-component text="Importing..." :width="20"></loading-component>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -52,7 +52,6 @@ export default {
     data() {
         return {
             importJobs: [],
-            loadingImportJobs: false,
             errors: null,
         }
     },
@@ -102,11 +101,6 @@ export default {
             return statuses[status];
         },
 
-        reloadImportJobs() {
-            this.getImportJobs();
-            this.loadingImportJobs = false;
-        },
-
         formattedDate(date) {
             return moment(date).tz('America/New_York').format('lll');
         }
@@ -115,17 +109,15 @@ export default {
      mounted() {
         this.getImportJobs();
 
-        this.loadingImportJobs = true;
-
         Echo.channel(`imports`)
             .listen('ImportFailed', (e) => {
-                this.reloadImportJobs();
+                this.getImportJobs();
             })
             .listen('ImportSucceeded', (e) => {
-                this.reloadImportJobs();
+                this.getImportJobs();
             })
             .listen('ImportJobStarted', (e) => {
-                this.reloadImportJobs();
+                this.getImportJobs();
             })
         ;
     }

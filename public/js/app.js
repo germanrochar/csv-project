@@ -5699,7 +5699,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       importJobs: [],
-      loadingImportJobs: false,
       errors: null
     };
   },
@@ -5744,10 +5743,6 @@ __webpack_require__.r(__webpack_exports__);
       };
       return statuses[status];
     },
-    reloadImportJobs: function reloadImportJobs() {
-      this.getImportJobs();
-      this.loadingImportJobs = false;
-    },
     formattedDate: function formattedDate(date) {
       return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).tz('America/New_York').format('lll');
     }
@@ -5756,13 +5751,12 @@ __webpack_require__.r(__webpack_exports__);
     var _this2 = this;
 
     this.getImportJobs();
-    this.loadingImportJobs = true;
     Echo.channel("imports").listen('ImportFailed', function (e) {
-      _this2.reloadImportJobs();
+      _this2.getImportJobs();
     }).listen('ImportSucceeded', function (e) {
-      _this2.reloadImportJobs();
+      _this2.getImportJobs();
     }).listen('ImportJobStarted', function (e) {
-      _this2.reloadImportJobs();
+      _this2.getImportJobs();
     });
   }
 });
@@ -59085,75 +59079,70 @@ var render = function () {
             ]
           ),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.loadingImportJobs,
-                  expression: "loadingImportJobs",
-                },
-              ],
-              staticClass: "mt-3",
-            },
-            [
-              _c("LoadingComponent", {
-                attrs: { text: "Loading import jobs...", width: 20 },
-              }),
-            ],
-            1
-          ),
-          _vm._v(" "),
           _vm._l(_vm.importJobs, function (importJob) {
             return _c(
               "div",
               { key: importJob.id, staticClass: "card mt-3 p-1" },
               [
-                _c("div", { staticClass: "card-body" }, [
-                  _c("div", { staticClass: "d-flex" }, [
-                    _c(
-                      "h5",
-                      { staticClass: "card-title u-margin-right-auto" },
-                      [_vm._v("Import Job #" + _vm._s(importJob.id))]
-                    ),
-                    _vm._v(" "),
-                    _c("p", [
-                      _c("span", { staticClass: "fw-bold" }, [
-                        _vm._v("Started at: "),
-                      ]),
-                      _vm._v(_vm._s(_vm.formattedDate(importJob.created_at))),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("span", {
-                    class: _vm.getImportJobBadgeStyle(importJob.status),
-                    domProps: {
-                      textContent: _vm._s(
-                        _vm.getImportJobBadgeText(importJob.status)
+                _c(
+                  "div",
+                  { staticClass: "card-body" },
+                  [
+                    _c("div", { staticClass: "d-flex" }, [
+                      _c(
+                        "h5",
+                        { staticClass: "card-title u-margin-right-auto" },
+                        [_vm._v("Import Job #" + _vm._s(importJob.id))]
                       ),
-                    },
-                  }),
-                  _vm._v(" "),
-                  _c("p", {
-                    staticClass: "mt-3",
-                    domProps: {
-                      textContent: _vm._s(
-                        _vm.getImportJobStatusText(importJob.status)
-                      ),
-                    },
-                  }),
-                  _vm._v(" "),
-                  importJob.status === "failed"
-                    ? _c("p", [
+                      _vm._v(" "),
+                      _c("p", [
                         _c("span", { staticClass: "fw-bold" }, [
-                          _vm._v("Error: "),
+                          _vm._v("Started at: "),
                         ]),
-                        _vm._v(" " + _vm._s(importJob.error_message)),
-                      ])
-                    : _vm._e(),
-                ]),
+                        _vm._v(_vm._s(_vm.formattedDate(importJob.created_at))),
+                      ]),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", {
+                      class: _vm.getImportJobBadgeStyle(importJob.status),
+                      domProps: {
+                        textContent: _vm._s(
+                          _vm.getImportJobBadgeText(importJob.status)
+                        ),
+                      },
+                    }),
+                    _vm._v(" "),
+                    _c("p", {
+                      staticClass: "mt-3",
+                      domProps: {
+                        textContent: _vm._s(
+                          _vm.getImportJobStatusText(importJob.status)
+                        ),
+                      },
+                    }),
+                    _vm._v(" "),
+                    importJob.status === "failed"
+                      ? _c("p", [
+                          _c("span", { staticClass: "fw-bold" }, [
+                            _vm._v("Error: "),
+                          ]),
+                          _vm._v(" " + _vm._s(importJob.error_message)),
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    importJob.status === "started"
+                      ? [
+                          _c("loading-component", {
+                            attrs: {
+                              text: "Currently importing...",
+                              width: 20,
+                            },
+                          }),
+                        ]
+                      : _vm._e(),
+                  ],
+                  2
+                ),
               ]
             )
           }),

@@ -12,12 +12,14 @@ class MarkAnImportJobAsFailed
 {
     public function handle(ContactsImportFailed $event): void
     {
-        $job = ImportJob::query()
-            ->where('job_id', $event->job->getJobId())
-            ->where('uuid', $event->job->uuid())
+        $importJob = ImportJob::query()
+            ->where('job_id', $event->jobId)
+            ->where('uuid', $event->jobId)
             ->firstOrFail();
 
-        $job->update([
+        info('Fetched failed job', ['job' => $importJob]);
+
+        $importJob->update([
             'status' => ImportJob::STATUS_FAILED,
             'error_message' => $event->errorMessage
         ]);
