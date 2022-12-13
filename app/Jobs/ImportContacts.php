@@ -40,6 +40,7 @@ class ImportContacts implements ShouldQueue
      */
     public function handle(): void
     {
+        // @TODO: Create two separate jobs. Create the import job from the controller. Then, process the import here. Finally, reflect the change in the UI.
         ImportJob::create([
             'job_id' => $this->job->getJobId(),
             'uuid' => $this->job->uuid(),

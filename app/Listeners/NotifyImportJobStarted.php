@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Events\ImportJobCreated;
 
-class ReloadImportJobs
+class NotifyImportJobStarted
 {
     /**
      * Handle the event.
@@ -14,7 +14,6 @@ class ReloadImportJobs
      */
     public function handle(ImportJobCreated $event): void
     {
-        info('Reloading import jobs...');
-        \App\Events\ReloadImportJobs::dispatch();
+        \App\Events\ImportJobStarted::dispatch();
     }
 }

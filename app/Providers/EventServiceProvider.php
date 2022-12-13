@@ -7,7 +7,7 @@ use App\Events\ContactsImportSucceeded;
 use App\Events\ImportJobCreated;
 use App\Listeners\MarkAnImportJobAsCompleted;
 use App\Listeners\MarkAnImportJobAsFailed;
-use App\Listeners\ReloadImportJobs;
+use App\Listeners\NotifyImportJobStarted;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -45,7 +45,7 @@ class EventServiceProvider extends ServiceProvider
 
         Event::listen(
             ImportJobCreated::class,
-            [ReloadImportJobs::class, 'handle']
+            [NotifyImportJobStarted::class, 'handle']
         );
     }
 }
