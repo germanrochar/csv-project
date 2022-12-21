@@ -13,7 +13,6 @@ class MarkAnImportJobAsFailed
     public function handle(ContactsImportFailed $event): void
     {
         $importJob = ImportJob::query()
-            ->where('job_id', $event->jobId)
             ->where('uuid', $event->jobId)
             ->firstOrFail();
 

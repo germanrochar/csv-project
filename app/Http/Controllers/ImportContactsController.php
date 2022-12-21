@@ -32,7 +32,6 @@ class ImportContactsController extends Controller
 
         $uuid = Str::uuid()->toString();
         ImportJob::create([
-            'job_id' => $uuid,
             'uuid' => $uuid,
             'status' => ImportJob::STATUS_STARTED,
         ]);
