@@ -16,7 +16,6 @@ class ImportJobTest extends TestCase
     {
         $importJobOne = ImportJob::factory()->create([
             'id' => 1,
-            'job_id' => 1,
             'uuid' => 'myuuid',
             'status' => ImportJob::STATUS_COMPLETED,
             'created_at' => Carbon::now()->tz('America/New_York')
@@ -28,7 +27,6 @@ class ImportJobTest extends TestCase
             [
                 [
                     'id' => 1,
-                    'job_id' => 1,
                     'uuid' => 'myuuid',
                     'status' => 'completed',
                     'error_message' => null,

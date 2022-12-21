@@ -13,7 +13,6 @@ class MarkAnImportJobAsCompleted
     public function handle(ContactsImportSucceeded $event): void
     {
         $importJob = ImportJob::query()
-            ->where('job_id', $event->jobId)
             ->where('uuid', $event->jobId)
             ->firstOrFail();
 
