@@ -36,12 +36,34 @@ class ImportJob extends Model
 
     /**
      * @param  Builder  $query
+     * @param  string  $tz
      * @return Builder
     */
-    public function scopeImportedToday(Builder $query): Builder
+    public function scopeImportedToday(Builder $query, string $tz): Builder
     {
-        $startOfDay = Carbon::now()->tz('America/New_York')->startOfDay();
-        $endOfDay = Carbon::now()->tz('America/New_York')->endOfDay();
+
+        var_dump(Carbon::now()->toDateTimeString());
+        // NOW
+        // UTC +6: 2022-12-27 08:02:40
+        // UTC:    2022-12-27 02:02:40
+        // UTC -6: 2022-12-26 20:02:4
+        //
+        // FILTER for Dec 26th
+        // UTC: 2022-12-26 06:00:00 - 2022-12-27 05:59:59
+        // UTC: 2022-12-25 18:00:00 - 2022-12-26 17:59:59
+
+        // Take the timezone and calculate the offset
+        var_dump('offset');
+        var_dump(Carbon::createFromTimestamp(0, $tz)->offsetHours);
+        $offsetHours = Carbon::createFromTimestamp(0, $tz)->offsetHours;
+
+        $startOfDay = Carbon::now()->startOfDay()->addHours($offsetHours);
+        $endOfDay = Carbon::now()->endOfDay()->addHours($offsetHours);
+
+        var_dump('start_of_day', $startOfDay->toDateTimeString());
+        var_dump('start_of_day_test', Carbon::now()->tz($tz)->startOfDay()->utc()->toDateTimeString());
+        var_dump('end_of_day', $endOfDay->toDateTimeString());
+        var_dump('end_of_day_test', Carbon::now()->tz($tz)->endOfDay()->utc()->toDateTimeString());
 
         return $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
     }
