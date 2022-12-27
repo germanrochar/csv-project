@@ -12,7 +12,7 @@
                     No Import Jobs where found.
                 </div>
 
-                <div v-for="(importJob) in importJobs" :key="importJob.id" class="card mt-5 p-1">
+                <div v-for="(importJob) in importJobs" :key="importJob.id" class="card mt-3 p-1">
                     <div class="card-body">
                         <div class="d-flex">
                             <h5 class="card-title u-margin-right-auto">Import Job #{{ importJob.id }}</h5>
@@ -22,6 +22,10 @@
                         <span :class="getImportJobBadgeStyle(importJob.status)" v-text="getImportJobBadgeText(importJob.status)"></span>
                         <p class="mt-3" v-text="getImportJobStatusText(importJob.status)"></p>
                         <p v-if="importJob.status === 'failed'"><span class="fw-bold">Error: </span> {{ importJob.error_message }}</p>
+
+                        <template v-if="importJob.status === 'started'">
+                            <loading-component text="Importing..." :width="20"></loading-component>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -36,16 +40,21 @@
 </template>
 
 <script>
-import moment from 'moment';
 import 'moment-timezone';
+import moment from 'moment';
+import { defaultTimezone } from '../../../core/constants/timezones.js';
+import LoadingComponent from "../../../components/imports/LoadingComponent.vue";
 
 export default {
     name: "MappingsCompletedPage.vue",
+
+    components: { LoadingComponent },
 
     data() {
         return {
             importJobs: [],
             errors: null,
+            timezone: null
         }
     },
 
@@ -57,7 +66,7 @@ export default {
 
     methods: {
         getImportJobs() {
-            axios.get('/import-jobs').then(({data}) => {
+            axios.get(`/import-jobs?tz=${this.timezone}`).then(({data}) => {
                 this.importJobs = data;
             }).catch(error => {
                 console.error(error);
@@ -95,11 +104,13 @@ export default {
         },
 
         formattedDate(date) {
-            return moment(date).tz('America/New_York').format('lll');
+            return moment(date).tz(this.timezone).format('lll');
         }
     },
 
-    mounted() {
+     mounted() {
+         this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? defaultTimezone;
+
         this.getImportJobs();
 
         Echo.channel(`imports`)
@@ -108,7 +119,11 @@ export default {
             })
             .listen('ImportSucceeded', (e) => {
                 this.getImportJobs();
-            });
+            })
+            .listen('ImportJobStarted', (e) => {
+                this.getImportJobs();
+            })
+        ;
     }
 }
 </script>

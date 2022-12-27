@@ -21,16 +21,18 @@ class ImportContacts implements ShouldQueue
 
     private Mappings $mappings;
     private string $csvPath;
+    private string $jobId;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Mappings $mappings, string $csvPath)
+    public function __construct(Mappings $mappings, string $csvPath, string $jobId)
     {
         $this->mappings = $mappings;
         $this->csvPath = $csvPath;
+        $this->jobId = $jobId;
     }
 
     /**
@@ -40,19 +42,13 @@ class ImportContacts implements ShouldQueue
      */
     public function handle(): void
     {
-        ImportJob::create([
-            'job_id' => $this->job->getJobId(),
-            'uuid' => $this->job->uuid(),
-            'status' => ImportJob::STATUS_STARTED,
-        ]);
-
         try {
             Excel::import(new ContactsImport($this->mappings), $this->csvPath, 's3');
         } catch (RuntimeException $e) {
-            ContactsImportFailed::dispatch($this->job, $e->getMessage());
+            ContactsImportFailed::dispatch($this->jobId, $e->getMessage());
             throw $e;
         }
 
-        ContactsImportSucceeded::dispatch($this->job);
+        ContactsImportSucceeded::dispatch($this->jobId);
     }
 }

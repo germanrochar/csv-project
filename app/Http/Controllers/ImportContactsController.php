@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ImportContactsRequest;
 use App\Jobs\ImportContacts;
 use App\Mappings;
+use App\Models\ImportJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ImportContactsController extends Controller
 {
@@ -28,7 +30,13 @@ class ImportContactsController extends Controller
             array_keys($mappingsInput),
         );
 
-        ImportContacts::dispatch($mappings, $csvPath);
+        $uuid = Str::uuid()->toString();
+        ImportJob::create([
+            'uuid' => $uuid,
+            'status' => ImportJob::STATUS_STARTED,
+        ]);
+
+        ImportContacts::dispatch($mappings, $csvPath, $uuid);
 
         return new JsonResponse(['message' => 'Import of contacts has started successfully.']);
     }

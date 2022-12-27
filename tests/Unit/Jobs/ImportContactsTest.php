@@ -23,31 +23,6 @@ class ImportContactsTest extends TestCase
 {
     use RefreshDatabase;
 
-    private SQSJob $mockedJob;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $mockedContainer = $this->getMockBuilder(Container::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockedSqsClient = $this->getMockBuilder(SqsClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockedJob = [
-            'MessageId' => 99,
-            'Body' => json_encode(['uuid' => 'my-uuid']),
-        ];
-
-        self::mock(JobContract::class)
-            ->shouldReceive('fail')
-            ->andReturnNull();
-        $this->mockedJob = new SqsJob($mockedContainer, $mockedSqsClient, $mockedJob, 'my-connection', 'my-queue');
-    }
-
     /** @test */
     public function it_imports_contacts_from_a_csv_file(): void
     {
@@ -66,10 +41,18 @@ class ImportContactsTest extends TestCase
             ->storeAs('/csv/files', 'contacts_list.csv');
 
         $mappings = new Mappings(['name', 'phone', 'custom_description'], ['csv_name', 'phone number', 'custom field']);
+        $importJob = ImportJob::factory()->create([
+            'status' => ImportJob::STATUS_STARTED,
+            'uuid' => 'my-uuid'
+        ]);
 
-        $importContactsJob = new ImportContacts($mappings, $csvPath);
-        $importContactsJob->setJob($this->mockedJob);
-        $importContactsJob->handle();
+        self::assertDatabaseCount('import_jobs', 1);
+        self::assertDatabaseHas('import_jobs', [
+            'uuid' => 'my-uuid',
+            'status' => 'started'
+        ]);
+
+        (new ImportContacts($mappings, $csvPath, $importJob->uuid))->handle();
 
         self::assertDatabaseHas('contacts', [
             'name' => 'german',
@@ -82,14 +65,12 @@ class ImportContactsTest extends TestCase
         self::assertSame('custom_description', $customAttributes->first()->key);
         self::assertSame('lorem ipsum', $customAttributes->first()->value);
 
-        $importJobs = ImportJob::all();
-        self::assertCount(1, $importJobs);
-
-        $importJob = $importJobs->first();
-        self::assertSame('99', $importJob->job_id);
-        self::assertSame('my-uuid', $importJob->uuid);
-        self::assertSame('started', $importJob->status);
-        self::assertNull($importJob->error_message);
+        self::assertDatabaseCount('import_jobs', 1);
+        self::assertDatabaseHas('import_jobs', [
+            'uuid' => 'my-uuid',
+            'status' => 'started',
+            'error_message' => null
+        ]);
 
         Event::assertDispatched(ContactsImportSucceeded::class);
         Event::assertNotDispatched(ContactsImportFailed::class);
@@ -114,12 +95,16 @@ class ImportContactsTest extends TestCase
 
         $mappings = new Mappings(['phone', 'custom_description'], ['phone number', 'my field']);
 
-        self::expectException(RuntimeException::class);
-        self::expectExceptionMessage('Something went wrong while importing contacts.');
+        $importJob = ImportJob::factory()->create([
+            'status' => ImportJob::STATUS_STARTED,
+            'uuid' => 'my-uuid'
+        ]);
 
-        $importContactsJob = new ImportContacts($mappings, $csvPath);
-        $importContactsJob->setJob($this->mockedJob);
-        $importContactsJob->handle();
+        try {
+            (new ImportContacts($mappings, $csvPath, $importJob->uuid))->handle();
+        } catch (RuntimeException $e) {
+            self::assertSame('Something went wrong while importing contacts.', $e->getMessage());
+        }
 
         self::assertDatabaseCount('contacts',0);
         self::assertDatabaseCount('custom_attributes',0);
@@ -128,7 +113,6 @@ class ImportContactsTest extends TestCase
         self::assertCount(1, $importJobs);
 
         $importJob = $importJobs->first();
-        self::assertSame('99', $importJob->job_id);
         self::assertSame('my-uuid', $importJob->uuid);
         self::assertSame('started', $importJob->status);
         self::assertNull($importJob->error_message);
@@ -156,12 +140,16 @@ class ImportContactsTest extends TestCase
 
         $mappings = new Mappings(['phone', 'sticky_phone_number_id'], ['phone number', 'custom field']);
 
-        self::expectException(RuntimeException::class);
-        self::expectExceptionMessage('Mapped columns in the csv does not match the data types.');
+        $importJob = ImportJob::factory()->create([
+            'status' => ImportJob::STATUS_STARTED,
+            'uuid' => 'my-uuid'
+        ]);
 
-        $importContactsJob = new ImportContacts($mappings, $csvPath);
-        $importContactsJob->setJob($this->mockedJob);
-        $importContactsJob->handle();
+        try {
+            (new ImportContacts($mappings, $csvPath, $importJob->uuid))->handle();
+        } catch (RuntimeException $e) {
+            self::assertSame('Mapped columns in the csv does not match the data types.', $e->getMessage());
+        }
 
         self::assertDatabaseCount('contacts',0);
         self::assertDatabaseCount('custom_attributes',0);
@@ -170,7 +158,6 @@ class ImportContactsTest extends TestCase
         self::assertCount(1, $importJobs);
 
         $importJob = $importJobs->first();
-        self::assertSame(99, $importJob->job_id);
         self::assertSame('my-uuid', $importJob->uuid);
         self::assertSame('started', $importJob->status);
         self::assertNull($importJob->error_message);

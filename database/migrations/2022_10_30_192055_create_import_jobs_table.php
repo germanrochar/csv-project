@@ -15,7 +15,6 @@ class CreateImportJobsTable extends Migration
     {
         Schema::create('import_jobs', function (Blueprint $table) {
             $table->id();
-            $table->string('job_id');
             $table->string('uuid')->nullable();
             $table->string('status');
             $table->string('error_message')->nullable();

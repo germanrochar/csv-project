@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int $id
- * @property string $job_id
  * @property string|null $uuid
  * @property string $status
  * @property string|null $error_message
@@ -37,10 +36,25 @@ class ImportJob extends Model
 
     /**
      * @param  Builder  $query
+     * @param  string  $tz
      * @return Builder
     */
-    public function scopeImportedToday(Builder $query): Builder
+    public function scopeImportedToday(Builder $query, string $tz): Builder
     {
-        return $query->whereDate('created_at', '=', Carbon::now()->tz('America/New_York')->toDateString());
+        $startOfDay = Carbon::now()
+            ->tz($tz)
+            ->startOfDay()
+            ->utc()
+            ->toDateTimeString()
+        ;
+
+        $endOfDay = Carbon::now()
+            ->tz($tz)
+            ->endOfDay()
+            ->utc()
+            ->toDateTimeString()
+        ;
+
+        return $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
     }
 }

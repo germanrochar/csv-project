@@ -63,7 +63,6 @@ class ImportContactsFromCsvTest extends TestCase
 
         $importJob = $importJobs->first();
         self::assertSame('completed', $importJob->status);
-        self::assertNotNull($importJob->job_id);
         self::assertNotNull($importJob->uuid);
         self::assertNull($importJob->error_message);
     }
@@ -116,7 +115,6 @@ class ImportContactsFromCsvTest extends TestCase
 
         $importJob = $importJobs->first();
         self::assertSame('completed', $importJob->status);
-        self::assertNotNull($importJob->job_id);
         self::assertNotNull($importJob->uuid);
         self::assertNull($importJob->error_message);
     }
@@ -159,7 +157,6 @@ class ImportContactsFromCsvTest extends TestCase
 
         $importJob = $importJobs->first();
         self::assertSame('failed', $importJob->status);
-        self::assertNotNull($importJob->job_id);
         self::assertNotNull($importJob->uuid);
         self::assertSame('Something went wrong while importing contacts.', $importJob->error_message);
     }
@@ -200,7 +197,6 @@ class ImportContactsFromCsvTest extends TestCase
 
         $importJob = $importJobs->first();
         self::assertSame('failed', $importJob->status);
-        self::assertNotNull($importJob->job_id);
         self::assertNotNull($importJob->uuid);
         self::assertSame('Mapped columns in the csv does not match the data types.', $importJob->error_message);
     }
