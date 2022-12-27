@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ShowImportJobsTest extends TestCase
+class FetchImportJobsTest extends TestCase
 {
     use RefreshDatabase;
 
