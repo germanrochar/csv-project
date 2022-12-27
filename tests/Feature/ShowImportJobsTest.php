@@ -12,12 +12,34 @@ class ShowImportJobsTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function a_guest_can_see_all_the_import_jobs_triggered_today_sorted_by_created_date(): void
+    public function timestamp_field_is_required_to_fetch_import_jobs(): void
     {
-        $importedJobOne = ImportJob::factory()->create(['created_at' => Carbon::now()->subHour()->tz('America/New_York')]);
-        $importedJobTwo = ImportJob::factory()->create(['created_at' => Carbon::now()->tz('America/New_York')]);
+        $this->getJson('/import-jobs')
+            ->assertJsonValidationErrors(['tz' => 'The tz field is required.'])
+        ;
+    }
 
-        $this->get('/import-jobs')
+    /** @test */
+    public function nobody_can_fetch_import_jobs_if_timezone_is_invalid(): void
+    {
+        $invalidTimezone = 'America/MyTimezone';
+
+        $this->getJson("/import-jobs?tz=$invalidTimezone")
+            ->assertJsonValidationErrors(['tz' => 'The tz must be a valid timezone.'])
+        ;
+    }
+
+    /** @test */
+    public function a_guest_can_fetch_all_the_import_jobs_triggered_today_sorted_by_created_date(): void
+    {
+        Carbon::setTestNow('2022-12-27 02:02:40');
+
+        $importedJobOne = ImportJob::factory()->create(['created_at' => '2022-12-26 22:02:40']);
+        $importedJobTwo = ImportJob::factory()->create(['created_at' => '2022-12-27 02:02:40']);
+
+        $timezone = 'America/Ojinaga'; // GMT-6
+
+        $this->getJson("/import-jobs?tz=$timezone")
             ->assertOk()
             ->assertJson([
                 [
@@ -41,11 +63,15 @@ class ShowImportJobsTest extends TestCase
     }
 
     /** @test */
-    public function a_guest_cannot_see_the_import_jobs_triggered_before_today(): void
+    public function a_guest_cannot_fetch_import_jobs_triggered_before_today(): void
     {
-        ImportJob::factory()->create(['created_at' => Carbon::now()->tz('America/New_York')->subDay()]);
+        Carbon::setTestNow('2022-12-27 02:02:40');
 
-        $this->get('/import-jobs')
+        $timezone = 'America/Ojinaga'; // GMT-6
+
+        ImportJob::factory()->create(['created_at' => Carbon::now()->subDay()]);
+
+        $this->getJson("/import-jobs?tz=$timezone")
             ->assertOk()
             ->assertJson([])
         ;

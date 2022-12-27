@@ -40,8 +40,9 @@
 </template>
 
 <script>
-import moment from 'moment';
 import 'moment-timezone';
+import moment from 'moment';
+import { defaultTimezone } from '../../../core/constants/timezones.js';
 import LoadingComponent from "../../../components/imports/LoadingComponent.vue";
 
 export default {
@@ -53,6 +54,7 @@ export default {
         return {
             importJobs: [],
             errors: null,
+            timezone: null
         }
     },
 
@@ -64,7 +66,7 @@ export default {
 
     methods: {
         getImportJobs() {
-            axios.get('/import-jobs').then(({data}) => {
+            axios.get(`/import-jobs?tz=${this.timezone}`).then(({data}) => {
                 this.importJobs = data;
             }).catch(error => {
                 console.error(error);
@@ -102,11 +104,13 @@ export default {
         },
 
         formattedDate(date) {
-            return moment(date).tz('America/New_York').format('lll');
+            return moment(date).tz(this.timezone).format('lll');
         }
     },
 
      mounted() {
+         this.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone ?? defaultTimezone;
+
         this.getImportJobs();
 
         Echo.channel(`imports`)

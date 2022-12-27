@@ -5642,11 +5642,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
-/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_imports_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/imports/LoadingComponent.vue */ "./resources/js/components/imports/LoadingComponent.vue");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment-timezone */ "./node_modules/moment-timezone/index.js");
+/* harmony import */ var moment_timezone__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment_timezone__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _core_constants_timezones_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../core/constants/timezones.js */ "./resources/js/core/constants/timezones.js");
+/* harmony import */ var _components_imports_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/imports/LoadingComponent.vue */ "./resources/js/components/imports/LoadingComponent.vue");
 //
 //
 //
@@ -5688,18 +5689,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "MappingsCompletedPage.vue",
   components: {
-    LoadingComponent: _components_imports_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    LoadingComponent: _components_imports_LoadingComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   data: function data() {
     return {
       importJobs: [],
-      errors: null
+      errors: null,
+      timezone: null
     };
   },
   computed: {
@@ -5711,7 +5714,7 @@ __webpack_require__.r(__webpack_exports__);
     getImportJobs: function getImportJobs() {
       var _this = this;
 
-      axios.get('/import-jobs').then(function (_ref) {
+      axios.get("/import-jobs?tz=".concat(this.timezone)).then(function (_ref) {
         var data = _ref.data;
         _this.importJobs = data;
       })["catch"](function (error) {
@@ -5744,12 +5747,14 @@ __webpack_require__.r(__webpack_exports__);
       return statuses[status];
     },
     formattedDate: function formattedDate(date) {
-      return moment__WEBPACK_IMPORTED_MODULE_0___default()(date).tz('America/New_York').format('lll');
+      return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).tz(this.timezone).format('lll');
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _Intl$DateTimeFormat$,
+        _this2 = this;
 
+    this.timezone = (_Intl$DateTimeFormat$ = Intl.DateTimeFormat().resolvedOptions().timeZone) !== null && _Intl$DateTimeFormat$ !== void 0 ? _Intl$DateTimeFormat$ : _core_constants_timezones_js__WEBPACK_IMPORTED_MODULE_2__.defaultTimezone;
     this.getImportJobs();
     Echo.channel("imports").listen('ImportFailed', function (e) {
       _this2.getImportJobs();
@@ -6062,6 +6067,21 @@ var Option = /*#__PURE__*/_createClass(function Option(key, humanReadableName) {
 });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/core/constants/timezones.js":
+/*!**************************************************!*\
+  !*** ./resources/js/core/constants/timezones.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "defaultTimezone": () => (/* binding */ defaultTimezone)
+/* harmony export */ });
+var defaultTimezone = 'America/Ojinaga';
 
 /***/ }),
 
@@ -59133,10 +59153,7 @@ var render = function () {
                     importJob.status === "started"
                       ? [
                           _c("loading-component", {
-                            attrs: {
-                              text: "Currently importing...",
-                              width: 20,
-                            },
+                            attrs: { text: "Importing...", width: 20 },
                           }),
                         ]
                       : _vm._e(),

@@ -51,7 +51,7 @@ services:
         volumes:
             - mysql:/var/lib/mysql
     npm:
-        image: node:19.2
+        image: node:latest
         environment:
             - NPM_TOKEN=${NPM_TOKEN}
         user: node

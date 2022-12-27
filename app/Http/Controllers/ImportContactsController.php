@@ -36,8 +36,6 @@ class ImportContactsController extends Controller
             'status' => ImportJob::STATUS_STARTED,
         ]);
 
-        info('Import job uuid', ['id' => $uuid]);
-
         ImportContacts::dispatch($mappings, $csvPath, $uuid);
 
         return new JsonResponse(['message' => 'Import of contacts has started successfully.']);
