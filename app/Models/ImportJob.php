@@ -40,8 +40,8 @@ class ImportJob extends Model
     */
     public function scopeImportedToday(Builder $query): Builder
     {
-        $startOfDay = Carbon::now()->startOfDay();
-        $endOfDay = Carbon::now()->endOfDay();
+        $startOfDay = Carbon::now()->tz('America/New_York')->startOfDay();
+        $endOfDay = Carbon::now()->tz('America/New_York')->endOfDay();
 
         return $query->whereBetween('created_at', [$startOfDay, $endOfDay]);
     }

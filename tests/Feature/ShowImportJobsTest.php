@@ -22,7 +22,6 @@ class ShowImportJobsTest extends TestCase
             ->assertJson([
                 [
                     'id' => $importedJobTwo->id,
-                    'job_id' => $importedJobTwo->job_id,
                     'uuid' => $importedJobTwo->uuid,
                     'status' => $importedJobTwo->status,
                     'error_message' => $importedJobTwo->error_message,
@@ -31,7 +30,6 @@ class ShowImportJobsTest extends TestCase
                 ],
                 [
                     'id' => $importedJobOne->id,
-                    'job_id' => $importedJobOne->job_id,
                     'uuid' => $importedJobOne->uuid,
                     'status' => $importedJobOne->status,
                     'error_message' => $importedJobOne->error_message,
