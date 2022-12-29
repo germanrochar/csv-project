@@ -4,7 +4,7 @@ all: help
 .PHONY: tinker
 tinker: ## Run the tinker command.
 	@echo "+ $@"
-	@docker-compose exec worker1 \
+	@docker-compose exec php \
 		php artisan tinker
 
 .PHONY: up
@@ -17,11 +17,11 @@ install: ## Install the project dependencies, bootstrap the database and compile
 	@echo "+ $@"
 	@rm -f .env
 	@cp .env.example .env
-	@docker-compose exec worker1 \
+	@docker-compose exec php \
 		composer install
-	@docker-compose exec worker1 \
+	@docker-compose exec php \
 		php artisan key:generate
-	@docker-compose exec worker1 \
+	@docker-compose exec php \
 		php artisan migrate:fresh
 	@docker-compose run --rm npm \
 		npm ci
